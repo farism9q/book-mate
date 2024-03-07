@@ -1,14 +1,15 @@
-import { ModeToggle } from "@/components/mode-toggle";
-import { Button } from "@/components/ui/button";
-import { UserButton } from "@clerk/nextjs";
+import { redirectToSignIn } from "@clerk/nextjs";
 
-export default function Home() {
-  return (
-    <>
-      <p className="text-emerald-500">Hello there</p>
-      <Button variant={"premium"}>Click me</Button>
-      <UserButton afterSignOutUrl="/" />
-      <ModeToggle />
-    </>
-  );
-}
+import { initialUser } from "@/lib/initial-user";
+
+const InitialPage = async () => {
+  const user = await initialUser();
+
+  if (!user) {
+    return redirectToSignIn();
+  }
+
+  return <div>Welcome</div>;
+};
+
+export default InitialPage;
