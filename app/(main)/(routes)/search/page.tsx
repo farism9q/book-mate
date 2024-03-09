@@ -35,13 +35,15 @@ const BookTitlePage = async ({ params, searchParams }: BookTitlePageProps) => {
     return redirect("/");
   }
 
+  const currPage = !page ? 0 : +page - 1;
+
   const url = qs.stringifyUrl({
     url: "https://www.googleapis.com/books/v1/volumes",
     query: {
       q: title,
       printType: "books",
-      page: !page ? 0 : +page - 1,
-      startIndex: !page ? 0 : +page * BOOKS_PER_PAGE, // intial page is "undifined" so we set it to "0".
+      page: currPage,
+      startIndex: currPage * BOOKS_PER_PAGE, // intial page is "undifined" so we set it to "0".
       maxResults: BOOKS_PER_PAGE,
       key: process.env.GOOGLE_BOOK_API_KEY,
     },

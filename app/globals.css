@@ -80,3 +80,11 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .premium {
+    background-image: linear-gradient(to bottom, #d13f3f, #3b3b3a 72%, #6ab2db);
+    color: white;
+    border: 0;
+  }
+}
