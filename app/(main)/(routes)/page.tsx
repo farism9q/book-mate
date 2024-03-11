@@ -23,14 +23,17 @@ const InitialPage = async () => {
               Discover the world of books
             </p>
             <h1
-              className={cn("uppercase text-primary text-6xl", font.className)}
+              className={cn(
+                "uppercase text-primary text-4xl md:text-6xl",
+                font.className
+              )}
             >
               Find your next read
             </h1>
           </div>
 
           <div className="flex flex-col justify-center items-center gap-4">
-            <p className="uppercase text-zinc-200">
+            <p className="uppercase text-center text-zinc-200">
               Explore a vast collection of books and dive into new worlds
             </p>
             <SearchBooksAction />

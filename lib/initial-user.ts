@@ -2,7 +2,7 @@ import { currentUser, redirectToSignIn } from "@clerk/nextjs";
 import { db } from "./db";
 import { User } from "@prisma/client";
 
-export const initialUser = async (): Promise<User> => {
+export const initialUser = async (): Promise<User | null> => {
   const clerkUser = await currentUser();
 
   if (!clerkUser) {
@@ -14,7 +14,6 @@ export const initialUser = async (): Promise<User> => {
     },
   });
 
-  // Create user if not exists
   if (user) {
     return user;
   }

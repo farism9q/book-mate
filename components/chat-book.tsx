@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { Button } from "./ui/button";
 
 export interface ChatBookProps {
@@ -13,7 +14,7 @@ export default function ChatBook({ bookId }: ChatBookProps) {
         <p className="text-zinc-100">
           You can start chatting with the book now.
         </p>
-        <Link href={`/chat/${bookId}`}>
+        <Link href={`/books/${bookId}/chat`}>
           <Button variant={"premium"}>Chat</Button>
         </Link>
       </div>

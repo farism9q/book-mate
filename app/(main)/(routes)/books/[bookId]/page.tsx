@@ -1,20 +1,20 @@
 import axios from "axios";
 import { redirect } from "next/navigation";
 import qs from "query-string";
+import Image from "next/image";
+import { Staatliches } from "next/font/google";
 
 import { cn } from "@/lib/utils";
+import { db } from "@/lib/db";
+import { initialUser } from "@/lib/initial-user";
+import { extractCategories } from "@/lib/book";
+
 import { Book } from "@/types";
-import { Metadata } from "next";
-import { Staatliches } from "next/font/google";
-import Image from "next/image";
 import { Star } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { CategoriesColors } from "@/constants";
 import Head from "next/head";
 import AddBook from "@/components/add-book";
-import { initialUser } from "@/lib/initial-user";
-import { db } from "@/lib/db";
 import ChatBook from "@/components/chat-book";
 
 interface BookDetailPageProps {
@@ -28,6 +28,10 @@ const font = Staatliches({ subsets: ["latin"], weight: "400" });
 const BookTitlePage = async ({ params }: BookDetailPageProps) => {
   const { bookId } = params;
   const user = await initialUser();
+
+  if (!user) {
+    return redirect("/");
+  }
 
   if (!bookId) {
     return redirect("/");
@@ -56,13 +60,7 @@ const BookTitlePage = async ({ params }: BookDetailPageProps) => {
     },
   });
 
-  const categories = new Set(
-    book.volumeInfo?.categories
-      ?.join(" / ")
-      .split(" / ")
-      .join(" & ")
-      .split(" & ")
-  );
+  const categories = extractCategories(book.volumeInfo.categories);
 
   return (
     <>

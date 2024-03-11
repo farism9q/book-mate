@@ -6,12 +6,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface ActionTooltipProps {
   label: string;
   children: React.ReactNode;
   side?: "top" | "right" | "bottom" | "left";
   align?: "start" | "center" | "end";
+  className?: string;
 }
 
 export const ActionTooltip = ({
@@ -19,6 +21,7 @@ export const ActionTooltip = ({
   children,
   side,
   align,
+  className,
 }: ActionTooltipProps) => {
   return (
     <TooltipProvider>
@@ -28,7 +31,7 @@ export const ActionTooltip = ({
         <TooltipContent
           side={side}
           align={align}
-          className="w-80 h-60 overflow-auto"
+          className={cn("w-80 h-60 overflow-auto", className)}
         >
           <p className="font-semibold text-sm capitalize">
             {label?.toLowerCase()}

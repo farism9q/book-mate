@@ -19,6 +19,11 @@ export async function POST(req: Request) {
     const updatedUser = await db.user.update({
       where: {
         id: user.id,
+        favorites: {
+          none: {
+            bookId,
+          },
+        },
       },
       data: {
         favorites: {
@@ -26,9 +31,6 @@ export async function POST(req: Request) {
             bookId,
           },
         },
-      },
-      include: {
-        favorites: true,
       },
     });
 

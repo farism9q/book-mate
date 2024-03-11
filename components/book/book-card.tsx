@@ -4,10 +4,9 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
-import { ActionTooltip } from "../action-tooltip";
 import { Book } from "@/types";
 import { Star } from "lucide-react";
-import { CategoriesColors } from "@/constants";
+import { extractCategories } from "@/lib/book";
 
 interface BookCardProps {
   book: Book;
@@ -18,6 +17,9 @@ const BookCard = ({ book }: BookCardProps) => {
   const onBookClick = (bookId: string) => {
     router.push(`/books/${bookId}`);
   };
+  const categories = extractCategories(book.volumeInfo.categories);
+
+  console.log("categories", categories);
 
   return (
     <Card
@@ -36,9 +38,9 @@ const BookCard = ({ book }: BookCardProps) => {
         <div className="flex justify-between">
           <div className="flex flex-col space-y-3">
             <div>
-              {book.volumeInfo?.categories?.map(cateegory => (
-                <Badge className={CategoriesColors[cateegory]} key={cateegory}>
-                  {cateegory}
+              {categories?.map((category: string) => (
+                <Badge variant={"outline"} key={category}>
+                  {category}
                 </Badge>
               ))}
             </div>
