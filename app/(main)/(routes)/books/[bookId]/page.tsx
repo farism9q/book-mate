@@ -13,8 +13,7 @@ import { Book } from "@/types";
 import { Star } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import Head from "next/head";
-import AddBook from "@/components/add-book";
+import AddFavBook from "@/components/add-fav-book";
 import ChatBook from "@/components/chat-book";
 
 interface BookDetailPageProps {
@@ -118,7 +117,7 @@ const BookTitlePage = async ({ params }: BookDetailPageProps) => {
               {book.volumeInfo.description}
             </p>
             {!userFav ? (
-              <AddBook bookId={book.id} />
+              <AddFavBook bookId={book.id} />
             ) : (
               <ChatBook bookId={book.id} />
             )}

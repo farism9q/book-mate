@@ -70,7 +70,11 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
             key={data.question}
             disabled={isLoading}
             onClick={() => onClick(data.question)}
-            className={isLoading ? "cursor-not-allowed opacity-40" : ""}
+            className={
+              isLoading
+                ? "cursor-not-allowed opacity-40 transition-all"
+                : "hover:opacity-40"
+            }
           >
             <div className="flex flex-col items-center justify-center space-y-4 bg-primary/20 border-2 border-primary rounded-lg p-3">
               <h3 className="text-white text-lg">{data.question}</h3>

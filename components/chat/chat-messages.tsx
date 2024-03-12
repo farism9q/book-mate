@@ -12,7 +12,7 @@ interface ChatMessagesProps {
 
 const ChatMessages = ({ book, user, messages }: ChatMessagesProps) => {
   return (
-    <div className="flex-1 overflow-y-auto no-scrollbar my-4 px-20">
+    <div className="flex-1 overflow-y-auto no-scrollbar my-4 px-10 md:px-20">
       {messages.length === 0 && <StartQuestions book={book} userId={user.id} />}
       {
         <div className="flex flex-col-reverse mt-auto">

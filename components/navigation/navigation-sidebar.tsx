@@ -1,12 +1,25 @@
+"use client";
+
 import { EntityAvatar } from "../entity-avatar";
-import { initialUser } from "@/lib/initial-user";
 
 import { UserButton } from "@clerk/nextjs";
 import { ModeToggle } from "../mode-toggle";
 import { NavigationItems } from "./navigation-items";
+import { User } from "@prisma/client";
+import { useEffect, useState } from "react";
 
-const NavigationSidebar = async () => {
-  const user = await initialUser();
+interface NavigationSidebarProps {
+  user: User;
+}
+
+const NavigationSidebar = ({ user }: NavigationSidebarProps) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   return (
     <div className="flex flex-col h-full w-full items-center py-6 bg-white border-r-2 border-zinc-500 dark:bg-[#212121] gap-y-12">

@@ -5,10 +5,10 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { initialUser } from "@/lib/initial-user";
-import { cn } from "@/lib/utils";
 
 import { Book } from "@/types";
 import BookCard from "@/components/book/book-card";
+import RoutePage from "@/components/route-page";
 
 const font = Staatliches({ subsets: ["latin"], weight: "400" });
 
@@ -46,29 +46,21 @@ const FavoriteBooksPage = async () => {
   });
 
   return (
-    <div className="flex flex-col py-12">
+    <RoutePage title="Favorite Books">
       <div className="flex flex-col justify-center items-center pt-24 space-y-24 overflow-y-auto">
-        <div className="flex flex-col justify-center items-center space-y-4">
-          <p className="text-zinc-500 dark:text-zinc-400">Results of</p>
-          <h1
-            className={cn(
-              "text-5xl font-bold text-primary capitalize",
-              font.className
-            )}
-          >
-            Favorite Books
-          </h1>
-        </div>
-
         <div className="flex flex-col items-center space-y-6">
           <div className="grid mx-8 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {books.map(book => (
-              <BookCard key={book.id} book={book} />
+            {books.map((book, idx) => (
+              <BookCard
+                key={book.id}
+                book={book}
+                favBookId={favoriteBooksIds[idx].id}
+              />
             ))}
           </div>
         </div>
       </div>
-    </div>
+    </RoutePage>
   );
 };
 

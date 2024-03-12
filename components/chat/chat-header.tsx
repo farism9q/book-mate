@@ -7,7 +7,7 @@ interface ChatHeaderProps {
 
 const ChatHeader = ({ imageUrl, title }: ChatHeaderProps) => {
   return (
-    <div className="bg-zinc-200/90 dark:bg-[#212121]">
+    <div className="bg-zinc-200/90 dark:bg-[#212121] line-clamp-1">
       <div className="flex items-center pl-4 py-2">
         <EntityAvatar
           src={imageUrl}

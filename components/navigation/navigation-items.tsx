@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Book, Star } from "lucide-react";
+import { Book, MessageSquareMore, Star } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -15,6 +15,11 @@ const routes = [
     label: "Favorite books",
     icon: <Star className="w-4 h-4" />,
     href: "/favorite-books",
+  },
+  {
+    label: "Chatting",
+    icon: <MessageSquareMore className="w-4 h-4" />,
+    href: "/chatting",
   },
 ];
 

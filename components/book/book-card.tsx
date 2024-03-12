@@ -1,25 +1,32 @@
 "use client";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { Card, CardContent, CardHeader } from "../ui/card";
-import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { Book } from "@/types";
-import { Star } from "lucide-react";
+import { MoreVertical, Star, Trash } from "lucide-react";
 import { extractCategories } from "@/lib/book";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface BookCardProps {
   book: Book;
+  favBookId?: string;
 }
 
-const BookCard = ({ book }: BookCardProps) => {
+const BookCard = ({ book, favBookId }: BookCardProps) => {
   const router = useRouter();
+  const { onOpen } = useModal();
   const onBookClick = (bookId: string) => {
     router.push(`/books/${bookId}`);
   };
   const categories = extractCategories(book.volumeInfo.categories);
-
-  console.log("categories", categories);
 
   return (
     <Card
@@ -34,15 +41,43 @@ const BookCard = ({ book }: BookCardProps) => {
           alt={book.volumeInfo.title}
         />
       </CardHeader>
-      <CardContent className="py-4 pl-2">
+      <CardContent className="py-4 pl-2 pr-0">
         <div className="flex justify-between">
           <div className="flex flex-col space-y-3">
-            <div>
-              {categories?.map((category: string) => (
-                <Badge variant={"outline"} key={category}>
-                  {category}
-                </Badge>
-              ))}
+            <div className="relative flex items-center">
+              <div className="mr-2">
+                {categories?.map((category: string) => (
+                  <Badge variant={"outline"} key={category}>
+                    {category}
+                  </Badge>
+                ))}
+              </div>
+              {favBookId && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <div
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
+                      className="absolute right-0 top-0 hover:opacity-30"
+                    >
+                      <MoreVertical className="w-6 h-6" />
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent side="left">
+                    <DropdownMenuItem
+                      onClick={e => {
+                        e.stopPropagation();
+                        onOpen("removeFavBook", { bookId: book.id, favBookId });
+                      }}
+                      className="text-rose-600 px-3 py-2 text-sm cursor-pointer"
+                    >
+                      Remove
+                      <Trash className="w-4 h-4 ml-auto" />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-md font-bold text-primary line-clamp-1">

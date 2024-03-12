@@ -4,11 +4,11 @@ import qs from "query-string";
 
 import BookCard from "@/components/book/book-card";
 import { SearchBooksAction } from "@/components/search-books-action";
-import { cn } from "@/lib/utils";
 import { Book } from "@/types";
 import { Metadata } from "next";
 import { Staatliches } from "next/font/google";
 import CustomPagination from "@/components/custom-pagination";
+import RoutePage from "@/components/route-page";
 
 const BOOKS_PER_PAGE = 12;
 
@@ -53,21 +53,9 @@ const BookTitlePage = async ({ params, searchParams }: BookTitlePageProps) => {
   const books = response.data.items;
 
   return (
-    <div className="flex flex-col py-12">
+    <RoutePage title={title} className="space-y-4">
       <SearchBooksAction />
       <div className="flex flex-col justify-center items-center pt-24 space-y-24 overflow-y-auto">
-        <div className="flex flex-col justify-center items-center space-y-4">
-          <p className="text-zinc-500 dark:text-zinc-400">Results of</p>
-          <h1
-            className={cn(
-              "text-5xl font-bold text-primary capitalize",
-              font.className
-            )}
-          >
-            {title}
-          </h1>
-        </div>
-
         <div className="flex flex-col items-center space-y-6">
           <div className="grid mx-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {books.map((book: Book) => (
@@ -78,7 +66,7 @@ const BookTitlePage = async ({ params, searchParams }: BookTitlePageProps) => {
           <CustomPagination />
         </div>
       </div>
-    </div>
+    </RoutePage>
   );
 };
 

@@ -9,21 +9,21 @@ export interface AddBookProps {
   bookId: string;
 }
 
-export default function AddBook({ bookId }: AddBookProps) {
+export default function AddFavBook({ bookId }: AddBookProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const onClick = async () => {
     try {
       setIsLoading(true);
       const url = qs.stringifyUrl({
-        url: "/api/add-book",
+        url: "/api/add-fav-book",
       });
       const response = await axios.post(url, { bookId });
       router.refresh();
       console.log("[fav book]", response.data);
       setIsLoading(false);
     } catch (err) {
-      console.log("[ADD_BOOK_ERROR]", err);
+      console.log("[ADD_FAV_BOOK_ERROR]", err);
     }
   };
 
