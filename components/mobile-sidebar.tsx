@@ -21,14 +21,15 @@ export default function MobileSidebar({ user }: MobileSidebarProps) {
   if (!isMounted) return null;
 
   if (!user) return null;
+
   return (
     <Sheet>
-      <SheetTrigger>
-        <Button variant={"ghost"} size={"icon"} className="md:hidden">
+      <SheetTrigger className="absolute right-0 top-0">
+        <Button variant={"ghost"} size={"icon"} className="md:hidden px-2">
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side={"left"} className="p-0">
+      <SheetContent side={"right"} className="p-0">
         <NavigationSidebar user={user} />
       </SheetContent>
     </Sheet>

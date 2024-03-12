@@ -44,7 +44,7 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
       <CardContent className="py-4 pl-2 pr-0">
         <div className="flex justify-between">
           <div className="flex flex-col space-y-3">
-            <div className="relative flex items-center">
+            <div className="relative flex justify-between items-center">
               <div className="mr-2">
                 {categories?.map((category: string) => (
                   <Badge variant={"outline"} key={category}>
@@ -64,7 +64,7 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
                       <MoreVertical className="w-6 h-6" />
                     </div>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent side="left">
+                  <DropdownMenuContent>
                     <DropdownMenuItem
                       onClick={e => {
                         e.stopPropagation();

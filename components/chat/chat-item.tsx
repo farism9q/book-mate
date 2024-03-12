@@ -26,13 +26,13 @@ const ChatItem = ({ type, text, avatar }: ChatItemProps) => {
   return (
     <div
       className={cn(
-        "group rounded-sm p-2",
+        "group p-2",
         type === "user"
-          ? "bg-zinc-600 dark:bg-primary/60"
-          : "bg-zinc-800 dark:bg-primary/20"
+          ? "bg-zinc-600 dark:bg-primary/60 rounded-t-sm"
+          : "bg-zinc-800 dark:bg-primary/20 rounded-b-sm"
       )}
     >
-      <div className={cn("flex gap-2", type === "user" && "items-center")}>
+      <div className={"flex gap-2"}>
         <EntityAvatar
           src={avatar}
           alt={type === "user" ? "User avatar" : "ChatGPT avatar"}

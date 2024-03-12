@@ -87,11 +87,8 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
   });
 
   return (
-    <div className="flex flex-col h-full w-full pb-6">
-      <ChatHeader
-        imageUrl={book.volumeInfo.imageLinks.thumbnail}
-        title={book.volumeInfo.title}
-      />
+    <div className="flex flex-col h-full w-full">
+      <ChatHeader book={book} />
       <ChatMessages book={book} user={user} messages={messages} />
       <ChatInput userId={user.id} book={book} />
     </div>

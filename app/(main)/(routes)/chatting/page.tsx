@@ -50,7 +50,7 @@ const ChattingPage = async () => {
         <Link
           key={conversation.id}
           href={`/books/${conversation.bookId}/chat`}
-          className="cursor-pointer border border-gray-200 rounded-md mx-2 mb-2 p-2"
+          className="cursor-pointer border border-gray-200 rounded-md mx-2 mb-2 p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 transition duration-200 ease-in-out"
         >
           <div className="flex items-center gap-x-2 py-1">
             <EntityAvatar

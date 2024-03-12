@@ -34,7 +34,7 @@ const ChatInput = ({ userId, book }: { userId: string; book: Book }) => {
         },
       });
 
-      const response = await axios.post(url, {
+      await axios.post(url, {
         question: values.question,
         book: {
           id: book.id,
@@ -53,7 +53,7 @@ const ChatInput = ({ userId, book }: { userId: string; book: Book }) => {
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="pb-4">
         <FormField
           control={form.control}
           name="question"
