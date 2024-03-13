@@ -68,28 +68,10 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
     },
   });
 
-  if (!conversation) {
-    conversation = await db.conversation.create({
-      data: {
-        bookId: book.id,
-        userId: user.id,
-      },
-    });
-  }
-
-  const messages = await db.message.findMany({
-    where: {
-      conversationId: conversation.id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
   return (
     <div className="flex flex-col h-full w-full">
       <ChatHeader book={book} />
-      <ChatMessages book={book} user={user} messages={messages} />
+      <ChatMessages book={book} user={user} conversation={conversation} />
       <ChatInput userId={user.id} book={book} />
     </div>
   );
