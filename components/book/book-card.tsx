@@ -2,18 +2,19 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+import { useModal } from "@/hooks/use-modal-store";
+import { extractCategories } from "@/lib/book";
+import { Book } from "@/types";
+
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Book } from "@/types";
-import { MoreVertical, Star, Trash } from "lucide-react";
-import { extractCategories } from "@/lib/book";
+import { MessageSquareMore, MoreVertical, Star, Trash } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useModal } from "@/hooks/use-modal-store";
 
 interface BookCardProps {
   book: Book;
@@ -65,6 +66,16 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
                     </div>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onClick={e => {
+                        e.stopPropagation();
+                        router.push(`/books/${book.id}/chat`);
+                      }}
+                      className="px-3 py-2 text-sm cursor-pointer"
+                    >
+                      Chat
+                      <MessageSquareMore className="w-4 h-4 ml-auto" />
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={e => {
                         e.stopPropagation();

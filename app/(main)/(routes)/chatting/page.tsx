@@ -1,11 +1,13 @@
 import axios from "axios";
 import qs from "query-string";
+import Link from "next/link";
+import { redirectToSignIn } from "@clerk/nextjs";
+import { formatRelative } from "date-fns";
+
 import { db } from "@/lib/db";
 import { initialUser } from "@/lib/initial-user";
-import { redirectToSignIn } from "@clerk/nextjs";
 import { Book } from "@/types";
 import { EntityAvatar } from "@/components/entity-avatar";
-import Link from "next/link";
 import RoutePage from "@/components/route-page";
 
 const ChattingPage = async () => {
@@ -60,9 +62,11 @@ const ChattingPage = async () => {
             />
             <h1>{chattedBooks[idx].volumeInfo.title}</h1>
             <div className="ml-auto text-center space-y-1">
-              <p className="text-zinc-400 dark:text-zinc-500">Last chat time</p>
               <span>
-                {new Date(conversations[idx].updatedAt).toLocaleDateString()}
+                {formatRelative(
+                  new Date(conversations[idx].updatedAt),
+                  new Date()
+                )}
               </span>
             </div>
           </div>

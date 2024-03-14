@@ -42,15 +42,7 @@ const CustomPagination = () => {
             />
           )}
         </PaginationItem>
-        {/* <PaginationItem>
-          {page !== "1" ? (
-            <PaginationLink href={pathname + "?" + queryString(+page - 1 + "")}>
-              {page}
-            </PaginationLink>
-          ) : (
-            page
-          )}
-        </PaginationItem> */}
+
         <PaginationItem>
           <p className="text-lg text-primary font-bold">{page}</p>
         </PaginationItem>

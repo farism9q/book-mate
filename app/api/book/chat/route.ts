@@ -42,7 +42,12 @@ export async function POST(req: Request) {
     });
 
     if (!conversation) {
-      return new NextResponse("Conversation not found", { status: 404 });
+      conversation = await db.conversation.create({
+        data: {
+          bookId: book.id,
+          userId,
+        },
+      });
     }
 
     const instructionMessage: ChatCompletionMessageParam = {

@@ -59,12 +59,12 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="text-center py-6">
-        <h3 className="text-white text-2xl">Start Questions</h3>
+        <h3 className="dark:text-white text-2xl">Start Questions</h3>
         <p className="text-zinc-400 text-sm">
           You can start chatting with the book now.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 text-center">
         {StartQuestionsData.map(data => (
           <button
             key={data.question}
@@ -77,8 +77,8 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
             }
           >
             <div className="flex flex-col items-center justify-center space-y-4 bg-primary/20 border-2 border-primary rounded-lg p-3">
-              <h3 className="text-white text-lg">{data.question}</h3>
-              <p className="text-zinc-400 text-sm">
+              <h3 className="dark:text-white text-lg">{data.question}</h3>
+              <p className="text-zinc-500 dark:text-zinc-400 text-sm">
                 Know the author of the book you are reading.
               </p>
             </div>

@@ -1,12 +1,13 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
 import { Book } from "@/types";
+
 import { EntityAvatar } from "../entity-avatar";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
 import { ChevronLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 interface ChatHeaderProps {
   book: Book;
@@ -38,7 +39,7 @@ const ChatHeader = ({ book }: ChatHeaderProps) => {
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
-          <div className="flex items-center pl-4 py-2">
+          <div className="flex items-center pl-2 py-2 mr-10">
             <EntityAvatar
               src={book.volumeInfo.imageLinks.thumbnail}
               alt={book.volumeInfo.title}
@@ -79,17 +80,6 @@ const ChatHeader = ({ book }: ChatHeaderProps) => {
 
           <ScrollArea className="text-xs h-[300px] md:text-sm text-zinc-500 dark:text-zinc-400 pt-2">
             {book.volumeInfo.description}
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veritatis
-            ipsam consequatur, minus nisi, eveniet animi porro in officia amet
-            fuga eaque, qui praesentium quisquam? Et itaque repudiandae
-            veritatis rem laboriosam inventore ratione voluptas sunt quis cumque
-            tempore ducimus at expedita, nobis laudantium accusamus fugit quia
-            dolor dolorem? Vel, ut repellat. Veritatis ipsam consequatur, minus
-            nisi, eveniet animi porro in officia amet fuga eaque, qui
-            praesentium quisquam? Et itaque repudiandae veritatis rem laboriosam
-            inventore ratione voluptas sunt quis cumque tempore ducimus at
-            expedita, nobis laudantium accusamus fugit quia dolor dolorem? Vel,
-            ut repellat.
           </ScrollArea>
         </div>
       </SheetContent>
