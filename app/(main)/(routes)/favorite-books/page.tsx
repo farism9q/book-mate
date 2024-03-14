@@ -1,6 +1,5 @@
 import qs from "query-string";
 import axios from "axios";
-import { Staatliches } from "next/font/google";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
@@ -9,8 +8,6 @@ import { initialUser } from "@/lib/initial-user";
 import { Book } from "@/types";
 import BookCard from "@/components/book/book-card";
 import RoutePage from "@/components/route-page";
-
-const font = Staatliches({ subsets: ["latin"], weight: "400" });
 
 const FavoriteBooksPage = async () => {
   const user = await initialUser();

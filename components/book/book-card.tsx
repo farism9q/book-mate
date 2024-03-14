@@ -24,6 +24,7 @@ interface BookCardProps {
 const BookCard = ({ book, favBookId }: BookCardProps) => {
   const router = useRouter();
   const { onOpen } = useModal();
+
   const onBookClick = (bookId: string) => {
     router.push(`/books/${bookId}`);
   };
@@ -42,54 +43,61 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
           alt={book.volumeInfo.title}
         />
       </CardHeader>
-      <CardContent className="py-4 pl-2 pr-0">
+      <CardContent className="pl-2 pr-0">
+        {favBookId && (
+          <div className="flex items-center">
+            <div className="w-full" />
+
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <div
+                  onClick={e => {
+                    e.stopPropagation();
+                  }}
+                  className="ml-auto pt-2 hover:opacity-30"
+                >
+                  <MoreVertical className="w-6 h-6" />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="absolute right-0 top-0 z-10 bg-white dark:bg-zinc-800 shadow-lg rounded-md py-2 w-40">
+                <DropdownMenuItem
+                  onClick={e => {
+                    e.stopPropagation();
+                    router.push(`/books/${book.id}/chat`);
+                  }}
+                  className="px-3 py-2 text-sm cursor-pointer"
+                >
+                  Chat
+                  <MessageSquareMore className="w-4 h-4 ml-auto" />
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={e => {
+                    e.stopPropagation();
+                    onOpen("removeFavBook", { bookId: book.id, favBookId });
+                  }}
+                  className="text-rose-600 px-3 py-2 text-sm cursor-pointer"
+                >
+                  Remove
+                  <Trash className="w-4 h-4 ml-auto" />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
+
         <div className="flex justify-between">
           <div className="flex flex-col space-y-3">
-            <div className="relative flex justify-between items-center">
-              <div className="mr-2">
-                {categories?.map((category: string) => (
-                  <Badge variant={"outline"} key={category}>
-                    {category}
-                  </Badge>
-                ))}
+            {categories.length > 0 && (
+              <div className="flex justify-between items-center">
+                <div className="mr-2">
+                  {categories?.map((category: string) => (
+                    <Badge variant={"outline"} key={category}>
+                      {category}
+                    </Badge>
+                  ))}
+                </div>
               </div>
-              {favBookId && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <div
-                      onClick={e => {
-                        e.stopPropagation();
-                      }}
-                      className="absolute right-0 top-0 hover:opacity-30"
-                    >
-                      <MoreVertical className="w-6 h-6" />
-                    </div>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onClick={e => {
-                        e.stopPropagation();
-                        router.push(`/books/${book.id}/chat`);
-                      }}
-                      className="px-3 py-2 text-sm cursor-pointer"
-                    >
-                      Chat
-                      <MessageSquareMore className="w-4 h-4 ml-auto" />
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={e => {
-                        e.stopPropagation();
-                        onOpen("removeFavBook", { bookId: book.id, favBookId });
-                      }}
-                      className="text-rose-600 px-3 py-2 text-sm cursor-pointer"
-                    >
-                      Remove
-                      <Trash className="w-4 h-4 ml-auto" />
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </div>
+            )}
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-md font-bold text-primary line-clamp-1">
                 {book.volumeInfo?.title}

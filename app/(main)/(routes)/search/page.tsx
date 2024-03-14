@@ -1,16 +1,17 @@
 import axios from "axios";
 import { redirect } from "next/navigation";
 import qs from "query-string";
+import { Metadata } from "next";
+
+
+import { BOOKS_PER_PAGE } from "@/constants";
+import { Book } from "@/types";
+
 
 import BookCard from "@/components/book/book-card";
 import { SearchBooksAction } from "@/components/search-books-action";
-import { Book } from "@/types";
-import { Metadata } from "next";
-import { Staatliches } from "next/font/google";
 import CustomPagination from "@/components/custom-pagination";
 import RoutePage from "@/components/route-page";
-
-const BOOKS_PER_PAGE = 12;
 
 type BookTitlePageProps = {
   params: {};
@@ -25,8 +26,6 @@ export const generateMetadata = ({
     description: `Everything about ${searchParams.title} book.`,
   };
 };
-
-const font = Staatliches({ subsets: ["latin"], weight: "400" });
 
 const BookTitlePage = async ({ params, searchParams }: BookTitlePageProps) => {
   const { title, page } = searchParams;

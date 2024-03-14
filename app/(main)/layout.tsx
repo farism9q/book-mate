@@ -1,10 +1,15 @@
+import { redirectToSignIn } from "@clerk/nextjs";
+
 import MobileSidebar from "@/components/mobile-sidebar";
 import NavigationSidebar from "@/components/navigation/navigation-sidebar";
 import { initialUser } from "@/lib/initial-user";
-import React from "react";
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await initialUser();
+
+  if (!user) {
+    redirectToSignIn();
+  }
 
   return (
     <div className="h-full">

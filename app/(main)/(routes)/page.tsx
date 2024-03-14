@@ -1,20 +1,14 @@
-import { redirectToSignIn } from "@clerk/nextjs";
+"use client";
 import { Staatliches } from "next/font/google";
 
-import { initialUser } from "@/lib/initial-user";
 import { cn } from "@/lib/utils";
 import { SearchBooksAction } from "@/components/search-books-action";
 import InitialBooks from "@/components/initial-books";
+import CustomPagination from "@/components/custom-pagination";
 
 const font = Staatliches({ subsets: ["latin"], weight: "400" });
 
-const InitialPage = async () => {
-  const user = await initialUser();
-
-  if (!user) {
-    return redirectToSignIn();
-  }
-
+const InitialPage = () => {
   return (
     <div className="flex flex-col overflow-y-auto no-scrollbar">
       <div className="relative h-[500px] w-full bg-[url('/home-image.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -43,8 +37,10 @@ const InitialPage = async () => {
           </div>
         </div>
       </div>
-
       <InitialBooks />
+      <div className="py-2">
+        <CustomPagination />
+      </div>
     </div>
   );
 };

@@ -24,9 +24,7 @@ const CustomPagination = () => {
     (value: string) => {
       const params = new URLSearchParams(searchParams.toString());
 
-      // if (value !== "0") {
       params.set("page", value);
-      // }
 
       return params.toString();
     },
@@ -34,7 +32,7 @@ const CustomPagination = () => {
   );
   return (
     <Pagination>
-      <PaginationContent>
+      <PaginationContent className="space-x-2">
         <PaginationItem>
           {page !== "1" && (
             <PaginationPrevious
