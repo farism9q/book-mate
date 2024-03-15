@@ -7,8 +7,10 @@ import { formatRelative } from "date-fns";
 import { db } from "@/lib/db";
 import { initialUser } from "@/lib/initial-user";
 import { Book } from "@/types";
+
 import { EntityAvatar } from "@/components/entity-avatar";
 import RoutePage from "@/components/route-page";
+import Empty from "@/components/empty";
 
 const ChattingPage = async () => {
   const user = await initialUser();
@@ -48,30 +50,34 @@ const ChattingPage = async () => {
 
   return (
     <RoutePage title="Chatting" className="space-y-4">
-      {conversations.map((conversation, idx) => (
-        <Link
-          key={conversation.id}
-          href={`/books/${conversation.bookId}/chat`}
-          className="cursor-pointer border border-gray-200 rounded-md mx-2 mb-2 p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 transition duration-200 ease-in-out"
-        >
-          <div className="flex items-center gap-x-2 py-1">
-            <EntityAvatar
-              src={chattedBooks[idx].volumeInfo.imageLinks.thumbnail}
-              alt={chattedBooks[idx].volumeInfo.title}
-              className="md:w-16 md:h-16"
-            />
-            <h1>{chattedBooks[idx].volumeInfo.title}</h1>
-            <div className="ml-auto text-center space-y-1">
-              <span>
-                {formatRelative(
-                  new Date(conversations[idx].updatedAt),
-                  new Date()
-                )}
-              </span>
+      {conversations.length > 0 ? (
+        conversations.map((conversation, idx) => (
+          <Link
+            key={conversation.id}
+            href={`/books/${conversation.bookId}/chat`}
+            className="cursor-pointer border border-gray-200 rounded-md mx-2 mb-2 p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 transition duration-200 ease-in-out"
+          >
+            <div className="flex items-center gap-x-2 py-1">
+              <EntityAvatar
+                src={chattedBooks[idx].volumeInfo.imageLinks.thumbnail}
+                alt={chattedBooks[idx].volumeInfo.title}
+                className="md:w-16 md:h-16"
+              />
+              <h1>{chattedBooks[idx].volumeInfo.title}</h1>
+              <div className="ml-auto text-center space-y-1">
+                <span>
+                  {formatRelative(
+                    new Date(conversations[idx].updatedAt),
+                    new Date()
+                  )}
+                </span>
+              </div>
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))
+      ) : (
+        <Empty label="No chatting started yet" />
+      )}
     </RoutePage>
   );
 };

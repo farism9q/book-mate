@@ -1,9 +1,12 @@
 "use client";
 import axios from "axios";
 import qs from "query-string";
-import { Button } from "./ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
+import { useModal } from "@/hooks/use-modal-store";
+
+import { Button } from "./ui/button";
 
 export interface AddBookProps {
   bookId: string;
@@ -11,6 +14,7 @@ export interface AddBookProps {
 
 export default function AddFavBook({ bookId }: AddBookProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const { onOpen } = useModal();
   const router = useRouter();
   const onClick = async () => {
     try {
@@ -18,12 +22,17 @@ export default function AddFavBook({ bookId }: AddBookProps) {
       const url = qs.stringifyUrl({
         url: "/api/add-fav-book",
       });
-      const response = await axios.post(url, { bookId });
-      router.refresh();
-      console.log("[fav book]", response.data);
+      await axios.post(url, { bookId });
+
       setIsLoading(false);
-    } catch (err) {
-      console.log("[ADD_FAV_BOOK_ERROR]", err);
+    } catch (err: any) {
+      if (err?.response?.status === 403) {
+        onOpen("upgradePlan");
+      } else {
+        console.log("[ADD_FAV_BOOK_ERROR]", err);
+      }
+    } finally {
+      router.refresh();
     }
   };
 

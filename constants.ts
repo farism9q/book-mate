@@ -1,5 +1,9 @@
 export const BOOKS_PER_PAGE = 12;
-
+export const USER_FREE_LIMIT = 5;
+export enum ErrorType {
+  ALREADY_FAV = "ALREADY_FAV",
+  UPGRADE_PLAN = "UPGRADE_PLAN",
+}
 export const CategoriesColors = {
   "Self-Help": "bg-yellow-500 hover:bg-yellow-600",
   "Fiction": "bg-blue-500 hover:bg-blue-600",

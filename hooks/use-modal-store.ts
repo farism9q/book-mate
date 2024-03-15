@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "removeFavBook";
+export type ModalType = "removeFavBook" | "upgradePlan";
 
 interface ModalData {
   bookId?: string;

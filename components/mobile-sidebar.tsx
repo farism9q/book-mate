@@ -1,17 +1,24 @@
 "use client";
 import { useEffect, useState } from "react";
 
+import { User } from "@prisma/client";
+
 import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import NavigationSidebar from "./navigation/navigation-sidebar";
-import { User } from "@prisma/client";
 
 interface MobileSidebarProps {
   user: User;
+  userLimitCount: number;
+  isSubscribed: boolean;
 }
 
-export default function MobileSidebar({ user }: MobileSidebarProps) {
+export default function MobileSidebar({
+  user,
+  userLimitCount,
+  isSubscribed,
+}: MobileSidebarProps) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -30,7 +37,11 @@ export default function MobileSidebar({ user }: MobileSidebarProps) {
         </Button>
       </SheetTrigger>
       <SheetContent side={"right"} className="p-0">
-        <NavigationSidebar user={user} />
+        <NavigationSidebar
+          user={user}
+          userLimitCount={userLimitCount}
+          isSubscribed={isSubscribed}
+        />
       </SheetContent>
     </Sheet>
   );

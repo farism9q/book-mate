@@ -4,10 +4,11 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { initialUser } from "@/lib/initial-user";
-
 import { Book } from "@/types";
+
 import BookCard from "@/components/book/book-card";
 import RoutePage from "@/components/route-page";
+import Empty from "@/components/empty";
 
 const FavoriteBooksPage = async () => {
   const user = await initialUser();
@@ -44,19 +45,23 @@ const FavoriteBooksPage = async () => {
 
   return (
     <RoutePage title="Favorite Books">
-      <div className="flex flex-col justify-center items-center pt-24 space-y-24 overflow-y-auto">
-        <div className="flex flex-col items-center space-y-6">
-          <div className="grid mx-8 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {books.map((book, idx) => (
-              <BookCard
-                key={book.id}
-                book={book}
-                favBookId={favoriteBooksIds[idx].id}
-              />
-            ))}
+      {books.length > 0 ? (
+        <div className="flex flex-col justify-center items-center pt-24 space-y-24 overflow-y-auto">
+          <div className="flex flex-col items-center space-y-6">
+            <div className="grid mx-8 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {books.map((book, idx) => (
+                <BookCard
+                  key={book.id}
+                  book={book}
+                  favBookId={favoriteBooksIds[idx].id}
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Empty label="There is no favorite book" />
+      )}
     </RoutePage>
   );
 };

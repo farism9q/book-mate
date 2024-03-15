@@ -1,14 +1,23 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import qs from "query-string";
+import axios from "axios";
 
 import { useModal } from "@/hooks/use-modal-store";
 import { extractCategories } from "@/lib/book";
 import { Book } from "@/types";
+import { ErrorType } from "@/constants";
 
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { MessageSquareMore, MoreVertical, Star, Trash } from "lucide-react";
+import {
+  Heart,
+  MessageSquareMore,
+  MoreVertical,
+  Star,
+  Trash,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +37,33 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
   const onBookClick = (bookId: string) => {
     router.push(`/books/${bookId}`);
   };
+  const onAddBookAsFav = async (bookId: string) => {
+    try {
+      const url = qs.stringifyUrl({
+        url: "/api/add-fav-book",
+      });
+      await axios.post(url, { bookId });
+
+      router.push(`/books/${book.id}/chat`);
+      router.refresh();
+    } catch (err: any) {
+      console.log("ADD_BOOK_AS_FAV", err);
+
+      if (
+        err?.response?.status === 403 &&
+        err.response.data.type === ErrorType.ALREADY_FAV
+      ) {
+        router.push(`/books/${book.id}/chat`);
+      }
+      if (
+        err?.response?.status === 403 &&
+        err.response.data.type === ErrorType.UPGRADE_PLAN
+      ) {
+        onOpen("upgradePlan");
+      }
+    }
+  };
+
   const categories = extractCategories(book.volumeInfo.categories);
 
   return (
@@ -44,7 +80,7 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
         />
       </CardHeader>
       <CardContent className="pl-2 pr-0">
-        {favBookId && (
+        {
           <div className="flex items-center">
             <div className="w-full" />
 
@@ -60,30 +96,46 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="absolute right-0 top-0 z-10 bg-white dark:bg-zinc-800 shadow-lg rounded-md py-2 w-40">
-                <DropdownMenuItem
-                  onClick={e => {
-                    e.stopPropagation();
-                    router.push(`/books/${book.id}/chat`);
-                  }}
-                  className="px-3 py-2 text-sm cursor-pointer"
-                >
-                  Chat
-                  <MessageSquareMore className="w-4 h-4 ml-auto" />
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={e => {
-                    e.stopPropagation();
-                    onOpen("removeFavBook", { bookId: book.id, favBookId });
-                  }}
-                  className="text-rose-600 px-3 py-2 text-sm cursor-pointer"
-                >
-                  Remove
-                  <Trash className="w-4 h-4 ml-auto" />
-                </DropdownMenuItem>
+                {!favBookId && (
+                  <DropdownMenuItem
+                    onClick={e => {
+                      e.stopPropagation();
+                      onAddBookAsFav(book.id);
+                    }}
+                    className="px-3 py-2 text-sm cursor-pointer"
+                  >
+                    Add as Favorite
+                    <Heart className="w-4 h-4 ml-auto" />
+                  </DropdownMenuItem>
+                )}
+                {favBookId && (
+                  <DropdownMenuItem
+                    onClick={e => {
+                      e.stopPropagation();
+                      router.push(`/books/${book.id}/chat`);
+                    }}
+                    className="px-3 py-2 text-sm cursor-pointer"
+                  >
+                    Chat
+                    <MessageSquareMore className="w-4 h-4 ml-auto" />
+                  </DropdownMenuItem>
+                )}
+                {favBookId && (
+                  <DropdownMenuItem
+                    onClick={e => {
+                      e.stopPropagation();
+                      onOpen("removeFavBook", { bookId: book.id, favBookId });
+                    }}
+                    className="text-rose-600 px-3 py-2 text-sm cursor-pointer"
+                  >
+                    Remove
+                    <Trash className="w-4 h-4 ml-auto" />
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        )}
+        }
 
         <div className="flex justify-between">
           <div className="flex flex-col space-y-3">
