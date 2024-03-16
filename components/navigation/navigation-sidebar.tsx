@@ -9,6 +9,7 @@ import UserFreeLimit from "../user-free-limit";
 import { EntityAvatar } from "../entity-avatar";
 import { ModeToggle } from "../mode-toggle";
 import { NavigationItems } from "./navigation-items";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface NavigationSidebarProps {
   user: User;
@@ -41,14 +42,16 @@ const NavigationSidebar = ({
 
       <NavigationItems />
 
-      <UserFreeLimit
-        userLimitCount={userLimitCount}
-        isSubscribed={isSubscribed}
-      />
-      <div className="flex items-center justify-center gap-x-2">
-        <UserButton />
-        <ModeToggle />
-      </div>
+      <ScrollArea className="h-[900px] py-2">
+        <UserFreeLimit
+          userLimitCount={userLimitCount}
+          isSubscribed={isSubscribed}
+        />
+        <div className="flex items-center justify-center p-2">
+          <UserButton />
+          <ModeToggle />
+        </div>
+      </ScrollArea>
     </div>
   );
 };

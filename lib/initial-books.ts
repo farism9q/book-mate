@@ -23,8 +23,6 @@ export async function getInitialBooks({
   });
   const response = await axios.get(url);
 
-  console.log("response", response);
-
   const books: Book[] = response.data.items.map((response: any) => {
     return {
       id: response.id,
