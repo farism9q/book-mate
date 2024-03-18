@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UserButton } from "@clerk/nextjs";
+import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
 import { User } from "@prisma/client";
 
 import UserFreeLimit from "../user-free-limit";
@@ -10,6 +10,7 @@ import { EntityAvatar } from "../entity-avatar";
 import { ModeToggle } from "../mode-toggle";
 import { NavigationItems } from "./navigation-items";
 import { ScrollArea } from "../ui/scroll-area";
+import { Loader2 } from "lucide-react";
 
 interface NavigationSidebarProps {
   user: User;
@@ -47,8 +48,13 @@ const NavigationSidebar = ({
           userLimitCount={userLimitCount}
           isSubscribed={isSubscribed}
         />
-        <div className="flex items-center justify-center p-2">
-          <UserButton />
+        <div className="flex items-center justify-center gap-x-2 p-2">
+          <ClerkLoading>
+            <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+          </ClerkLoading>
+          <ClerkLoaded>
+            <UserButton />
+          </ClerkLoaded>
           <ModeToggle />
         </div>
       </ScrollArea>

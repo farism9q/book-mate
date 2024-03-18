@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 
 const url = process.env.PUBLIC_ABSOLUTE_URL;
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const { userId } = auth();
     const user = await currentUser();
