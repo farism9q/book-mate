@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import NavigationSidebar from "./navigation/navigation-sidebar";
+import { useNavToggle } from "@/hooks/use-nav-toggle";
 
 interface MobileSidebarProps {
   user: User;
@@ -20,6 +21,7 @@ export default function MobileSidebar({
   isSubscribed,
 }: MobileSidebarProps) {
   const [isMounted, setIsMounted] = useState(false);
+  const { open, onOpenChange } = useNavToggle();
 
   useEffect(() => {
     setIsMounted(true);
@@ -30,7 +32,7 @@ export default function MobileSidebar({
   if (!user) return null;
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={() => onOpenChange()}>
       <SheetTrigger className="absolute right-0 top-0">
         <Button variant={"ghost"} size={"icon"} className="md:hidden px-2">
           <Menu />

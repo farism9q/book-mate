@@ -1,5 +1,6 @@
 "use client";
 
+import { useNavToggle } from "@/hooks/use-nav-toggle";
 import { cn } from "@/lib/utils";
 import { Book, MessageSquareMore, Star } from "lucide-react";
 import Link from "next/link";
@@ -25,11 +26,15 @@ const routes = [
 
 export const NavigationItems = () => {
   const pathname = usePathname();
+  const { onOpenChange } = useNavToggle();
 
   return (
     <div className="flex flex-col h-full w-[90%] space-y-3">
       {routes.map(route => (
         <Link
+          onClick={() => {
+            onOpenChange();
+          }}
           key={route.label}
           href={route.href}
           className={cn(
