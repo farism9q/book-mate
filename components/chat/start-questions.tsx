@@ -9,18 +9,23 @@ import { Book, BookInfoForChatGPT } from "@/types";
 
 const StartQuestionsData = [
   {
-    question: "Who wrote the book ?",
+    question: "Who wrote the book?",
     description: "Know the author of the book you are reading.",
   },
   {
-    question: "When was the book published ?",
+    question: "When was the book published?",
     description: "Know when the book was published.",
   },
 
   {
-    question: "What is the book about ?",
+    question: "What is the book about?",
     description:
       "Know what the book is about. To decide if you want to read it.",
+  },
+  {
+    question: "What prerequisite knowledge for reading the book?",
+    description:
+      "Prepares you for the book by outlining essential prerequisites.",
   },
 ];
 
@@ -56,6 +61,8 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
     }
   };
 
+  // TODO - Check the fourth question and try to make the component more readable and responsive
+
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="text-center py-6">
@@ -76,7 +83,7 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
                 : "hover:opacity-40"
             }
           >
-            <div className="flex flex-col items-center justify-center space-y-4 bg-primary/20 border-2 border-primary rounded-lg p-3">
+            <div className="flex flex-col justify-center h-full space-y-2 bg-primary/20 border-2 border-primary rounded-lg p-3">
               <h3 className="dark:text-white text-lg">{data.question}</h3>
               <p className="text-zinc-500 dark:text-zinc-400 text-sm">
                 {data.description}

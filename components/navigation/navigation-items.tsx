@@ -26,14 +26,14 @@ const routes = [
 
 export const NavigationItems = () => {
   const pathname = usePathname();
-  const { onOpenChange } = useNavToggle();
+  const { onClose } = useNavToggle();
 
   return (
     <div className="flex flex-col h-full w-[90%] space-y-3">
       {routes.map(route => (
         <Link
           onClick={() => {
-            onOpenChange();
+            onClose();
           }}
           key={route.label}
           href={route.href}

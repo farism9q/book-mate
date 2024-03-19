@@ -8,6 +8,7 @@ interface NavToggleProviderProps {
 export const NavToggleContext = createContext({
   open: false,
   onOpenChange: () => {},
+  onClose: () => {},
 });
 
 export const NavToggleProvider = ({ children }: NavToggleProviderProps) => {
@@ -15,12 +16,14 @@ export const NavToggleProvider = ({ children }: NavToggleProviderProps) => {
 
   const open = isClicked;
   const onOpenChange = () => setIsClicked((clicked: boolean) => !clicked);
+  const onClose = () => setIsClicked(false);
 
   return (
     <NavToggleContext.Provider
       value={{
         open,
         onOpenChange,
+        onClose,
       }}
     >
       {children}

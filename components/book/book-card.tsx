@@ -7,7 +7,7 @@ import axios from "axios";
 import { useModal } from "@/hooks/use-modal-store";
 import { extractCategories } from "@/lib/book";
 import { Book } from "@/types";
-import { ErrorType } from "@/constants";
+import { CategoriesColors, ErrorType } from "@/constants";
 
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
@@ -142,11 +142,18 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
             {categories.length > 0 && (
               <div className="flex justify-between items-center">
                 <div className="mr-2">
-                  {categories?.map((category: string) => (
-                    <Badge variant={"outline"} key={category}>
-                      {category}
-                    </Badge>
-                  ))}
+                  {categories?.map((category: string) => {
+                    const className = CategoriesColors[category.toLowerCase()];
+                    return (
+                      <Badge
+                        variant={"outline"}
+                        className={className ? className : "bg-gray-500"}
+                        key={category}
+                      >
+                        {category}
+                      </Badge>
+                    );
+                  })}
                 </div>
               </div>
             )}
