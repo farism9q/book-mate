@@ -61,8 +61,6 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
     }
   };
 
-  // TODO - Check the fourth question and try to make the component more readable and responsive
-
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="text-center py-6">
