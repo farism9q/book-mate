@@ -2,6 +2,10 @@
 <b>Book mate</b>
 </h1>
 
+# Under active development
+
+> This project is currently being improved to add more features.
+
 ## Desktop demo
 
 ![](https://github.com/farism9q/delete/blob/master/gifs/desktop.gif)
