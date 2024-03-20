@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">
+<b>Book mate</b>
+</h1>
 
-## Getting Started
+## Desktop demo
+![](https://github.com/farism9q/delete/blob/master/gifs/desktop.gif)
+## Mobile demo
+![](https://github.com/farism9q/delete/blob/master/gifs/mobile.gif)
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Overview](#overview)
+- [App Architecture](#app-architecture)
+- [Hosting](#hosting)
+- [Features](#features)
+  - [Searching book](#searching-book)
+  - [Add book to favorite list](#add-book-to-favorite-list)
+  - [ChatGPT Integration](#chatGPT-integration)
+  - [Free Limit](#free-limit)
+- [Live Demo](#live-demo)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Overview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This web application is designed to users to search for books, view book details, save their favorite books, and utilize ChatGPT for any inquiries about the books..
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# App Architecture
 
-## Learn More
+- React
+- TypeScript
+- Next.js: React framework for building server-side rendered React applications.
+- Supabase
+- Shadcn
+- TailwindCSS
+- Stripe
+- Clerk - Authentication
 
-To learn more about Next.js, take a look at the following resources:
+### Hosting
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Supabase - Database
+- Vercel - Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Features
 
-## Deploy on Vercel
+### Searching book
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Users can search for books by providing the book title.
+- They can select a book to view detailed information about the book, including title, author, description, and more.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Add book to favorite list
+
+- Users can save their favorite books for later reference.
+
+### ChatGPT Integration
+
+- Users can ask questions about the books using ChatGPT.
+
+### Free Limit
+
+- Users are limited to saving up to 5 favorite books. Additional books can be purchased with Stripe integration.
+
+## Live Demo
+
+[Visit website](https://book-mate-faris-alqahtanis-projects.vercel.app/sign-in?redirect_url=https%3A%2F%2Fbook-mate-faris-alqahtanis-projects.vercel.app%2F)
