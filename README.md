@@ -3,8 +3,11 @@
 </h1>
 
 ## Desktop demo
+
 ![](https://github.com/farism9q/delete/blob/master/gifs/desktop.gif)
+
 ## Mobile demo
+
 ![](https://github.com/farism9q/delete/blob/master/gifs/mobile.gif)
 
 ## Table of Contents
@@ -21,7 +24,7 @@
 
 ## Overview
 
-This web application is designed to users to search for books, view book details, save their favorite books, and utilize ChatGPT for any inquiries about the books..
+This web application is designed for readers to search for books, view book details, save their favorite books, and utilize ChatGPT for any inquiries about the books..
 
 # App Architecture
 
@@ -60,4 +63,4 @@ This web application is designed to users to search for books, view book details
 
 ## Live Demo
 
-[Visit website](https://book-mate-faris-alqahtanis-projects.vercel.app/sign-in?redirect_url=https%3A%2F%2Fbook-mate-faris-alqahtanis-projects.vercel.app%2F)
+[Visit website](https://book-mate-3fxgmsqxu-faris-alqahtanis-projects.vercel.app/)
