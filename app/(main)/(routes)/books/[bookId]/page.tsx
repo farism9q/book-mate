@@ -15,7 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import AddFavBook from "@/components/add-fav-book";
 import ChatBook from "@/components/chat-book";
-import BookDetailLoading from "./loading";
 
 interface BookDetailPageProps {
   params: {

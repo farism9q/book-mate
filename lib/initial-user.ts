@@ -8,9 +8,14 @@ export const initialUser = async (): Promise<User> => {
   if (!clerkUser) {
     return redirectToSignIn();
   }
-  const user = await db.user.findUnique({
+  const user = await db.user.update({
     where: {
       userClerkId: clerkUser.id,
+    },
+    data: {
+      email: clerkUser.emailAddresses[0].emailAddress,
+      name: clerkUser.firstName + " " + clerkUser.lastName,
+      imageURL: clerkUser.imageUrl,
     },
   });
 

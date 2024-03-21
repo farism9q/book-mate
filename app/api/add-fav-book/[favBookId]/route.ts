@@ -40,7 +40,6 @@ export async function DELETE(
 
     return NextResponse.json(updatedUser);
   } catch (err) {
-    console.log("DELETE_FAV_BOOK", err);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

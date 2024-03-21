@@ -3,6 +3,9 @@
 import qs from "query-string";
 import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { useModal } from "@/hooks/use-modal-store";
 
 import {
   Dialog,
@@ -12,9 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useModal } from "@/hooks/use-modal-store";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const RemoveFavoriteBookModal = () => {
   const { isOpen, onClose, type, data } = useModal();
@@ -35,12 +37,17 @@ export const RemoveFavoriteBookModal = () => {
         },
       });
 
+      // Did not use toast.promise here because we want to disable the buttons (confirm and cancel) while the request is being made
+      const toastLoaderId = toast.loading("Removing book from favorite");
       await axios.delete(url);
+      toast.dismiss(toastLoaderId);
+
+      toast.success("Book removed from favorite");
 
       onClose();
       router.refresh();
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to remove book from favorite");
     } finally {
       setIsLoading(false);
     }

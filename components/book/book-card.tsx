@@ -7,7 +7,7 @@ import axios from "axios";
 import { useModal } from "@/hooks/use-modal-store";
 import { extractCategories } from "@/lib/book";
 import { Book } from "@/types";
-import { CategoriesColors, ErrorType } from "@/constants";
+import { ErrorType } from "@/constants";
 
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
@@ -24,6 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface BookCardProps {
   book: Book;
@@ -37,29 +38,46 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
   const onBookClick = (bookId: string) => {
     router.push(`/books/${bookId}`);
   };
+
   const onAddBookAsFav = async (bookId: string) => {
     try {
       const url = qs.stringifyUrl({
         url: "/api/add-fav-book",
       });
-      await axios.post(url, { bookId });
 
-      router.push(`/books/${book.id}/chat`);
-      router.refresh();
+      toast.promise(axios.post(url, { bookId }), {
+        loading: "Adding to favorite",
+        success(data) {
+          router.push(`/books/${book.id}/chat`);
+          router.refresh();
+          return "Added to favorite";
+        },
+        error(error) {
+          if (
+            error?.response?.status === 403 &&
+            error.response.data?.type === ErrorType.ALREADY_FAV
+          ) {
+            router.push(`/books/${book.id}`);
+            router.refresh();
+            return "Already added as favorite";
+          }
+          if (
+            error?.response?.status === 403 &&
+            error.response.data?.type === ErrorType.UPGRADE_PLAN
+          ) {
+            onOpen("upgradePlan");
+            return "You need to upgrade";
+          }
+
+          return "Something went wrong";
+        },
+      });
     } catch (err: any) {
-      console.log("ADD_BOOK_AS_FAV", err);
-
       if (
-        err?.response?.status === 403 &&
-        err.response.data.type === ErrorType.ALREADY_FAV
+        err.response.data?.type !== ErrorType.ALREADY_FAV &&
+        err.response.data?.type !== ErrorType.UPGRADE_PLAN
       ) {
-        router.push(`/books/${book.id}/chat`);
-      }
-      if (
-        err?.response?.status === 403 &&
-        err.response.data.type === ErrorType.UPGRADE_PLAN
-      ) {
-        onOpen("upgradePlan");
+        toast.error("Something went wrong");
       }
     }
   };
@@ -79,20 +97,18 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
           alt={book.volumeInfo.title}
         />
       </CardHeader>
-      <CardContent className="pl-2 pr-0">
+      <CardContent className="px-2">
         {
-          <div className="flex items-center">
-            <div className="w-full" />
-
+          <div className="flex flex-row-reverse py-2 items-start">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <div
                   onClick={e => {
                     e.stopPropagation();
                   }}
-                  className="ml-auto pt-2 hover:opacity-30"
+                  className="ml-auto hover:opacity-30"
                 >
-                  <MoreVertical className="w-6 h-6" />
+                  <MoreVertical className="size-5 hover:border-[1px] border-slate-400 dark:border-slate-200" />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="absolute right-0 top-0 z-10 bg-white dark:bg-zinc-800 shadow-lg rounded-md py-2 w-40">
@@ -134,44 +150,35 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
+            {categories.length > 0 && (
+              <div className="flex flex-wrap gap-1 items-center w-full">
+                {categories?.map((category: string) => {
+                  return (
+                    <Badge variant={"outline"} key={category}>
+                      {category}
+                    </Badge>
+                  );
+                })}
+              </div>
+            )}
           </div>
         }
 
-        <div className="flex justify-between">
-          <div className="flex flex-col space-y-3">
-            {categories.length > 0 && (
-              <div className="flex justify-between items-center">
-                <div className="mr-2">
-                  {categories?.map((category: string) => {
-                    const className = CategoriesColors[category.toLowerCase()];
-                    return (
-                      <Badge
-                        variant={"outline"}
-                        className={className ? className : "bg-gray-500"}
-                        key={category}
-                      >
-                        {category}
-                      </Badge>
-                    );
-                  })}
-                </div>
+        <div className="flex flex-col space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-md font-bold text-primary line-clamp-1">
+              {book.volumeInfo?.title}
+            </h2>
+            {book.volumeInfo?.averageRating && (
+              <div className="flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400 font-bold">
+                ({book.volumeInfo?.averageRating})
+                <Star className="w-4 h-4" />
               </div>
             )}
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-md font-bold text-primary line-clamp-1">
-                {book.volumeInfo?.title}
-              </h2>
-              {book.volumeInfo?.averageRating && (
-                <div className="flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400 font-bold">
-                  ({book.volumeInfo?.averageRating})
-                  <Star className="w-4 h-4" />
-                </div>
-              )}
-            </div>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-3">
-              {book.volumeInfo?.description}
-            </p>
           </div>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-3">
+            {book.volumeInfo?.description}
+          </p>
         </div>
       </CardContent>
     </Card>

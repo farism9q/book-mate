@@ -8,6 +8,7 @@ import { EntityAvatar } from "../entity-avatar";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeft } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface ChatHeaderProps {
   book: Book;
@@ -30,15 +31,16 @@ const ChatHeader = ({ book }: ChatHeaderProps) => {
     <Sheet>
       <SheetTrigger>
         <div className="flex items-center gap-2 bg-zinc-200/90 dark:bg-[#212121]">
-          <button
+          <Button
+            variant={"ghost"}
             onClick={e => {
               e.stopPropagation();
               router.back();
             }}
-            className="ml-2 rounded-md hover:bg-zinc-300/90 dark:hover:bg-[#333]"
+            className="ml-2 p-2 rounded-md hover:bg-zinc-300/90 dark:hover:bg-[#333]"
           >
             <ChevronLeft className="w-6 h-6" />
-          </button>
+          </Button>
           <div className="flex items-center pl-2 py-2 mr-10">
             <EntityAvatar
               src={book.volumeInfo.imageLinks.thumbnail}

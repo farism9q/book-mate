@@ -55,7 +55,6 @@ export async function GET(
       nextCursor,
     });
   } catch (err) {
-    console.log("GET_MESSAGES", err);
     return new NextResponse("INTERNAL ERROR", { status: 500 });
   }
 }

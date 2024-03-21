@@ -12,6 +12,7 @@ import Empty from "@/components/empty";
 
 const FavoriteBooksPage = async () => {
   const user = await initialUser();
+
   if (!user) {
     return redirect("/");
   }

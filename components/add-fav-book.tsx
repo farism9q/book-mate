@@ -4,9 +4,8 @@ import qs from "query-string";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useModal } from "@/hooks/use-modal-store";
-
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 export interface AddBookProps {
   bookId: string;
@@ -14,23 +13,22 @@ export interface AddBookProps {
 
 export default function AddFavBook({ bookId }: AddBookProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const { onOpen } = useModal();
   const router = useRouter();
   const onClick = async () => {
     try {
       setIsLoading(true);
+
       const url = qs.stringifyUrl({
         url: "/api/add-fav-book",
       });
-      await axios.post(url, { bookId });
+      toast.promise(axios.post(url, { bookId }), {
+        loading: "Adding to favorite",
+        success: "Added to favorite",
+      });
 
       setIsLoading(false);
     } catch (err: any) {
-      if (err?.response?.status === 403) {
-        onOpen("upgradePlan");
-      } else {
-        console.log("[ADD_FAV_BOOK_ERROR]", err);
-      }
+      toast.error("Something went wrong");
     } finally {
       router.refresh();
     }

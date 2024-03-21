@@ -29,7 +29,7 @@ export const NavigationItems = () => {
   const { onClose } = useNavToggle();
 
   return (
-    <div className="flex flex-col h-full w-[90%] space-y-3">
+    <div className="flex flex-col space-y-3">
       {routes.map(route => (
         <Link
           onClick={() => {

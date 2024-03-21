@@ -6,11 +6,10 @@ import { User } from "@prisma/client";
 
 import UserFreeLimit from "../user-free-limit";
 
-import { EntityAvatar } from "../entity-avatar";
 import { ModeToggle } from "../mode-toggle";
 import { NavigationItems } from "./navigation-items";
-import { ScrollArea } from "../ui/scroll-area";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 interface NavigationSidebarProps {
   user: User;
@@ -37,27 +36,34 @@ const NavigationSidebar = ({
     border-zinc-500 dark:bg-[#212121] gap-y-6"
     >
       <div className="flex flex-col items-center">
-        <EntityAvatar src={user?.imageURL} alt={user?.name || ""} />
-        <span className="text-sm font-semibold mt-4">{user?.name}</span>
+        <div className="relative w-40 h-32">
+          <Image
+            fill
+            src={user?.imageURL}
+            alt={user?.name || ""}
+            className="rounded-md"
+          />
+        </div>
+        <span className="text-lg font-semibold mt-4">{user?.name}</span>
       </div>
 
-      <NavigationItems />
+      <div className="flex-1  w-[90%]">
+        <NavigationItems />
+      </div>
 
-      <ScrollArea className="h-[900px] py-2">
-        <UserFreeLimit
-          userLimitCount={userLimitCount}
-          isSubscribed={isSubscribed}
-        />
-        <div className="flex items-center justify-center gap-x-2 p-2">
-          <ClerkLoading>
-            <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
-          </ClerkLoading>
-          <ClerkLoaded>
-            <UserButton />
-          </ClerkLoaded>
+      <UserFreeLimit
+        userLimitCount={userLimitCount}
+        isSubscribed={isSubscribed}
+      />
+      <div className="w-full flex items-center justify-center gap-x-2 mt-2 pr-2 mb-[-12px]">
+        <ClerkLoading>
+          <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+        </ClerkLoading>
+        <ClerkLoaded>
+          <UserButton afterSignOutUrl="/" />
           <ModeToggle />
-        </div>
-      </ScrollArea>
+        </ClerkLoaded>
+      </div>
     </div>
   );
 };

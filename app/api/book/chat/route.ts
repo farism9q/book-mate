@@ -77,7 +77,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(message);
   } catch (err) {
-    console.log("[POST_BOOK_CHAT]", err);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

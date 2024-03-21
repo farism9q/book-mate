@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { Book } from "@/types";
+
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
-import { Book } from "@/types";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   question: z.string().min(1),
@@ -48,7 +50,7 @@ const ChatInput = ({ userId, book }: { userId: string; book: Book }) => {
       form.reset();
       router.refresh();
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to send question");
     }
   };
   return (

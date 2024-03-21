@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 import { cn } from "@/lib/utils";
 
+import { Book, Check, MessageSquare, Zap } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -16,8 +17,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
 import { Badge } from "../ui/badge";
-import { Book, Check, MessageSquare, Zap } from "lucide-react";
 import { Card } from "../ui/card";
 
 const tools = [
@@ -51,7 +53,7 @@ export const UpgradePlanModal = () => {
 
       window.location.href = response.data.url;
     } catch (err) {
-      console.log("[UPGRADE_MODAL_ERROR]", err);
+      toast.error("Failed to upgrade plan");
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +65,7 @@ export const UpgradePlanModal = () => {
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center flex-col gap-y-4 pb-2">
             <div className="flex items-center gap-x-2 font-bold py-1">
-              Upgrade top
+              Upgrade to
               <Badge variant={"premium"} className="uppercase text-sm py-1">
                 pro
               </Badge>

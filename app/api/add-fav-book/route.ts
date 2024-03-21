@@ -71,7 +71,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(updatedUser);
   } catch (err) {
-    console.log("[POST_BOOK]", err);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

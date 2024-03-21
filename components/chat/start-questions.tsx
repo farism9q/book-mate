@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 
 import { Book, BookInfoForChatGPT } from "@/types";
 
+import { toast } from "sonner";
+
 const StartQuestionsData = [
   {
     question: "Who wrote the book?",
@@ -57,7 +59,7 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
       setIsLoading(false);
       router.refresh();
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to send question");
     }
   };
 
