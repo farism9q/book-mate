@@ -42,7 +42,7 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
   const onAddBookAsFav = async (bookId: string) => {
     try {
       const url = qs.stringifyUrl({
-        url: "/api/add-fav-book",
+        url: "/api/fav-book",
       });
 
       toast.promise(axios.post(url, { bookId }), {

@@ -42,12 +42,7 @@ export async function POST(req: Request) {
     });
 
     if (!conversation) {
-      conversation = await db.conversation.create({
-        data: {
-          bookId: book.id,
-          userId,
-        },
-      });
+      return new NextResponse("Conversation not found", { status: 404 });
     }
 
     const instructionMessage: ChatCompletionMessageParam = {
@@ -67,13 +62,27 @@ export async function POST(req: Request) {
 
     const responseMessage = response.choices[0].message;
 
-    const message = await db.message.create({
+    const updatedConversation = await db.conversation.update({
+      where: {
+        id: conversation.id,
+      },
       data: {
-        conversationId: conversation.id,
-        userQuestion: question,
-        chatGPTResponse: responseMessage.content as string,
+        updatedAt: new Date(),
+        messages: {
+          create: {
+            userQuestion: question,
+            chatGPTResponse: responseMessage.content as string,
+          },
+        },
+      },
+
+      include: {
+        messages: true,
       },
     });
+
+    const message =
+      updatedConversation.messages[updatedConversation.messages.length - 1];
 
     return NextResponse.json(message);
   } catch (err) {

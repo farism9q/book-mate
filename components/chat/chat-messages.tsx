@@ -46,8 +46,9 @@ const ChatMessages = ({ book, user, conversation }: ChatMessagesProps) => {
 
   return (
     <div className="flex-1 overflow-y-auto no-scrollbar my-4 px-10 md:px-20">
-      {!conversation?.id && <StartQuestions book={book} userId={user.id} />}
-
+      {data?.pages[0]?.items?.length === 0 && (
+        <StartQuestions userId={user.id} book={book} />
+      )}
       {hasNextPage && (
         <div className="flex justify-center">
           {isFetchingNextPage ? (

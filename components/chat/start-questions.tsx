@@ -64,7 +64,7 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
+    <div className="flex flex-col items-center justify-center h-full px-4 overflow-auto no-scrollbar ">
       <div className="text-center py-6">
         <h3 className="dark:text-white text-2xl">Start Questions</h3>
         <p className="text-zinc-400 text-sm">
@@ -84,8 +84,10 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
             }
           >
             <div className="flex flex-col justify-center h-full space-y-2 bg-primary/20 border-2 border-primary rounded-lg p-3">
-              <h3 className="dark:text-white text-lg">{data.question}</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-sm">
+              <h3 className="dark:text-white text-sm md:text-lg">
+                {data.question}
+              </h3>
+              <p className="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm">
                 {data.description}
               </p>
             </div>

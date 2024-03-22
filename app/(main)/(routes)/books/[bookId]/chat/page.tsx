@@ -9,6 +9,7 @@ import { Book } from "@/types";
 import ChatInput from "@/components/chat/chat-input";
 import ChatHeader from "@/components/chat/chat-header";
 import ChatMessages from "@/components/chat/chat-messages";
+import { createUpdateConversation } from "@/lib/conversation";
 
 interface BookChatPageProps {
   params: { bookId: string };
@@ -55,23 +56,14 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
     volumeInfo: response.data.volumeInfo,
   };
 
-  let conversation = await db.conversation.findFirst({
-    where: {
-      AND: [
-        {
-          bookId: book.id,
-        },
-        {
-          userId: user.id,
-        },
-      ],
-    },
-  });
+  let conversation = await createUpdateConversation(params.bookId);
 
   return (
     <div className="flex flex-col h-full w-full">
       <ChatHeader book={book} />
+
       <ChatMessages book={book} user={user} conversation={conversation} />
+
       <ChatInput userId={user.id} book={book} />
     </div>
   );

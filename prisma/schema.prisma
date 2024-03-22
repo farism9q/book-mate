@@ -50,6 +50,8 @@ model Favorite {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   bookId String
 
+  deleted Boolean @default(false)
+
   messages Message[]
 
   createdAt DateTime @default(now())

@@ -60,7 +60,7 @@ const NavigationSidebar = ({
           <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
         </ClerkLoading>
         <ClerkLoaded>
-          <UserButton afterSignOutUrl="/" />
+          <UserButton afterSignOutUrl="/sign-in" />
           <ModeToggle />
         </ClerkLoaded>
       </div>

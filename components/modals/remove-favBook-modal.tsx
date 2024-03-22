@@ -31,7 +31,7 @@ export const RemoveFavoriteBookModal = () => {
     try {
       setIsLoading(true);
       const url = qs.stringifyUrl({
-        url: `/api/add-fav-book/${favBookId}`,
+        url: `/api/fav-book/${favBookId}`,
         query: {
           bookId,
         },
@@ -62,7 +62,12 @@ export const RemoveFavoriteBookModal = () => {
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
             Are you sure you want to do this? <br />
-            The book will be permanently deleted.
+            Both the <span className="text-primary font-semibold">
+              book
+            </span>{" "}
+            and the{" "}
+            <span className="text-primary font-semibold">conversation</span>{" "}
+            will be permanently deleted.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="bg-gray-100 px-6 py-4">

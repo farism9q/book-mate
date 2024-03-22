@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "./ui/button";
 import { toast } from "sonner";
+import { ErrorType } from "@/constants";
+import { useModal } from "@/hooks/use-modal-store";
 
 export interface AddBookProps {
   bookId: string;
@@ -13,24 +15,48 @@ export interface AddBookProps {
 
 export default function AddFavBook({ bookId }: AddBookProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const { onOpen } = useModal();
   const router = useRouter();
   const onClick = async () => {
     try {
       setIsLoading(true);
 
       const url = qs.stringifyUrl({
-        url: "/api/add-fav-book",
-      });
-      toast.promise(axios.post(url, { bookId }), {
-        loading: "Adding to favorite",
-        success: "Added to favorite",
+        url: "/api/fav-book",
       });
 
-      setIsLoading(false);
+      toast.promise(axios.post(url, { bookId }), {
+        loading: "Adding to favorite",
+        success(data) {
+          router.push(`/books/${bookId}/chat`);
+          router.refresh();
+          return "Added to favorite";
+        },
+        error(error) {
+          if (
+            error?.response?.status === 403 &&
+            error.response.data?.type === ErrorType.ALREADY_FAV
+          ) {
+            router.push(`/books/${bookId}`);
+            router.refresh();
+            return "Already added as favorite";
+          }
+          if (
+            error?.response?.status === 403 &&
+            error.response.data?.type === ErrorType.UPGRADE_PLAN
+          ) {
+            onOpen("upgradePlan");
+            return "You need to upgrade";
+          }
+
+          return "Something went wrong";
+        },
+        finally() {
+          setIsLoading(false);
+        },
+      });
     } catch (err: any) {
       toast.error("Something went wrong");
-    } finally {
-      router.refresh();
     }
   };
 

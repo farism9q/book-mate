@@ -21,6 +21,12 @@ const ChattingPage = async () => {
   const conversations = await db.conversation.findMany({
     where: {
       userId: user.id,
+      deleted: {
+        not: true,
+      },
+    },
+    include: {
+      messages: true,
     },
     orderBy: {
       updatedAt: "desc",
@@ -51,30 +57,34 @@ const ChattingPage = async () => {
   return (
     <RoutePage title="Chatting" className="space-y-4">
       {conversations.length > 0 ? (
-        conversations.map((conversation, idx) => (
-          <Link
-            key={conversation.id}
-            href={`/books/${conversation.bookId}/chat`}
-            className="cursor-pointer border border-gray-200 rounded-md mx-2 mb-2 p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 transition duration-200 ease-in-out"
-          >
-            <div className="flex items-center gap-x-2 py-1">
-              <EntityAvatar
-                src={chattedBooks[idx].volumeInfo.imageLinks.thumbnail}
-                alt={chattedBooks[idx].volumeInfo.title}
-                className="md:w-16 md:h-16"
-              />
-              <h1>{chattedBooks[idx].volumeInfo.title}</h1>
-              <div className="ml-auto text-center space-y-1">
-                <span>
-                  {formatRelative(
-                    new Date(conversations[idx].updatedAt),
-                    new Date()
-                  )}
-                </span>
-              </div>
-            </div>
-          </Link>
-        ))
+        conversations.map(
+          (conversation, idx) =>
+            // Only conversations with messages
+            conversation.messages.length > 0 && (
+              <Link
+                key={conversation.id}
+                href={`/books/${conversation.bookId}/chat`}
+                className="cursor-pointer border border-gray-200 rounded-md mx-2 mb-2 p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 transition duration-200 ease-in-out"
+              >
+                <div className="flex items-center gap-x-2 py-1">
+                  <EntityAvatar
+                    src={chattedBooks[idx].volumeInfo.imageLinks.thumbnail}
+                    alt={chattedBooks[idx].volumeInfo.title}
+                    className="md:w-16 md:h-16"
+                  />
+                  <h1>{chattedBooks[idx].volumeInfo.title}</h1>
+                  <div className="ml-auto text-center space-y-1">
+                    <span>
+                      {formatRelative(
+                        new Date(conversations[idx].updatedAt),
+                        new Date()
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            )
+        )
       ) : (
         <Empty label="No chatting started yet" />
       )}

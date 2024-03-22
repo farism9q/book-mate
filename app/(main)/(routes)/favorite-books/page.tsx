@@ -21,6 +21,9 @@ const FavoriteBooksPage = async () => {
     where: {
       userId: user.id,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   // Map over the favoriteBooksIds to create an array of promises

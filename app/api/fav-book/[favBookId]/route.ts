@@ -24,11 +24,33 @@ export async function DELETE(
       return new NextResponse("Book id is missing", { status: 400 });
     }
 
+    const conversation = await db.conversation.findFirst({
+      where: {
+        bookId,
+        userId: user.id,
+      },
+    });
+
+    if (!conversation) {
+      return new NextResponse("Conversation not found", { status: 404 });
+    }
+
     const updatedUser = await db.user.update({
       where: {
         id: user.id,
       },
       data: {
+        conversations: {
+          update: {
+            where: {
+              id: conversation.id,
+              AND: [{ bookId }, { userId: user.id }],
+            },
+            data: {
+              deleted: true,
+            },
+          },
+        },
         favorites: {
           delete: {
             id: params.favBookId,
