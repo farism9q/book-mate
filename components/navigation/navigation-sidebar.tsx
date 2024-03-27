@@ -32,8 +32,8 @@ const NavigationSidebar = ({
 
   return (
     <div
-      className="flex flex-col h-full w-full items-center pt-6 pb-12 px-2 bg-white border-r-2
-    border-zinc-500 dark:bg-[#757575] gap-y-6"
+      className="flex flex-col h-full lg:fixed left-0 top-0 items-center pt-6 px-2 bg-white border-r-2
+    border-zinc-500 dark:bg-[#212121] gap-y-6"
     >
       <div className="flex flex-col items-center px-0">
         <div className="relative w-40 h-32">
@@ -51,18 +51,20 @@ const NavigationSidebar = ({
         <NavigationItems />
       </div>
 
-      <UserFreeLimit
-        userLimitCount={userLimitCount}
-        isSubscribed={isSubscribed}
-      />
-      <div className="w-full flex items-center justify-center gap-x-2 mt-2 pr-2 mb-[-12px]">
-        <ClerkLoading>
-          <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
-        </ClerkLoading>
-        <ClerkLoaded>
-          <UserButton afterSignOutUrl="/sign-in" />
-          <ModeToggle />
-        </ClerkLoaded>
+      <div className="overflow-y-auto no-scrollbar flex flex-col pb-6">
+        <UserFreeLimit
+          userLimitCount={userLimitCount}
+          isSubscribed={isSubscribed}
+        />
+        <div className="flex items-center justify-center gap-x-2 mt-2 pr-2">
+          <ClerkLoading>
+            <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+          </ClerkLoading>
+          <ClerkLoaded>
+            <UserButton afterSignOutUrl="/sign-in" />
+            <ModeToggle />
+          </ClerkLoaded>
+        </div>
       </div>
     </div>
   );
