@@ -32,10 +32,10 @@ const NavigationSidebar = ({
 
   return (
     <div
-      className="flex flex-col h-full w-full items-center py-6 bg-white border-r-2
-    border-zinc-500 dark:bg-[#212121] gap-y-6"
+      className="flex flex-col h-full w-full items-center pt-6 pb-12 px-2 bg-white border-r-2
+    border-zinc-500 dark:bg-[#757575] gap-y-6"
     >
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center px-0">
         <div className="relative w-40 h-32">
           <Image
             fill
@@ -47,7 +47,7 @@ const NavigationSidebar = ({
         <span className="text-lg font-semibold mt-4">{user?.name}</span>
       </div>
 
-      <div className="flex-1  w-[90%]">
+      <div className="flex-1 w-[90%]">
         <NavigationItems />
       </div>
 

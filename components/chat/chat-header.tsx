@@ -9,13 +9,25 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "../ui/button";
+import BookDescription from "../book/book-description";
+import { Badge } from "../ui/badge";
+import { useModal } from "@/hooks/use-modal-store";
+import { ActionTooltip } from "../action-tooltip";
+import { CHAT_LIMIT_PER_BOOK } from "@/constants";
 
 interface ChatHeaderProps {
   book: Book;
+  bookChatCountsLimit: number;
+  isSubscribed: boolean;
 }
 
-const ChatHeader = ({ book }: ChatHeaderProps) => {
+const ChatHeader = ({
+  book,
+  bookChatCountsLimit,
+  isSubscribed,
+}: ChatHeaderProps) => {
   const router = useRouter();
+  const { onOpen } = useModal();
 
   const [isMoutned, setIsMoutned] = useState(false);
 
@@ -41,7 +53,7 @@ const ChatHeader = ({ book }: ChatHeaderProps) => {
           >
             <ChevronLeft className="w-6 h-6" />
           </Button>
-          <div className="flex items-center pl-2 py-2 mr-10">
+          <div className="flex items-center pl-2 py-2 mr-10 w-full">
             <EntityAvatar
               src={book.volumeInfo.imageLinks.thumbnail}
               alt={book.volumeInfo.title}
@@ -50,6 +62,26 @@ const ChatHeader = ({ book }: ChatHeaderProps) => {
             <h1 className="text-sm md:text-2xl font-bold pl-2 line-clamp-1">
               {book.volumeInfo.title}
             </h1>
+            {!isSubscribed && (
+              <ActionTooltip
+                label={`${
+                  CHAT_LIMIT_PER_BOOK - bookChatCountsLimit
+                } chats left for this book`}
+              >
+                <div className="min-w-fit pl-2 ml-auto">
+                  <Badge
+                    variant={"premium"}
+                    className="text-sm md:text-2xl line-clamp-none"
+                    onClick={e => {
+                      e.stopPropagation();
+                      onOpen("upgradePlan");
+                    }}
+                  >
+                    <p className="text-white">{bookChatCountsLimit} / 5</p>
+                  </Badge>
+                </div>
+              </ActionTooltip>
+            )}
           </div>
         </div>
       </SheetTrigger>
@@ -80,8 +112,11 @@ const ChatHeader = ({ book }: ChatHeaderProps) => {
             </span>
           </div>
 
-          <ScrollArea className="text-xs h-[300px] md:text-sm text-zinc-500 dark:text-zinc-400 pt-2">
-            {book.volumeInfo.description}
+          <ScrollArea className="h-[300px] border-2 border-slate-200 rounded-md p-2 mt-2">
+            <BookDescription
+              description={book.volumeInfo.description}
+              className="text-zinc-500 dark:text-zinc-400"
+            />
           </ScrollArea>
         </div>
       </SheetContent>

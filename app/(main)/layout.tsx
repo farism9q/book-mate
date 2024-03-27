@@ -20,14 +20,14 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-full">
       <NavToggleProvider>
-        <nav className="hidden md:flex flex-col h-full w-[280px] z-30 fixed inset-y-0">
+        <nav className="hidden lg:flex flex-col h-full w-[280px] z-30 fixed inset-y-0">
           <NavigationSidebar
             user={user}
             userLimitCount={userLimit}
             isSubscribed={isSubscribed}
           />
         </nav>
-        <nav className="md:hidden sticky top-0 z-40">
+        <nav className="lg:hidden sticky top-0 z-40">
           <MobileSidebar
             user={user}
             userLimitCount={userLimit}
@@ -35,7 +35,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
           />
         </nav>
       </NavToggleProvider>
-      <main className="md:pl-[280px] h-full">{children}</main>
+      <main className="lg:pl-[280px] h-full">{children}</main>
     </div>
   );
 };

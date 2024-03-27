@@ -1,13 +1,4 @@
-"use client";
-
-import { useState } from "react";
-import axios from "axios";
-import qs from "query-string";
-import { useRouter } from "next/navigation";
-
 import { Book, BookInfoForChatGPT } from "@/types";
-
-import { toast } from "sonner";
 
 const StartQuestionsData = [
   {
@@ -30,39 +21,13 @@ const StartQuestionsData = [
       "Prepares you for the book by outlining essential prerequisites.",
   },
 ];
-
-const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const onClick = async (question: string) => {
-    try {
-      setIsLoading(true);
-      const url = qs.stringifyUrl({
-        url: `/api/book/chat`,
-        query: {
-          userId,
-        },
-      });
-
-      await axios.post(url, {
-        question,
-        book: {
-          id: book.id,
-          title: book.volumeInfo.title,
-          publisher: book.volumeInfo.publisher,
-          authors: book.volumeInfo.authors,
-          publishedDate: book.volumeInfo.publishedDate,
-        } as BookInfoForChatGPT,
-      });
-
-      setIsLoading(false);
-      router.refresh();
-    } catch (error) {
-      toast.error("Failed to send question");
-    }
-  };
-
+type Props = {
+  userId: string;
+  book: Book;
+  onSendMessage: (message: string) => void;
+  isPending: boolean;
+};
+const StartQuestions = ({ userId, book, onSendMessage, isPending }: Props) => {
   return (
     <div className="flex flex-col items-center justify-center h-full px-4 overflow-auto no-scrollbar ">
       <div className="text-center py-6">
@@ -75,10 +40,10 @@ const StartQuestions = ({ userId, book }: { userId: string; book: Book }) => {
         {StartQuestionsData.map(data => (
           <button
             key={data.question}
-            disabled={isLoading}
-            onClick={() => onClick(data.question)}
+            disabled={isPending}
+            onClick={() => onSendMessage(data.question)}
             className={
-              isLoading
+              isPending
                 ? "cursor-not-allowed opacity-40 transition-all"
                 : "hover:opacity-40"
             }

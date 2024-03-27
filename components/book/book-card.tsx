@@ -5,7 +5,7 @@ import qs from "query-string";
 import axios from "axios";
 
 import { useModal } from "@/hooks/use-modal-store";
-import { extractCategories } from "@/lib/book";
+import { extractCategories } from "@/lib/utils";
 import { Book } from "@/types";
 import { ErrorType } from "@/constants";
 
@@ -25,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
+import BookDescription from "./book-description";
 
 interface BookCardProps {
   book: Book;
@@ -176,9 +177,11 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
               </div>
             )}
           </div>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-3">
-            {book.volumeInfo?.description}
-          </p>
+
+          <BookDescription
+            description={book.volumeInfo.description}
+            className="line-clamp-3"
+          />
         </div>
       </CardContent>
     </Card>

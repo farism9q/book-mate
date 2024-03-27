@@ -4,6 +4,9 @@ import OpenAi from "openai";
 import { db } from "@/lib/db";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import { BookInfoForChatGPT } from "@/types";
+import { userHasFreeLimit } from "@/lib/user-limit";
+import { ErrorType } from "@/constants";
+import { checkSubscription } from "@/lib/user-subscription";
 
 const openai = new OpenAi({
   apiKey: process.env.OPENAI_API_KEY,
@@ -43,6 +46,24 @@ export async function POST(req: Request) {
 
     if (!conversation) {
       return new NextResponse("Conversation not found", { status: 404 });
+    }
+
+    const isFreeLimit = await userHasFreeLimit({
+      type: "bookChat",
+      conversationId: conversation.id,
+    });
+    const isSubscribed = await checkSubscription();
+
+    if (!isFreeLimit && !isSubscribed) {
+      return new NextResponse(
+        JSON.stringify({
+          message: "Upgrade your plan to send more questions",
+          type: ErrorType.UPGRADE_PLAN,
+        }),
+        {
+          status: 403,
+        }
+      );
     }
 
     const instructionMessage: ChatCompletionMessageParam = {

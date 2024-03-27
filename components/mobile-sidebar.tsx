@@ -34,7 +34,7 @@ export default function MobileSidebar({
   return (
     <Sheet open={open} onOpenChange={() => onOpenChange()}>
       <SheetTrigger className="absolute right-0 top-0">
-        <Button variant={"ghost"} size={"icon"} className="md:hidden px-2">
+        <Button variant={"ghost"} size={"icon"} className="lg:hidden px-2">
           <Menu />
         </Button>
       </SheetTrigger>

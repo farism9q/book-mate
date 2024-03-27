@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const isFreeLimit = await userHasFreeLimit();
+    const isFreeLimit = await userHasFreeLimit({ type: "addFavBook" });
     const isSubscribed = await checkSubscription();
 
     if (!isFreeLimit && !isSubscribed) {

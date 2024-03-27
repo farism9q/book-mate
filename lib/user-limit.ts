@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs";
 
 import { db } from "./db";
-import { USER_FREE_LIMIT } from "@/constants";
+import { CHAT_LIMIT_PER_BOOK, USER_FREE_LIMIT } from "@/constants";
 
 export async function increaseUserLimit() {
   const { userId } = auth();
@@ -36,24 +36,67 @@ export async function increaseUserLimit() {
   }
 }
 
-export async function userHasFreeLimit() {
+export async function userChatLimits({
+  conversationId,
+}: {
+  conversationId?: string;
+}) {
   const { userId } = auth();
 
   if (!userId) {
     return;
   }
 
-  const userLimit = await db.userLimit.findUnique({
-    where: {
-      userId,
-    },
-  });
-
-  if (!userLimit || userLimit.count < USER_FREE_LIMIT) {
-    return true;
+  if (!conversationId) {
+    return 0;
   }
 
-  return false;
+  const bookChatCounts = await db.message.findMany({
+    where: {
+      conversationId,
+    },
+    take: 5,
+  });
+
+  return bookChatCounts.length;
+}
+
+export async function userHasFreeLimit({
+  type,
+  conversationId,
+}: {
+  type: "addFavBook" | "bookChat";
+  conversationId?: string;
+}) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return;
+  }
+
+  if (type === "addFavBook") {
+    const userLimit = await db.userLimit.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    if (!userLimit || userLimit.count < USER_FREE_LIMIT) {
+      return true;
+    }
+
+    return false;
+  }
+
+  if (type === "bookChat") {
+    const bookChats = await userChatLimits({ conversationId });
+
+    if (!bookChats) {
+      return true;
+    }
+
+    return bookChats < CHAT_LIMIT_PER_BOOK;
+  }
 }
 
 export async function userLimitCount() {

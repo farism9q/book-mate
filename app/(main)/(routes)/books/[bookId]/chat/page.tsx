@@ -6,10 +6,11 @@ import { initialUser } from "@/lib/initial-user";
 import { db } from "@/lib/db";
 
 import { Book } from "@/types";
-import ChatInput from "@/components/chat/chat-input";
 import ChatHeader from "@/components/chat/chat-header";
-import ChatMessages from "@/components/chat/chat-messages";
 import { createUpdateConversation } from "@/lib/conversation";
+import { ChatPannel } from "@/components/chat/chat-pannel";
+import { checkSubscription } from "@/lib/user-subscription";
+import { userChatLimits, userHasFreeLimit } from "@/lib/user-limit";
 
 interface BookChatPageProps {
   params: { bookId: string };
@@ -58,13 +59,24 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
 
   let conversation = await createUpdateConversation(params.bookId);
 
+  const isSubscribedPromise = checkSubscription();
+  const bookChatCountsLimitPromise = userChatLimits({
+    conversationId: conversation.id,
+  });
+
+  const [isSubscribed, bookChatCountsLimit] = await Promise.all([
+    isSubscribedPromise,
+    bookChatCountsLimitPromise,
+  ]);
+
   return (
     <div className="flex flex-col h-full w-full">
-      <ChatHeader book={book} />
-
-      <ChatMessages book={book} user={user} conversation={conversation} />
-
-      <ChatInput userId={user.id} book={book} />
+      <ChatHeader
+        book={book}
+        bookChatCountsLimit={bookChatCountsLimit || 0}
+        isSubscribed={isSubscribed}
+      />
+      <ChatPannel book={book} user={user} conversation={conversation} />
     </div>
   );
 };

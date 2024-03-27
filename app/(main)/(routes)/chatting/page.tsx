@@ -55,7 +55,7 @@ const ChattingPage = async () => {
   });
 
   return (
-    <RoutePage title="Chatting" className="space-y-4">
+    <RoutePage title="Chatting" className="space-y-4 px-4">
       {conversations.length > 0 ? (
         conversations.map(
           (conversation, idx) =>

@@ -20,17 +20,19 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 import { Badge } from "../ui/badge";
-import { Card } from "../ui/card";
+import { Card, CardDescription } from "../ui/card";
 
 const tools = [
   {
     label: "unlimited books",
+    tip: "Enjoy of adding unlimited books, instead of 5 books",
     icon: Book,
     color: "text-violet-500",
     bgColor: "bg-violet-500/10",
   },
   {
     label: "unlimited chats",
+    tip: "Enjoy of unlimited chats, instead of 5 chats per book",
     icon: MessageSquare,
 
     color: "text-pink-700",
@@ -73,19 +75,26 @@ export const UpgradePlanModal = () => {
           </DialogTitle>
           <DialogDescription className="text-center py-2 space-y-2 text-zinc-900 font-medium">
             {tools.map(tool => (
-              <Card
-                key={tool.label}
-                className="flex justify-between items-center p-3 border-black/5"
-              >
-                <div className="flex gap-x-4 items-center">
+              <Card key={tool.label} className="p-3 border-black/5">
+                <CardDescription className="flex gap-x-4 w-full items-center relative">
                   <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
                     <tool.icon className={cn("w-6 h-6", tool.color)} />
                   </div>
-                  <div className="font-semibold text-sm uppercase">
-                    {tool.label}
+                  <div className="flex flex-col items-start gap-y-1">
+                    <div className="flex justify-between items-center w-full">
+                      <h3 className="font-bold text-sm uppercase">
+                        {tool.label}
+                      </h3>
+                      <div className="p-[2px] flex items-center absolute right-0 justify-center rounded-md bg-emerald-500/40">
+                        <Check className="text-emerald-500 size-[18px]" />
+                      </div>
+                    </div>
+
+                    <p className="text-sm text-left text-gray-500">
+                      {tool.tip}
+                    </p>
                   </div>
-                </div>
-                <Check className="text-emerald-500 w-5 h-5" />
+                </CardDescription>
               </Card>
             ))}
           </DialogDescription>

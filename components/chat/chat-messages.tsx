@@ -6,21 +6,41 @@ import { Book } from "@/types";
 import ChatItem from "./chat-item";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { Loader2, ServerCrash } from "lucide-react";
-import { Fragment } from "react";
+import { ElementRef, Fragment, useEffect, useRef, useState } from "react";
+import { useChatScroll } from "@/hooks/use-chat-scroll";
 
 interface ChatMessagesProps {
   book: Book;
   user: User;
   conversation: Conversation | null;
+  onSendMessage: (message: string) => void;
+  isPending: boolean;
 }
 
-const ChatMessages = ({ book, user, conversation }: ChatMessagesProps) => {
+const ChatMessages = ({
+  book,
+  user,
+  conversation,
+  onSendMessage,
+  isPending,
+}: ChatMessagesProps) => {
+  const chatRef = useRef<ElementRef<"div">>(null);
+  const bottomRef = useRef<ElementRef<"div">>(null);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
       bookId: book.id,
       userId: user.id,
       conversationId: conversation?.id,
     });
+
+  useChatScroll({
+    bottomRef,
+    chatRef,
+    messagesCount: data?.pages[0]?.items?.length || 0,
+    loadMore: fetchNextPage,
+    shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
+  });
 
   if (status === "loading") {
     return (
@@ -45,9 +65,17 @@ const ChatMessages = ({ book, user, conversation }: ChatMessagesProps) => {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto no-scrollbar my-4 px-10 md:px-20">
+    <div
+      ref={chatRef}
+      className="flex-1 overflow-y-auto no-scrollbar my-4 px-10 md:px-20"
+    >
       {data?.pages[0]?.items?.length === 0 && (
-        <StartQuestions userId={user.id} book={book} />
+        <StartQuestions
+          userId={user.id}
+          book={book}
+          onSendMessage={onSendMessage}
+          isPending={isPending}
+        />
       )}
       {hasNextPage && (
         <div className="flex justify-center">
@@ -86,6 +114,7 @@ const ChatMessages = ({ book, user, conversation }: ChatMessagesProps) => {
           ))}
         </div>
       }
+      <div ref={bottomRef} />
     </div>
   );
 };

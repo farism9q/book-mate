@@ -7,7 +7,7 @@ import { Staatliches } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { db } from "@/lib/db";
 import { initialUser } from "@/lib/initial-user";
-import { extractCategories } from "@/lib/book";
+import { extractCategories } from "@/lib/utils";
 
 import { Book } from "@/types";
 import { Star } from "lucide-react";
@@ -15,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import AddFavBook from "@/components/add-fav-book";
 import ChatBook from "@/components/chat-book";
+import BookDescription from "@/components/book/book-description";
 
 interface BookDetailPageProps {
   params: {
@@ -113,9 +114,7 @@ const BookTitlePage = async ({ params }: BookDetailPageProps) => {
               ))}
             </div>
 
-            <p className="text-zinc-500 dark:text-zinc-200 text-sm">
-              {book.volumeInfo.description}
-            </p>
+            <BookDescription description={book.volumeInfo.description} />
             {!userFav ? (
               <AddFavBook bookId={book.id} />
             ) : (
