@@ -1,11 +1,10 @@
 import axios from "axios";
 import qs from "query-string";
 import Link from "next/link";
-import { redirectToSignIn } from "@clerk/nextjs";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { formatRelative } from "date-fns";
 
 import { db } from "@/lib/db";
-import { initialUser } from "@/lib/initial-user";
 import { Book } from "@/types";
 
 import { EntityAvatar } from "@/components/entity-avatar";
@@ -13,14 +12,15 @@ import RoutePage from "@/components/route-page";
 import Empty from "@/components/empty";
 
 const ChattingPage = async () => {
-  const user = await initialUser();
-  if (!user) {
+  const { userId } = auth();
+
+  if (!userId) {
     return redirectToSignIn();
   }
 
   const conversations = await db.conversation.findMany({
     where: {
-      userId: user.id,
+      userId,
       deleted: {
         not: true,
       },
@@ -54,9 +54,13 @@ const ChattingPage = async () => {
     } as Book;
   });
 
+  const hasNoConversations =
+    conversations.length === 0 ||
+    conversations.every(conversation => conversation.messages.length === 0);
+
   return (
     <RoutePage title="Chatting" className="space-y-4 px-4">
-      {conversations.length > 0 ? (
+      {!hasNoConversations ? (
         conversations.map(
           (conversation, idx) =>
             // Only conversations with messages

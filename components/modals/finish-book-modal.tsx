@@ -1,5 +1,6 @@
 "use client";
 
+// Modal shadow is from: https://manuarora.in/boxshadows
 import { useState } from "react";
 import axios from "axios";
 import qs from "query-string";
@@ -21,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "../ui/textarea";
 import { StarRating } from "../StarRating";
 import { useRouter } from "next/navigation";
-import { truncateTxt } from "@/lib/utils";
+import { cn, truncateTxt } from "@/lib/utils";
 
 export const FinishBookModal = () => {
   const { isOpen, onClose, type, data } = useModal();
@@ -48,6 +49,9 @@ export const FinishBookModal = () => {
     onClose();
     return null;
   }
+
+  // Number of review modals are currently opened
+  const nbReviewsModal = finishedBooks?.length;
 
   const onClick = async () => {
     try {
@@ -76,52 +80,57 @@ export const FinishBookModal = () => {
   };
 
   return (
-    <>
-      <Confetti
-        width={width}
-        height={height}
-        recycle={false}
-        numberOfPieces={500}
-        tweenDuration={10000}
-      />
-      <Dialog open={isModalOpen}>
-        <DialogContent className="p-0 overflow-hidden">
-          <DialogHeader className="pt-8 px-6">
-            <DialogTitle className="text-2xl text-center font-bold">
-              Congratulations! You&apos;ve finished the book.
-              <span className="text-primary text-center line-clamp-1">
-                {truncateTxt({
-                  text: currentFinishedBook.volumeInfo.title,
-                  nbChars: 30,
-                })}
-              </span>
-            </DialogTitle>
-            <DialogDescription className="text-center text-zinc-500">
-              You can rate this book and write a review to share your thoughts
-              with others.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="px-6 py-4">
-            <div className="grid w-full gap-x-2 gap-y-4">
-              <StarRating
-                disabled={isLoading}
-                currentRating={rating}
-                onRatingChange={onRatingChange}
-                nbStars={5}
-              />
-              <Textarea
-                disabled={isLoading}
-                onChange={e => setReview(e.target.value)}
-                value={review}
-                placeholder="Type your review here..."
-              />
-              <Button disabled={isLoading} onClick={onClick}>
-                Send review
-              </Button>
-            </div>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+    <Dialog open={isModalOpen}>
+      <DialogContent
+        className={cn(
+          "p-0 overflow-hidden",
+          nbReviewsModal &&
+            nbReviewsModal > 1 &&
+            "shadow-[5px_5px_rgba(255,255,255,0.4),_10px_10px_rgba(255,255,255,0.3)] dark:shadow-[5px_5px_rgba(60,60,60,0.8),_10px_10px_rgba(60,60,60,0.7)]"
+        )}
+      >
+        <Confetti
+          width={width}
+          height={height}
+          recycle={false}
+          numberOfPieces={500}
+          tweenDuration={10000}
+        />
+        <DialogHeader className="pt-8 px-6">
+          <DialogTitle className="text-2xl text-center font-bold">
+            Congratulations! You&apos;ve finished the book.
+            <span className="text-primary text-center line-clamp-1">
+              {truncateTxt({
+                text: currentFinishedBook.volumeInfo.title,
+                nbChars: 30,
+              })}
+            </span>
+          </DialogTitle>
+          <DialogDescription className="text-center text-zinc-500">
+            You can rate this book and write a review to share your thoughts
+            with others.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="px-6 py-4">
+          <div className="grid w-full gap-x-2 gap-y-4">
+            <StarRating
+              disabled={isLoading}
+              currentRating={rating}
+              onRatingChange={onRatingChange}
+              nbStars={5}
+            />
+            <Textarea
+              disabled={isLoading}
+              onChange={e => setReview(e.target.value)}
+              value={review}
+              placeholder="Type your review here..."
+            />
+            <Button disabled={isLoading} onClick={onClick}>
+              Send review
+            </Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };

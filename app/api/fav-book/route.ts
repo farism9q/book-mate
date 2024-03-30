@@ -2,17 +2,17 @@ import { NextResponse } from "next/server";
 
 import { ErrorType } from "@/constants";
 import { db } from "@/lib/db";
-import { initialUser } from "@/lib/initial-user";
 import { increaseUserLimit, userHasFreeLimit } from "@/lib/user-limit";
 import { checkSubscription } from "@/lib/user-subscription";
+import { auth } from "@clerk/nextjs";
 
 export async function POST(req: Request) {
   try {
-    const user = await initialUser();
+    const { userId } = auth();
 
     const { bookId } = await req.json();
 
-    if (!user) {
+    if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
     const isAlreadyFav = await db.favorite.findFirst({
       where: {
-        userId: user.id,
+        userId,
         bookId,
       },
     });
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
     const updatedUser = await db.user.update({
       where: {
-        id: user.id,
+        userClerkId: userId,
       },
       data: {
         favorites: {

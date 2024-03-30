@@ -26,7 +26,7 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
   // Check if the user has the book as a favorite
   const userFavBook = await db.user.findFirst({
     where: {
-      id: user.id,
+      userClerkId: user.userClerkId,
       favorites: {
         some: {
           bookId: params.bookId,

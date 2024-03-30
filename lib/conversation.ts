@@ -1,19 +1,17 @@
 import { db } from "@/lib/db";
-import { initialUser } from "@/lib/initial-user";
-import { redirectToSignIn } from "@clerk/nextjs";
-import { date } from "zod";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 
 export const createUpdateConversation = async (bookId: string) => {
-  const user = await initialUser();
+  const { userId } = auth();
 
-  if (!user) {
+  if (!userId) {
     return redirectToSignIn();
   }
 
   let conversation = await db.conversation.findFirst({
     where: {
       bookId,
-      userId: user.id,
+      userId,
     },
     include: {
       messages: true,
@@ -38,7 +36,7 @@ export const createUpdateConversation = async (bookId: string) => {
     return await db.conversation.create({
       data: {
         bookId,
-        userId: user.id,
+        userId,
       },
     });
   }

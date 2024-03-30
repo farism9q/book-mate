@@ -1,13 +1,13 @@
 import { db } from "@/lib/db";
-import { initialUser } from "@/lib/initial-user";
+import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const user = await initialUser();
+    const { userId } = auth();
     const { bookId, review, rating } = await req.json();
 
-    if (!user) {
+    if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     const userFavoriteBook = await db.favorite.findFirst({
       where: {
-        userId: user.id,
+        userId,
         bookId,
       },
     });
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 
     const existingReview = await db.review.findFirst({
       where: {
-        userId: user.id,
+        userId,
         bookId,
       },
     });
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     } else {
       // Insert a new review
       newReview = await db.review.create({
-        data: { userId: user.id, bookId, review, rating },
+        data: { userId, bookId, review, rating },
       });
     }
 

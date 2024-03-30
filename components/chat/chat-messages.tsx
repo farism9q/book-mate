@@ -6,7 +6,7 @@ import { Book } from "@/types";
 import ChatItem from "./chat-item";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { Loader2, ServerCrash } from "lucide-react";
-import { ElementRef, Fragment, useEffect, useRef, useState } from "react";
+import { ElementRef, Fragment, useRef } from "react";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
 
 interface ChatMessagesProps {
@@ -30,7 +30,7 @@ const ChatMessages = ({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
       bookId: book.id,
-      userId: user.id,
+      userId: user.userClerkId,
       conversationId: conversation?.id,
     });
 
@@ -71,7 +71,7 @@ const ChatMessages = ({
     >
       {data?.pages[0]?.items?.length === 0 && (
         <StartQuestions
-          userId={user.id}
+          userId={user.userClerkId}
           book={book}
           onSendMessage={onSendMessage}
           isPending={isPending}
@@ -93,7 +93,7 @@ const ChatMessages = ({
       )}
 
       {
-        <div className="flex flex-col-reverse mt-auto">
+        <div className="relative flex flex-col-reverse mt-auto w-full h-[600px] overflow-y-auto no-scrollbar">
           {data?.pages.map((group, idx) => (
             <Fragment key={idx}>
               {group.items.map((message: Message) => (

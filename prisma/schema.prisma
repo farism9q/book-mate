@@ -44,7 +44,7 @@ model Favorite {
   bookId String
 
   userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [userClerkId], onDelete: Cascade)
 
   status FavoriteBookStatus @default(WILL_READ)
   
@@ -58,7 +58,7 @@ model Review {
   id String @id @default(uuid())
 
   userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [userClerkId], onDelete: Cascade)
 
   bookId String
 
@@ -75,7 +75,7 @@ model Review {
   id String @id @default(uuid())
 
   userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [userClerkId], onDelete: Cascade)
   bookId String
 
   deleted Boolean @default(false)

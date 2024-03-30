@@ -3,23 +3,23 @@ import axios from "axios";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
-import { initialUser } from "@/lib/initial-user";
 import { Book } from "@/types";
 
 import { BookCard } from "@/components/book/book-card";
 import RoutePage from "@/components/route-page";
 import Empty from "@/components/empty";
+import { auth } from "@clerk/nextjs";
 
 const FavoriteBooksPage = async () => {
-  const user = await initialUser();
+  const { userId } = auth();
 
-  if (!user) {
+  if (!userId) {
     return redirect("/");
   }
 
   const favoriteBooks = await db.favorite.findMany({
     where: {
-      userId: user.id,
+      userId,
     },
     orderBy: {
       createdAt: "desc",

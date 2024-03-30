@@ -176,7 +176,12 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
                 )}
                 {favBookId && (
                   <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className="flex items-center">
+                    <DropdownMenuSubTrigger
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
+                      className="flex items-center"
+                    >
                       <span className="uppercase">
                         {favBookStatus?.replace("_", " ")}
                       </span>

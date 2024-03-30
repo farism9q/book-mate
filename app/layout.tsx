@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { Check, Loader, X } from "lucide-react";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -35,7 +36,26 @@ export default function RootLayout({
             storageKey="book-mate-theme"
           >
             <ModalProvider />
-            <Toaster />
+            <Toaster
+              toastOptions={{
+                classNames: {
+                  error: "border border-rose-500",
+                  loading: "border border-zinc-700",
+                  success: "border border-emerald-500",
+                },
+              }}
+              icons={{
+                success: (
+                  <Check className="bg-emerald-500 text-white w-5 h-5 p-[2px] rounded-full" />
+                ),
+                loading: (
+                  <Loader className="bg-zinc-700 text-white w-5 h-5 p-[2px] rounded-full animate-spin" />
+                ),
+                error: (
+                  <X className="bg-rose-500 text-white w-5 h-5 p-[2px] rounded-full" />
+                ),
+              }}
+            />
             <QueryProvider>{children}</QueryProvider>
           </ThemeProvider>
         </body>

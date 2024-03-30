@@ -29,7 +29,7 @@ export const ChatPannel = ({ book, user, conversation }: Props) => {
         const url = qs.stringifyUrl({
           url: `/api/book/chat`,
           query: {
-            userId: user.id,
+            userId: user.userClerkId,
           },
         });
 
@@ -69,7 +69,7 @@ export const ChatPannel = ({ book, user, conversation }: Props) => {
         isPending={isPending}
       />
       <ChatInput
-        userId={user.id}
+        userId={user.userClerkId}
         book={book}
         onSendMessage={onSendMessage}
         isPending={isPending}

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { initialUser } from "@/lib/initial-user";
+import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function DELETE(
@@ -7,12 +7,12 @@ export async function DELETE(
   { params }: { params: { favBookId: string } }
 ) {
   try {
-    const user = await initialUser();
+    const { userId } = auth();
 
     const { searchParams } = new URL(req.url);
     const bookId = searchParams.get("bookId");
 
-    if (!user) {
+    if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -27,7 +27,7 @@ export async function DELETE(
     const conversation = await db.conversation.findFirst({
       where: {
         bookId,
-        userId: user.id,
+        userId,
       },
     });
 
@@ -37,14 +37,14 @@ export async function DELETE(
 
     const updatedUser = await db.user.update({
       where: {
-        id: user.id,
+        userClerkId: userId,
       },
       data: {
         conversations: {
           update: {
             where: {
               id: conversation.id,
-              AND: [{ bookId }, { userId: user.id }],
+              AND: [{ bookId }, { userId }],
             },
             data: {
               deleted: true,
@@ -71,10 +71,11 @@ export async function PATCH(
   { params }: { params: { favBookId: string } }
 ) {
   try {
-    const user = await initialUser();
+    const { userId } = auth();
+
     const { status } = await req.json();
 
-    if (!user) {
+    if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -88,7 +89,7 @@ export async function PATCH(
 
     const updatedFavBook = await db.favorite.update({
       where: {
-        userId: user.id,
+        userId,
         id: params.favBookId,
       },
       data: {

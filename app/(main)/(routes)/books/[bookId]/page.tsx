@@ -6,7 +6,6 @@ import { Staatliches } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 import { db } from "@/lib/db";
-import { initialUser } from "@/lib/initial-user";
 import { extractCategories } from "@/lib/utils";
 
 import { Book } from "@/types";
@@ -16,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import AddFavBook from "@/components/add-fav-book";
 import ChatBook from "@/components/chat-book";
 import BookDescription from "@/components/book/book-description";
+import { auth } from "@clerk/nextjs";
 
 interface BookDetailPageProps {
   params: {
@@ -27,9 +27,9 @@ const font = Staatliches({ subsets: ["latin"], weight: "400" });
 
 const BookTitlePage = async ({ params }: BookDetailPageProps) => {
   const { bookId } = params;
-  const user = await initialUser();
+  const {userId} = auth()
 
-  if (!user) {
+  if (!userId) {
     return redirect("/");
   }
 
@@ -51,7 +51,7 @@ const BookTitlePage = async ({ params }: BookDetailPageProps) => {
 
   const userFav = await db.user.findUnique({
     where: {
-      id: user.id,
+      userClerkId: userId,
       favorites: {
         some: {
           bookId: book.id,
