@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import BookCard from "./book/book-card";
+import { BookCard } from "./book/book-card";
 import { Category } from "@/constants";
 import BookCardSkeleton from "./book/book-card-skeleton";
 

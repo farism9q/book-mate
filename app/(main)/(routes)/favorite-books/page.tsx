@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { initialUser } from "@/lib/initial-user";
 import { Book } from "@/types";
 
-import BookCard from "@/components/book/book-card";
+import { BookCard } from "@/components/book/book-card";
 import RoutePage from "@/components/route-page";
 import Empty from "@/components/empty";
 
@@ -17,7 +17,7 @@ const FavoriteBooksPage = async () => {
     return redirect("/");
   }
 
-  const favoriteBooksIds = await db.favorite.findMany({
+  const favoriteBooks = await db.favorite.findMany({
     where: {
       userId: user.id,
     },
@@ -27,7 +27,7 @@ const FavoriteBooksPage = async () => {
   });
 
   // Map over the favoriteBooksIds to create an array of promises
-  const bookPromises = favoriteBooksIds.map(favoriteBook => {
+  const bookPromises = favoriteBooks.map(favoriteBook => {
     const url = qs.stringifyUrl({
       url: `https://www.googleapis.com/books/v1/volumes/${favoriteBook.bookId}`,
       query: {
@@ -57,7 +57,8 @@ const FavoriteBooksPage = async () => {
                 <BookCard
                   key={book.id}
                   book={book}
-                  favBookId={favoriteBooksIds[idx].id}
+                  favBookId={favoriteBooks[idx].id}
+                  favBookStatus={favoriteBooks[idx].status}
                 />
               ))}
             </div>

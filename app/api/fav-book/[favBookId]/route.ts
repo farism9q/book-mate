@@ -65,3 +65,39 @@ export async function DELETE(
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: { favBookId: string } }
+) {
+  try {
+    const user = await initialUser();
+    const { status } = await req.json();
+
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    if (!params.favBookId) {
+      return new NextResponse("Favorite book id is missing", { status: 400 });
+    }
+
+    if (!status) {
+      return new NextResponse("Book's status is missing", { status: 400 });
+    }
+
+    const updatedFavBook = await db.favorite.update({
+      where: {
+        userId: user.id,
+        id: params.favBookId,
+      },
+      data: {
+        status,
+      },
+    });
+
+    return NextResponse.json(updatedFavBook);
+  } catch (err) {
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}

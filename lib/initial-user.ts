@@ -1,8 +1,9 @@
 import { currentUser, redirectToSignIn } from "@clerk/nextjs";
 import { db } from "./db";
 import { User } from "@prisma/client";
+import { cache } from "react";
 
-export const initialUser = async (): Promise<User> => {
+export const initialUser = cache(async (): Promise<User> => {
   const clerkUser = await currentUser();
 
   if (!clerkUser) {
@@ -37,4 +38,4 @@ export const initialUser = async (): Promise<User> => {
   });
 
   return newUser;
-};
+});

@@ -12,7 +12,9 @@ import { ErrorType } from "@/constants";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
 import {
+  Check,
   Heart,
+  Loader,
   MessageSquareMore,
   MoreVertical,
   Star,
@@ -23,18 +25,58 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSubContent,
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
 import BookDescription from "./book-description";
+import { FavoriteBookStatus } from "@prisma/client";
+import { useState } from "react";
+import { Separator } from "../ui/separator";
 
 interface BookCardProps {
   book: Book;
   favBookId?: string;
+  favBookStatus?: FavoriteBookStatus;
 }
 
-const BookCard = ({ book, favBookId }: BookCardProps) => {
+export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { onOpen } = useModal();
+  const { onOpen, data } = useModal();
+
+  const onBookStatusChange = async (status: FavoriteBookStatus) => {
+    if (status === favBookStatus) return;
+    if (!favBookId) return;
+
+    try {
+      setIsLoading(true);
+
+      const url = qs.stringifyUrl({
+        url: `/api/fav-book/${favBookId}`,
+      });
+
+      const response = await axios.patch(url, { status });
+
+      if (response.data.status === FavoriteBookStatus.FINISHED) {
+        const books =
+          data.finishedBooks?.length === 0
+            ? [book]
+            : [book, ...(data.finishedBooks || [])];
+
+        onOpen("finishBook", { finishedBooks: books });
+      }
+
+      toast.success("Book status updated");
+      router.refresh();
+    } catch (err: any) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const onBookClick = (bookId: string) => {
     router.push(`/books/${bookId}`);
@@ -102,15 +144,22 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
         {
           <div className="flex flex-row-reverse py-2 items-start">
             <DropdownMenu>
-              <DropdownMenuTrigger>
-                <div
-                  onClick={e => {
-                    e.stopPropagation();
-                  }}
-                  className="ml-auto hover:opacity-30"
-                >
-                  <MoreVertical className="size-5 hover:border-[1px] border-slate-400 dark:border-slate-200" />
-                </div>
+              <DropdownMenuTrigger
+                disabled={isLoading}
+                className={isLoading ? "outline-none" : ""}
+              >
+                {isLoading ? (
+                  <Loader className="w-4 h-4 animate-spin" />
+                ) : (
+                  <div
+                    onClick={e => {
+                      e.stopPropagation();
+                    }}
+                    className="ml-auto hover:opacity-30"
+                  >
+                    <MoreVertical className="size-6 hover:border-[1px] border-slate-400 dark:border-slate-200" />
+                  </div>
+                )}
               </DropdownMenuTrigger>
               <DropdownMenuContent className="absolute right-0 top-0 z-10 bg-white dark:bg-zinc-800 shadow-lg rounded-md py-2 w-40">
                 {!favBookId && (
@@ -126,28 +175,64 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
                   </DropdownMenuItem>
                 )}
                 {favBookId && (
-                  <DropdownMenuItem
-                    onClick={e => {
-                      e.stopPropagation();
-                      router.push(`/books/${book.id}/chat`);
-                    }}
-                    className="px-3 py-2 text-sm cursor-pointer"
-                  >
-                    Chat
-                    <MessageSquareMore className="w-4 h-4 ml-auto" />
-                  </DropdownMenuItem>
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="flex items-center">
+                      <span className="uppercase">
+                        {favBookStatus?.replace("_", " ")}
+                      </span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        {Object.values(FavoriteBookStatus).map(status => {
+                          return (
+                            <DropdownMenuItem
+                              key={status}
+                              onClick={e => {
+                                e.stopPropagation();
+                                onBookStatusChange(status);
+                              }}
+                              className="py-2 text-sm cursor-pointer"
+                            >
+                              {status.replace("_", " ")}
+                              {favBookStatus === status && (
+                                <Check className="w-4 h-4 ml-auto" />
+                              )}
+                            </DropdownMenuItem>
+                          );
+                        })}
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
                 )}
                 {favBookId && (
-                  <DropdownMenuItem
-                    onClick={e => {
-                      e.stopPropagation();
-                      onOpen("removeFavBook", { bookId: book.id, favBookId });
-                    }}
-                    className="text-rose-600 px-3 py-2 text-sm cursor-pointer"
-                  >
-                    Remove
-                    <Trash className="w-4 h-4 ml-auto" />
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuItem
+                      onClick={e => {
+                        e.stopPropagation();
+                        router.push(`/books/${book.id}/chat`);
+                      }}
+                      className="px-3 py-2 text-sm cursor-pointer"
+                    >
+                      Chat
+                      <MessageSquareMore className="w-4 h-4 ml-auto" />
+                    </DropdownMenuItem>
+
+                    <Separator className="h-[2px] my-[2px]" />
+
+                    <DropdownMenuItem
+                      onClick={e => {
+                        e.stopPropagation();
+                        onOpen("removeFavBook", {
+                          bookId: book.id,
+                          favBookId,
+                        });
+                      }}
+                      className="text-rose-600 px-3 py-2 text-sm cursor-pointer"
+                    >
+                      Remove
+                      <Trash className="w-4 h-4 ml-auto" />
+                    </DropdownMenuItem>
+                  </>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -187,5 +272,3 @@ const BookCard = ({ book, favBookId }: BookCardProps) => {
     </Card>
   );
 };
-
-export default BookCard;
