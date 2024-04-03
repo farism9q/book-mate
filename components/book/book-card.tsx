@@ -6,7 +6,7 @@ import axios from "axios";
 
 import { useModal } from "@/hooks/use-modal-store";
 import { extractCategories } from "@/lib/utils";
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 import { ErrorType } from "@/constants";
 
 import { Card, CardContent, CardHeader } from "../ui/card";

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { db } from "@/lib/db";
 import { extractCategories } from "@/lib/utils";
 
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 import { Star } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -27,7 +27,7 @@ const font = Staatliches({ subsets: ["latin"], weight: "400" });
 
 const BookTitlePage = async ({ params }: BookDetailPageProps) => {
   const { bookId } = params;
-  const {userId} = auth()
+  const { userId } = auth();
 
   if (!userId) {
     return redirect("/");

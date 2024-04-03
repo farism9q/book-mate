@@ -5,7 +5,7 @@ import axios from "axios";
 import { initialUser } from "@/lib/initial-user";
 import { db } from "@/lib/db";
 
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 import ChatHeader from "@/components/chat/chat-header";
 import { createUpdateConversation } from "@/lib/conversation";
 import { ChatPannel } from "@/components/chat/chat-pannel";

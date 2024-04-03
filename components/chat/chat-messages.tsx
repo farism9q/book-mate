@@ -2,7 +2,7 @@
 import { Conversation, Message, User } from "@prisma/client";
 
 import StartQuestions from "./start-questions";
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 import ChatItem from "./chat-item";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { Loader2, ServerCrash } from "lucide-react";

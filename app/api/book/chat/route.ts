@@ -3,7 +3,7 @@ import OpenAi from "openai";
 
 import { db } from "@/lib/db";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-import { BookInfoForChatGPT } from "@/types";
+import { BookInfoForChatGPT } from "@/types/book";
 import { userHasFreeLimit } from "@/lib/user-limit";
 import { ErrorType } from "@/constants";
 import { checkSubscription } from "@/lib/user-subscription";

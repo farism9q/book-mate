@@ -1,10 +1,19 @@
-import RoutePage from "@/components/route-page";
+import { UserProfile } from "@/components/profile/user-profile";
+import { initialUser } from "@/lib/initial-user";
+import { redirectToSignIn } from "@clerk/nextjs";
+import { User, UserSettings } from "@prisma/client";
 
-const AccountPage = () => {
+const AccountPage = async () => {
+  const user = (await initialUser()) as User & { userSettings: UserSettings };
+
+  if (!user) {
+    return redirectToSignIn();
+  }
+
   return (
-    <RoutePage title="Account">
-      <h3 className="text-lg text-center">This page is not yet implemented</h3>
-    </RoutePage>
+    <div className="relative flex flex-col items-center h-full w-full px-6 py-12">
+      <UserProfile user={user} />
+    </div>
   );
 };
 

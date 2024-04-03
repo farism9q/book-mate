@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
+import { SignOutButton, useAuth } from "@clerk/nextjs";
 import { User } from "@prisma/client";
 
 import UserFreeLimit from "../user-free-limit";
 
 import { ModeToggle } from "../mode-toggle";
 import { NavigationItems } from "./navigation-items";
-import { Loader2 } from "lucide-react";
 import Image from "next/image";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 interface NavigationSidebarProps {
   user: User;
@@ -23,12 +24,19 @@ const NavigationSidebar = ({
   isSubscribed,
 }: NavigationSidebarProps) => {
   const [isMounted, setIsMounted] = useState(false);
+  const { sessionId } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   if (!isMounted) return null;
+
+  if (!sessionId) {
+    router.replace("/sign-in");
+    return;
+  }
 
   return (
     <div
@@ -56,14 +64,11 @@ const NavigationSidebar = ({
           userLimitCount={userLimitCount}
           isSubscribed={isSubscribed}
         />
-        <div className="flex items-center justify-center gap-x-2 mt-2 pr-2">
-          <ClerkLoading>
-            <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
-          </ClerkLoading>
-          <ClerkLoaded>
-            <UserButton afterSignOutUrl="/sign-in" />
-            <ModeToggle />
-          </ClerkLoaded>
+        <div className="flex flex-col items-center justify-center gap-y-6 mt-2 pr-2">
+          <ModeToggle />
+          <SignOutButton signOutOptions={{ sessionId }}>
+            <Button variant={"destructive"}>Sign out</Button>
+          </SignOutButton>
         </div>
       </div>
     </div>

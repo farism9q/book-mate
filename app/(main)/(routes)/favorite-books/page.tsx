@@ -3,7 +3,7 @@ import axios from "axios";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 
 import { BookCard } from "@/components/book/book-card";
 import RoutePage from "@/components/route-page";

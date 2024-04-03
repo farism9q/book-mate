@@ -3,7 +3,7 @@ import qs from "query-string";
 import axios from "axios";
 import { toast } from "sonner";
 
-import { Book, BookInfoForChatGPT } from "@/types";
+import { Book, BookInfoForChatGPT } from "@/types/book";
 import ChatInput from "./chat-input";
 import ChatMessages from "./chat-messages";
 import { Conversation, User } from "@prisma/client";

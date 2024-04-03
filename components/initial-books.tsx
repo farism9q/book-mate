@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
 
 import { useInitialBooks } from "@/hooks/use-initial-books";
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 
 import {
   Form,

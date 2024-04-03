@@ -1,5 +1,5 @@
 import { BOOKS_PER_PAGE, Category } from "@/constants";
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 import axios from "axios";
 import qs from "query-string";
 

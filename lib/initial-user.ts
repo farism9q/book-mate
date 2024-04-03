@@ -1,9 +1,8 @@
 import { currentUser, redirectToSignIn } from "@clerk/nextjs";
 import { db } from "./db";
-import { User } from "@prisma/client";
 import { cache } from "react";
 
-export const initialUser = cache(async (): Promise<User> => {
+export const initialUser = cache(async () => {
   const clerkUser = await currentUser();
 
   if (!clerkUser) {
@@ -13,19 +12,13 @@ export const initialUser = cache(async (): Promise<User> => {
     where: {
       userClerkId: clerkUser.id,
     },
+    include: {
+      userSettings: true,
+    },
   });
 
   if (user) {
-    return await db.user.update({
-      where: {
-        userClerkId: clerkUser.id,
-      },
-      data: {
-        email: clerkUser.emailAddresses[0].emailAddress,
-        name: clerkUser.firstName + " " + clerkUser.lastName,
-        imageURL: clerkUser.imageUrl,
-      },
-    });
+    return user;
   }
 
   const newUser = await db.user.create({
@@ -34,6 +27,15 @@ export const initialUser = cache(async (): Promise<User> => {
       email: clerkUser.emailAddresses[0].emailAddress,
       name: clerkUser.firstName + " " + clerkUser.lastName,
       imageURL: clerkUser.imageUrl,
+      bio: "Nothing...",
+      userSettings: {
+        create: {
+          allowBooksVisibliity: false,
+        },
+      },
+    },
+    include: {
+      userSettings: true,
     },
   });
 

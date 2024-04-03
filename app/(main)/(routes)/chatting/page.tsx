@@ -5,7 +5,7 @@ import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { formatRelative } from "date-fns";
 
 import { db } from "@/lib/db";
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 
 import { EntityAvatar } from "@/components/entity-avatar";
 import RoutePage from "@/components/route-page";

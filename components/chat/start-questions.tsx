@@ -1,4 +1,4 @@
-import { Book, BookInfoForChatGPT } from "@/types";
+import { Book } from "@/types/book";
 
 const StartQuestionsData = [
   {

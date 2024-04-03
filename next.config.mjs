@@ -14,6 +14,13 @@ const nextConfig = {
         port: "",
         pathname: "*/**",
       },
+      {
+        //  (https://utfs.io/f/
+        protocol: "https",
+        hostname: "utfs.io",
+        port: "",
+        pathname: "/f/**",
+      },
     ],
   },
 };

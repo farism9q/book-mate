@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 
 import { EntityAvatar } from "../entity-avatar";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";

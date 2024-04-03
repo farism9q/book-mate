@@ -1,12 +1,18 @@
-import { Book } from "@/types";
+import { Book } from "@/types/book";
+import { User } from "@prisma/client";
 import { create } from "zustand";
 
-export type ModalType = "removeFavBook" | "upgradePlan" | "finishBook";
+export type ModalType =
+  | "removeFavBook"
+  | "upgradePlan"
+  | "finishBook"
+  | "editUserProfile";
 
 interface ModalData {
   bookId?: string;
   favBookId?: string;
   finishedBooks?: Book[];
+  user?: User;
 }
 
 interface ModalStore {

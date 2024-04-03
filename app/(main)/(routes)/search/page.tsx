@@ -4,7 +4,7 @@ import qs from "query-string";
 import { Metadata } from "next";
 
 import { BOOKS_PER_PAGE } from "@/constants";
-import { Book } from "@/types";
+import { Book } from "@/types/book";
 
 import { BookCard } from "@/components/book/book-card";
 import { SearchBooksAction } from "@/components/search-books-action";

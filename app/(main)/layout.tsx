@@ -14,7 +14,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   const isSubscribed = await checkSubscription();
 
   if (!user) {
-    redirectToSignIn();
+    return redirectToSignIn();
   }
 
   return (
