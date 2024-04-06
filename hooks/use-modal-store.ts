@@ -12,7 +12,7 @@ interface ModalData {
   bookId?: string;
   favBookId?: string;
   finishedBooks?: Book[];
-  user?: User;
+  user?: User & { externalAccounts: boolean };
 }
 
 interface ModalStore {

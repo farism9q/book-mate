@@ -15,7 +15,7 @@ import { Footer } from "./footer";
 import { updateUserSettings } from "@/actions/user-settings";
 
 type Props = {
-  user: User & { userSettings: UserSettings };
+  user: User & { userSettings: UserSettings; externalAccounts: boolean };
 };
 export const UserProfile = ({ user }: Props) => {
   const [showUserBooksToggle, setShowUserBooksToggle] = useState(
@@ -39,7 +39,6 @@ export const UserProfile = ({ user }: Props) => {
           router.refresh();
         })
         .catch(err => {
-          console.error(err);
           toast.error("Failed to update settings");
           setShowUserBooksToggle(!status); // Revert the toggle status
         });
@@ -47,6 +46,7 @@ export const UserProfile = ({ user }: Props) => {
   };
 
   const toggleStatusInfo = showUserBooksToggle ? "Turned on" : "Turned off";
+
   if (!user) {
     return null;
   }
@@ -55,25 +55,33 @@ export const UserProfile = ({ user }: Props) => {
     <div className="flex flex-col items-center border rounded-md pb-6 space-y-10 overflow-auto no-scrollbar h-full w-full">
       <div className="flex items-end justify-end w-full p-2">
         <Button
+          variant={"secondary"}
           onClick={() => onOpen("editUserProfile", { user })}
-          size="lg"
-          className="text-lg"
+          size="sm"
+          className="border-2 border-zinc-600/30 hover:bg-primary/10 transition-colors duration-300"
         >
           Edit
         </Button>
       </div>
-      <div className="grid gap-2 text-center">
-        <Image
-          src={user.imageURL}
-          alt={user.name}
-          className="rounded-md mx-auto mb-4 md:w-[320px] md:h-[320px]"
-          height="320"
-          width="320"
-        />
+      <div className="grid gap-2 space-y-4">
+        <div className="relative mx-auto">
+          <div className="absolute rounded-md h-full w-full -z-20 blur-md animate-blob animation-delay-75 bg-primary/70 dark:bg-primary/40" />
+          <div className="w-[200px] h-[200px] md:w-[320px] md:h-[320px]">
+            <Image
+              src={user.imageURL}
+              alt={user.name}
+              className="rounded-md mx-auto"
+              fill
+            />
+          </div>
+        </div>
+
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold">{user.name}</h1>
-          <div className="flex items-center h-28 justify-center">
-            <p className="px-6 w-full max-h-full text-md md:text-lg font-medium tracking-wide text-gray-500 dark:text-gray-400 overflow-auto no-scrollbar">
+          <h1 className="text-2xl text-center font-semibold leading-none tracking-tight">
+            {user.name}
+          </h1>
+          <div className="flex items-center h-fit mx-6 mt-6 justify-center border border-primary/10 rounded-md hover:border-primary/30 transition-all duration-300">
+            <p className="px-3 py-2 w-full max-h-full text-md text-sm md:text-lg font-medium tracking-wide text-muted-foreground overflow-auto no-scrollbar">
               {user?.bio}
             </p>
           </div>

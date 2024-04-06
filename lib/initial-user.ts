@@ -18,7 +18,7 @@ export const initialUser = cache(async () => {
   });
 
   if (user) {
-    return user;
+    return { ...user, externalAccounts: !!clerkUser?.externalAccounts.length };
   }
 
   const newUser = await db.user.create({
@@ -39,5 +39,5 @@ export const initialUser = cache(async () => {
     },
   });
 
-  return newUser;
+  return { ...newUser, externalAccounts: !!clerkUser?.externalAccounts.length };
 });

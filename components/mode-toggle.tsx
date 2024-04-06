@@ -14,7 +14,9 @@ export function ModeToggle() {
       <Button
         onClick={() => setTheme("light")}
         variant="outline"
-        className={theme === "light" ? "bg-[#f2f2f2b6]" : "bg-transparent"}
+        className={
+          theme === "light" ? "bg-muted-foreground/20" : "bg-transparent"
+        }
         size="icon"
       >
         <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all text-black dark:text-white" />
@@ -22,7 +24,9 @@ export function ModeToggle() {
       <Button
         onClick={() => setTheme("dark")}
         variant="outline"
-        className={theme === "dark" ? "bg-transparent/30" : "bg-transparent"}
+        className={
+          theme === "dark" ? "bg-muted-foreground/20" : "bg-transparent"
+        }
         size="icon"
       >
         <Moon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all text-black dark:text-white" />

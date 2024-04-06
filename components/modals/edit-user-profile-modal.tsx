@@ -35,19 +35,30 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Loader } from "lucide-react";
-const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  bio: z.string().max(160),
-  avatar: z.union([z.string().url(), z.string().length(0)]),
-  currentPassword: z.union([
-    z.string().min(8, "Your current password must be >= 8 chars"),
-    z.string().length(0),
-  ]),
-  newPassword: z.union([
-    z.string().min(8, "New password must be >= 8 chars"),
-    z.string().length(0),
-  ]),
-});
+
+const formSchema = z
+  .object({
+    name: z.string().min(2).max(50),
+    bio: z.string().max(250),
+    avatar: z.union([z.string().url(), z.string().length(0)]),
+    currentPassword: z.union([
+      z.string().min(8, "Your current password must be >= 8 chars"),
+      z.string().length(0),
+    ]),
+    newPassword: z.union([
+      z.string().min(8, "New password must be >= 8 chars"),
+      z.string().length(0),
+    ]),
+  })
+  .refine(data => {
+    if (data.currentPassword && !data.newPassword) {
+      return false;
+    }
+    if (data.newPassword && !data.currentPassword) {
+      return false;
+    }
+    return true;
+  });
 
 export const EditUserProfileModal = () => {
   const router = useRouter();
@@ -124,6 +135,7 @@ export const EditUserProfileModal = () => {
       !avatar
     ) {
       toast.info("No changes to save");
+      handleClearChanges();
       onClose();
       return;
     }
@@ -194,7 +206,7 @@ export const EditUserProfileModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="h-[80%] overflow-auto no-scrollbar">
+      <DialogContent className="h-[80%] overflow-auto no-scrollbar pt-16">
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <DialogHeader className="mx-8 flex justify-center items-center">
@@ -210,14 +222,6 @@ export const EditUserProfileModal = () => {
               />
             </DialogHeader>
             <div className="flex flex-col justify-center items-center p-2">
-              <div className="flex flex-col items-center text-center gap-2 py-2">
-                <h1 className="text-2xl font-bold">{user?.name}</h1>
-                <div className="w-full h-28 flex items-center justify-center">
-                  <p className="w-[75%] max-h-full text-sm font-medium text-center tracking-wide text-gray-500 dark:text-gray-400 overflow-auto no-scrollbar">
-                    {user?.bio}
-                  </p>
-                </div>
-              </div>
               <div className="w-full max-w-sm space-y-4">
                 <div className="space-y-2">
                   <FormField
@@ -257,41 +261,46 @@ export const EditUserProfileModal = () => {
                     )}
                   />
                 </div>
-                <div className="space-y-2">
-                  <FormField
-                    disabled={isLoading}
-                    control={control}
-                    name="currentPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Current password</FormLabel>
-                        <FormControl>
-                          <Input type="password" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Leave it blank if you don&apos;t want to change your
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <FormField
-                    disabled={isLoading}
-                    control={control}
-                    name="newPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>New password</FormLabel>
-                        <FormControl>
-                          <Input type="password" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                {!user?.externalAccounts && (
+                  <>
+                    <div className="space-y-2">
+                      <FormField
+                        disabled={isLoading}
+                        control={control}
+                        name="currentPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Current password</FormLabel>
+                            <FormControl>
+                              <Input type="password" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                              Leave it blank if you don&apos;t want to change
+                              your password
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <FormField
+                        disabled={isLoading}
+                        control={control}
+                        name="newPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>New password</FormLabel>
+                            <FormControl>
+                              <Input type="password" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </>
+                )}
 
                 <DialogFooter>
                   {isLoading ? (

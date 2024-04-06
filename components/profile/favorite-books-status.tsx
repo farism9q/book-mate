@@ -77,7 +77,7 @@ export const FavoriteBooksStatus = ({ userId, userName }: Props) => {
             opts={{
               align: "start",
             }}
-            className="max-w-[150px] sm:max-w-sm flex justify-center"
+            className="max-w-[150px] sm:max-w-sm flex justify-center transition-all duration-200"
           >
             <CarouselContent className="m-auto">
               {Object.values(FavoriteBookStatus).map(status => (
@@ -85,10 +85,9 @@ export const FavoriteBooksStatus = ({ userId, userName }: Props) => {
                   onClick={() => setShowUserBooks(!showUserBooks)}
                   key={status}
                   className={cn(
-                    "w-full flex justify-center items-center py-2 mx-0 px-0 text-black dark:text-[#F4F4F5] bg-[#FFFFFF] dark:bg-[#27272A] rounded-md hover:cursor-pointer",
-                    showUserBooks &&
-                      bookStatus === status &&
-                      "rounded-2xl bg-[#F4F4F5] dark:bg-[#18181B]"
+                    "w-full flex justify-center items-center py-2 mx-0 px-0 rounded-md border-2 border-b-8 text-zinc-700 dark:text-zinc-200 bg-primary/30 dark:bg-primary/10 hover:dark:bg-primary/20 border-primary/30 dark:border-primary/10 hover:cursor-pointer hover:bg-primary/20 transition-all duration-200",
+                    showUserBooks && bookStatus === status && "bg-primary/30",
+                    showUserBooks && "border-2"
                   )}
                 >
                   <span className="text-sm sm:text-3xl font-semibold">
@@ -105,7 +104,9 @@ export const FavoriteBooksStatus = ({ userId, userName }: Props) => {
         {showUserBooks && (
           <div className="flex flex-col pl-4 space-y-4 my-4">
             <div className="text-lg sm:text-3xl text-primary font-semibold">
-              {userName}&apos;s {bookStatus?.split("_").join(" ").toLowerCase()}{" "}
+              {userName}&apos;s {` "`}
+              {bookStatus?.split("_").join(" ").toLowerCase()}
+              {`" `}
               books list
             </div>
 

@@ -41,7 +41,7 @@ const NavigationSidebar = ({
   return (
     <div
       className="flex flex-col h-full lg:fixed left-0 top-0 items-center pt-6 px-2 bg-white border-r-2
-    border-zinc-500 dark:bg-[#212121] gap-y-6"
+    border-zinc-800 dark:bg-[#04090A] gap-y-6"
     >
       <div className="flex flex-col items-center px-0">
         <div className="relative w-40 h-32">

@@ -20,8 +20,7 @@ export async function POST(req: NextRequest) {
       lastName: clerkUpdateFields.lastName,
     });
 
-    let verifiedPasswordPromise, userAvatarPromise;
-
+    let verifiedPasswordPromise;
     if (clerkUpdateFields.currentPassword && clerkUpdateFields.newPassword) {
       verifiedPasswordPromise = clerkClient.users.verifyPassword({
         userId,
