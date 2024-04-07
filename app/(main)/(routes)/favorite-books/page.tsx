@@ -9,20 +9,46 @@ import { BookCard } from "@/components/book/book-card";
 import RoutePage from "@/components/route-page";
 import Empty from "@/components/empty";
 import { auth } from "@clerk/nextjs";
+import { FavoriteBookStatus } from "@prisma/client";
 
-const FavoriteBooksPage = async () => {
+const filterOpt = [
+  { value: "all", label: `All` },
+  { value: "finished", label: `Finished` },
+  { value: "will_read", label: `Will read` },
+  { value: "reading", label: `Reading` },
+];
+const sortOpt = [
+  { value: "asc", label: "Oldest" },
+  { value: "desc", label: "Newest" },
+];
+
+type Props = {
+  params: {};
+  searchParams: {
+    filter: string;
+    date: string;
+  };
+};
+
+const FavoriteBooksPage = async ({ searchParams }: Props) => {
   const { userId } = auth();
+
+  const { filter, date } = searchParams;
+
+  const status =
+    filter !== "all" ? filter?.replace(" ", "_").toUpperCase() : undefined;
 
   if (!userId) {
     return redirect("/");
   }
 
-  const favoriteBooks = await db.favorite.findMany({
+  let favoriteBooks = await db.favorite.findMany({
     where: {
       userId,
+      status: status as FavoriteBookStatus,
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: (date as "asc" | "desc") || "desc",
     },
   });
 
@@ -48,9 +74,16 @@ const FavoriteBooksPage = async () => {
   });
 
   return (
-    <RoutePage title="Favorite Books">
+    <RoutePage
+      title="Favorite Books"
+      filter={{ options: filterOpt, urlQuery: "filter" }}
+      sort={{
+        options: sortOpt,
+        urlQuery: "date",
+      }}
+    >
       {books.length > 0 ? (
-        <div className="flex flex-col justify-center items-center pt-24 space-y-24 overflow-y-auto">
+        <div className="flex flex-col justify-center items-center space-y-24 overflow-y-auto">
           <div className="flex flex-col items-center space-y-6">
             <div className="grid mx-8 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {books.map((book, idx) => (

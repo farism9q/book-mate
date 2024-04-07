@@ -11,8 +11,21 @@ import { EntityAvatar } from "@/components/entity-avatar";
 import RoutePage from "@/components/route-page";
 import Empty from "@/components/empty";
 
-const ChattingPage = async () => {
+const sortOpt = [
+  { value: "asc", label: "Oldest" },
+  { value: "desc", label: "Newest" },
+];
+
+type Props = {
+  params: {};
+  searchParams: {
+    date: string;
+  };
+};
+
+const ChattingPage = async ({ searchParams }: Props) => {
   const { userId } = auth();
+  const { date } = searchParams;
 
   if (!userId) {
     return redirectToSignIn();
@@ -29,7 +42,7 @@ const ChattingPage = async () => {
       messages: true,
     },
     orderBy: {
-      updatedAt: "desc",
+      updatedAt: (date as "asc" | "desc") || "desc",
     },
   });
 
@@ -59,7 +72,14 @@ const ChattingPage = async () => {
     conversations.every(conversation => conversation.messages.length === 0);
 
   return (
-    <RoutePage title="Chatting" className="space-y-4 px-4">
+    <RoutePage
+      title="Chatting"
+      className="space-y-4 px-4"
+      sort={{
+        options: sortOpt,
+        urlQuery: "date",
+      }}
+    >
       {!hasNoConversations ? (
         conversations.map(
           (conversation, idx) =>
