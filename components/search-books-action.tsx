@@ -6,6 +6,7 @@ import { z } from "zod";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useRouter } from "next/navigation";
+import { Search } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -28,30 +29,34 @@ export const SearchBooksAction = () => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex justify-center items-start gap-x-2"
-      >
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  autoFocus
-                  placeholder="book title"
-                  className="border-0 focus-visible:ring-0 text-black dark:text-white focus-visible:ring-offset-0"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="dark:text-white">
-          Search
-        </Button>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormControl>
+                  <Input
+                    autoFocus
+                    placeholder="Search books by title..."
+                    className="focus-visible:ring-0 focus-visible:ring-offset-0"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="w-12">
+            <button
+              type="submit"
+              className="dark:text-white bg-primary flex justify-center items-center rounded-e-md w-full h-full"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </form>
     </Form>
   );

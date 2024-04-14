@@ -54,7 +54,7 @@ const BookTitlePage = async ({ params, searchParams }: BookTitlePageProps) => {
       <SearchBooksAction />
       <div className="flex flex-col justify-center items-center pt-24 space-y-24 overflow-y-auto">
         <div className="flex flex-col items-center space-y-6">
-          <div className="grid mx-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {books.map((book: Book) => (
               <BookCard key={book.id} book={book} />
             ))}

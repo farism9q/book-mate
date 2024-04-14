@@ -18,8 +18,8 @@ const filterOpt = [
   { value: "reading", label: `Reading` },
 ];
 const sortOpt = [
-  { value: "asc", label: "Oldest" },
   { value: "desc", label: "Newest" },
+  { value: "asc", label: "Oldest" },
 ];
 
 type Props = {
@@ -85,7 +85,7 @@ const FavoriteBooksPage = async ({ searchParams }: Props) => {
       {books.length > 0 ? (
         <div className="flex flex-col justify-center items-center space-y-24 overflow-y-auto">
           <div className="flex flex-col items-center space-y-6">
-            <div className="grid mx-8 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
               {books.map((book, idx) => (
                 <BookCard
                   key={book.id}

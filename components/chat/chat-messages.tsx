@@ -93,7 +93,7 @@ const ChatMessages = ({
       )}
 
       {
-        <div className="relative flex flex-col-reverse mt-auto w-full h-[600px] overflow-y-auto no-scrollbar">
+        <div className="relative flex flex-col-reverse mt-auto w-full h-full overflow-y-auto no-scrollbar">
           {data?.pages.map((group, idx) => (
             <Fragment key={idx}>
               {group.items.map((message: Message) => (

@@ -144,7 +144,10 @@ export const EditUserProfileModal = () => {
       const userFields: UserAccountUpdate = {
         clerkUpdateFields: {
           firstName: name.split(" ")[0],
-          lastName: name.split(" ").slice(1).join(" "),
+          lastName:
+            name.split(" ").length > 1
+              ? name.split(" ").slice(1).join(" ")
+              : " ",
         },
         userUpdateFields: {
           bio,

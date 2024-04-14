@@ -28,7 +28,7 @@ export default function AddFavBook({ bookId }: AddBookProps) {
       toast.promise(axios.post(url, { bookId }), {
         loading: "Adding to favorite",
         success(data) {
-          router.push(`/books/${bookId}/chat`);
+          router.push(`/book/${bookId}/chat`);
           router.refresh();
           return "Added to favorite";
         },

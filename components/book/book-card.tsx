@@ -91,7 +91,7 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
       toast.promise(axios.post(url, { bookId }), {
         loading: "Adding to favorite",
         success(data) {
-          router.push(`/books/${book.id}/chat`);
+          router.push(`/book/${book.id}/chat`);
           router.refresh();
           return "Added to favorite";
         },
@@ -128,11 +128,7 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
   const categories = extractCategories(book.volumeInfo.categories);
 
   return (
-    <Card
-      onClick={() => onBookClick(book.id)}
-      key={book.id}
-      className="cursor-pointer hover:opacity-80 transition-all"
-    >
+    <Card key={book.id}>
       <CardHeader className="relative aspect-square w-full h-48">
         <Image
           fill
@@ -140,7 +136,10 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
           alt={book.volumeInfo.title}
         />
       </CardHeader>
-      <CardContent className="px-2">
+      <CardContent
+        onClick={() => onBookClick(book.id)}
+        className="px-2 cursor-pointer hover:opacity-80 transition-all"
+      >
         {
           <div className="flex flex-row-reverse py-2 items-start">
             <DropdownMenu>
@@ -155,13 +154,13 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
                     onClick={e => {
                       e.stopPropagation();
                     }}
-                    className="ml-auto hover:opacity-30"
+                    className="hover:opacity-30 hover:bg-neutral-200 hover:dark:bg-neutral-700 rounded-md py-1"
                   >
-                    <MoreVertical className="size-6 hover:border-[1px] border-slate-400 dark:border-slate-200" />
+                    <MoreVertical className="size-6" />
                   </div>
                 )}
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="absolute right-0 top-0 z-10 bg-white dark:bg-zinc-800 shadow-lg rounded-md py-2 w-40">
+              <DropdownMenuContent className="absolute right-0 top-0 z-10 bg-white dark:bg-black shadow-lg rounded-md py-2 w-40">
                 {!favBookId && (
                   <DropdownMenuItem
                     onClick={e => {
@@ -214,7 +213,7 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
                     <DropdownMenuItem
                       onClick={e => {
                         e.stopPropagation();
-                        router.push(`/books/${book.id}/chat`);
+                        router.push(`/book/${book.id}/chat`);
                       }}
                       className="px-3 py-2 text-sm cursor-pointer"
                     >

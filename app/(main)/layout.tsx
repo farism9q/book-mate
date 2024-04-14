@@ -18,7 +18,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="h-full">
+    <div>
       <NavToggleProvider>
         <nav className="hidden lg:flex flex-col h-full w-[280px] z-30 fixed inset-y-0">
           <NavigationSidebar
@@ -27,7 +27,8 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
             isSubscribed={isSubscribed}
           />
         </nav>
-        <nav className="lg:hidden sticky top-0 z-40">
+
+        <nav className="lg:hidden h-12 sticky px-2 mx-2 mt-4 top-4 z-50 flex justify-center items-center bg-white dark:bg-black border border-border rounded-2xl">
           <MobileSidebar
             user={user}
             userLimitCount={userLimit}

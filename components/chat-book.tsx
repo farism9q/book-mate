@@ -14,7 +14,7 @@ export default function ChatBook({ bookId }: ChatBookProps) {
         <p className="text-zinc-100">
           You can start chatting with the book now.
         </p>
-        <Link href={`/books/${bookId}/chat`}>
+        <Link href={`/book/${bookId}/chat`}>
           <Button variant={"premium"}>Chat</Button>
         </Link>
       </div>

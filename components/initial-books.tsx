@@ -65,7 +65,7 @@ const InitialBooks = () => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-y-4">
+    <div className="flex flex-col items-center gap-y-4 py-6">
       <Form {...form}>
         <FormField
           control={form.control}
@@ -79,7 +79,7 @@ const InitialBooks = () => {
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger className="bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none">
+                  <SelectTrigger className="border focus:ring-0 ring-offset-0 focus:ring-offset-0 capitalize outline-none">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                 </FormControl>

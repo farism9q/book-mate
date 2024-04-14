@@ -40,9 +40,9 @@ const RoutePage = ({
         </h1>
       </div>
 
-      <main className="flex flex-col py-20 space-y-4">
-        <div className="flex items-center justify-end gap-x-2 w-full">
-          <div className="flex items-center justify-center md:justify-end gap-x-2 px-4">
+      <main className="flex flex-col py-20 space-y-4 mx-4">
+        <div className="flex flex-col sm:flex-row items-center justify-end w-full">
+          <div className="w-fit flex flex-col sm:flex-row gap-2">
             {filter && (
               <Filter options={filter?.options} urlQuery={filter?.urlQuery} />
             )}

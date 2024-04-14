@@ -85,7 +85,7 @@ const ChatHeader = ({
           </div>
         </div>
       </SheetTrigger>
-      <SheetContent side={"left"}>
+      <SheetContent side={"left"} className="z-[100]">
         <div className="flex flex-col items-center">
           <EntityAvatar
             src={book.volumeInfo.imageLinks.thumbnail}
@@ -112,7 +112,7 @@ const ChatHeader = ({
             </span>
           </div>
 
-          <ScrollArea className="h-[300px] border-2 border-slate-200 rounded-md p-2 mt-2">
+          <ScrollArea className="h-[300px] border rounded-md p-2 mt-2">
             <BookDescription
               description={book.volumeInfo.description}
               className="text-zinc-500 dark:text-zinc-400"

@@ -33,10 +33,11 @@ export default function MobileSidebar({
 
   return (
     <Sheet open={open} onOpenChange={() => onOpenChange()}>
-      <SheetTrigger className="absolute right-0 top-0">
-        <Button variant={"ghost"} size={"icon"} className="lg:hidden px-2">
-          <Menu />
-        </Button>
+      <h1 className="text-primary text-lg font-bold p-2">Book mate.</h1>
+      <SheetTrigger className="ml-auto">
+        <button className="p-2">
+          <Menu className="w-5 h-5" />
+        </button>
       </SheetTrigger>
       <SheetContent side={"right"} className="p-0">
         <NavigationSidebar

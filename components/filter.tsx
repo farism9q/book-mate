@@ -24,7 +24,7 @@ export const Filter = ({ options, urlQuery }: Props) => {
   const currentFilter = searchParams.get(urlQuery);
 
   return (
-    <Tabs defaultValue={options[0].value} className="w-[400px]">
+    <Tabs defaultValue={options[0].value}>
       <TabsList>
         {options.map(option => (
           <TabsTrigger

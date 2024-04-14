@@ -87,24 +87,27 @@ const ChattingPage = async ({ searchParams }: Props) => {
             conversation.messages.length > 0 && (
               <Link
                 key={conversation.id}
-                href={`/books/${conversation.bookId}/chat`}
-                className="cursor-pointer border border-gray-200 rounded-md mx-2 mb-2 p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 transition duration-200 ease-in-out"
+                href={`/book/${conversation.bookId}/chat`}
+                className="cursor-pointer border border-gray-200 rounded-md mb-2 p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 transition duration-200 ease-in-out"
               >
                 <div className="flex items-center gap-x-2 py-1">
-                  <EntityAvatar
-                    src={chattedBooks[idx].volumeInfo.imageLinks.thumbnail}
-                    alt={chattedBooks[idx].volumeInfo.title}
-                    className="md:w-16 md:h-16"
-                  />
-                  <h1>{chattedBooks[idx].volumeInfo.title}</h1>
-                  <div className="ml-auto text-center space-y-1">
-                    <span>
-                      {formatRelative(
-                        new Date(conversations[idx].updatedAt),
-                        new Date()
-                      )}
-                    </span>
+                  <div className="flex-1 flex items-center gap-x-2">
+                    <EntityAvatar
+                      src={chattedBooks[idx].volumeInfo.imageLinks.thumbnail}
+                      alt={chattedBooks[idx].volumeInfo.title}
+                      className="md:w-16 md:h-16"
+                    />
+                    <h1 className="line-clamp-1">
+                      {chattedBooks[idx].volumeInfo.title}
+                    </h1>
                   </div>
+
+                  <span className="text-muted-foreground text-xs md:text-sm">
+                    {formatRelative(
+                      new Date(conversations[idx].updatedAt),
+                      new Date()
+                    )}
+                  </span>
                 </div>
               </Link>
             )

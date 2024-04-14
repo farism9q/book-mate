@@ -29,7 +29,7 @@ export const Sort = ({ options, urlQuery }: Props) => {
 
   return (
     <Select onValueChange={onChange}>
-      <SelectTrigger className="focus:ring-0 ring-offset-0 focus:ring-offset-0 capitalize outline-none px-4">
+      <SelectTrigger className="focus:ring-0 ring-offset-0 focus:ring-offset-0 capitalize outline-none gap-x-1">
         <SelectValue placeholder={options[0].label} />
       </SelectTrigger>
 
