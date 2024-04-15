@@ -8,7 +8,6 @@ import { useChatQuery } from "@/hooks/use-chat-query";
 import { ArrowDown, Loader2, ServerCrash } from "lucide-react";
 import { ElementRef, Fragment, useRef } from "react";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
-import { useMedia, useScroll } from "react-use";
 
 interface ChatMessagesProps {
   book: Book;
@@ -29,9 +28,6 @@ const ChatMessages = ({
   const bottomRef = useRef<ElementRef<"div">>(null);
   const scrollRef = useRef<ElementRef<"div">>(null);
 
-  const { y } = useScroll(scrollRef);
-  const isMobile = useMedia("(max-width: 1024px)");
-
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
       bookId: book.id,
@@ -43,8 +39,6 @@ const ChatMessages = ({
     bottomRef,
     chatRef,
     scrollRef,
-    isMobile,
-    y,
     messagesCount: data?.pages[0]?.items?.length || 0,
     loadMore: fetchNextPage,
     shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
@@ -131,7 +125,7 @@ const ChatMessages = ({
             </Fragment>
           ))}
           {showScrollButton && (
-            <div className="absolute bottom-2 right-4 border bg-zinc-700/10 rounded-full flex justify-center items-center p-2 hover:scale-110 transition-all">
+            <div className="absolute bottom-2 right-4 border bg-zinc-700/10 dark:bg-zinc-700/40 rounded-full flex justify-center items-center p-2 hover:scale-110 transition-all">
               <div className="absolute h-[50%] w-[50%] -z-20 blur-sm animate-blob animation-delay-75 bg-primary/70 dark:bg-primary/40" />
               <button
                 onClick={() => {

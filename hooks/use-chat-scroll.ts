@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
+import { useMedia } from "react-use";
 
 const SCROLL_THRESHOLD = 200;
+const BOTTOM_CLIENT_Y_THRESHOLD = 614.4000244140625; // This the inital value of the bottom div (clientY)
 
 type ChatScrollProps = {
   chatRef: React.RefObject<HTMLDivElement>;
   bottomRef: React.RefObject<HTMLDivElement>;
   scrollRef: React.RefObject<HTMLDivElement>;
-  y: number;
-  isMobile: boolean;
   messagesCount: number;
   loadMore: () => void;
   shouldLoadMore: boolean;
@@ -17,8 +17,6 @@ export function useChatScroll({
   bottomRef,
   chatRef,
   scrollRef,
-  y,
-  isMobile,
   messagesCount,
   loadMore,
   shouldLoadMore,
@@ -26,17 +24,34 @@ export function useChatScroll({
   const [hasInitialized, setHasInitialized] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
 
+  const isMobile = useMedia("(max-width: 1024px)", false);
+
   useEffect(() => {
-    if (!isMobile) {
+    const bottomDiv = bottomRef.current;
+
+    if (!bottomDiv || !isMobile) {
       return;
     }
 
-    if (y * -1 > SCROLL_THRESHOLD) {
-      setShowScrollButton(true);
-    } else {
-      setShowScrollButton(false);
-    }
-  }, [y, bottomRef, hasInitialized, scrollRef, isMobile]);
+    const handleScroll = () => {
+      const y = bottomDiv.getBoundingClientRect().y;
+      if (bottomRef.current && scrollRef.current) {
+        // If distance from bottom is more than 200px, show the scroll button
+        const shouldShowButton =
+          y - BOTTOM_CLIENT_Y_THRESHOLD >= SCROLL_THRESHOLD;
+
+        setShowScrollButton(shouldShowButton);
+      }
+    };
+
+    const currentScrollRef = scrollRef.current;
+    currentScrollRef?.addEventListener("scroll", handleScroll);
+
+    // Clean up event listener on unmount
+    return () => {
+      currentScrollRef?.removeEventListener("scroll", handleScroll);
+    };
+  }, [bottomRef, scrollRef, isMobile, messagesCount]);
 
   useEffect(() => {
     const topDiv = chatRef.current;
@@ -64,7 +79,7 @@ export function useChatScroll({
         return;
       }
 
-      // First mount, scroll to bottom
+      // // First mount, scroll to bottom
       if (bottomDiv && !hasInitialized) {
         setHasInitialized(true);
         return;
