@@ -62,27 +62,27 @@ const ChatHeader = ({
             <h1 className="text-sm md:text-2xl font-bold pl-2 line-clamp-1">
               {book.volumeInfo.title}
             </h1>
-            {!isSubscribed && (
-              <ActionTooltip
-                label={`${
-                  CHAT_LIMIT_PER_BOOK - bookChatCountsLimit
-                } chats left for this book`}
-              >
-                <div className="min-w-fit pl-2 ml-auto">
-                  <Badge
-                    variant={"premium"}
-                    className="text-sm md:text-2xl line-clamp-none"
-                    onClick={e => {
-                      e.stopPropagation();
-                      onOpen("upgradePlan");
-                    }}
-                  >
-                    <p className="text-white">{bookChatCountsLimit} / 5</p>
-                  </Badge>
-                </div>
-              </ActionTooltip>
-            )}
           </div>
+          {!isSubscribed && (
+            <ActionTooltip
+              label={`${
+                CHAT_LIMIT_PER_BOOK - bookChatCountsLimit
+              } chats left for this book`}
+            >
+              <div className="min-w-fit pr-2">
+                <Badge
+                  variant={"premium"}
+                  className="text-sm md:text-2xl line-clamp-none"
+                  onClick={e => {
+                    e.stopPropagation();
+                    onOpen("upgradePlan");
+                  }}
+                >
+                  <p className="text-white">{bookChatCountsLimit} / 5</p>
+                </Badge>
+              </div>
+            </ActionTooltip>
+          )}
         </div>
       </SheetTrigger>
       <SheetContent side={"left"} className="z-[100]">

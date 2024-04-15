@@ -12,8 +12,8 @@ import RoutePage from "@/components/route-page";
 import Empty from "@/components/empty";
 
 const sortOpt = [
-  { value: "asc", label: "Oldest" },
   { value: "desc", label: "Newest" },
+  { value: "asc", label: "Oldest" },
 ];
 
 type Props = {

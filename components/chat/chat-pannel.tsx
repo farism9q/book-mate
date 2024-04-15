@@ -68,12 +68,7 @@ export const ChatPannel = ({ book, user, conversation }: Props) => {
         onSendMessage={onSendMessage}
         isPending={isPending}
       />
-      <ChatInput
-        userId={user.userClerkId}
-        book={book}
-        onSendMessage={onSendMessage}
-        isPending={isPending}
-      />
+      <ChatInput onSendMessage={onSendMessage} isPending={isPending} />
     </>
   );
 };

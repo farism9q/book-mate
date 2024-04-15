@@ -12,12 +12,10 @@ const formSchema = z.object({
 });
 
 type Props = {
-  userId: string;
-  book: Book;
   onSendMessage: (message: string) => void;
   isPending: boolean;
 };
-const ChatInput = ({ userId, book, onSendMessage, isPending }: Props) => {
+const ChatInput = ({ onSendMessage, isPending }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

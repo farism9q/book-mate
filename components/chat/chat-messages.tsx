@@ -5,9 +5,10 @@ import StartQuestions from "./start-questions";
 import { Book } from "@/types/book";
 import ChatItem from "./chat-item";
 import { useChatQuery } from "@/hooks/use-chat-query";
-import { Loader2, ServerCrash } from "lucide-react";
+import { ArrowDown, Loader2, ServerCrash } from "lucide-react";
 import { ElementRef, Fragment, useRef } from "react";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
+import { useMedia, useScroll } from "react-use";
 
 interface ChatMessagesProps {
   book: Book;
@@ -26,6 +27,10 @@ const ChatMessages = ({
 }: ChatMessagesProps) => {
   const chatRef = useRef<ElementRef<"div">>(null);
   const bottomRef = useRef<ElementRef<"div">>(null);
+  const scrollRef = useRef<ElementRef<"div">>(null);
+
+  const { y } = useScroll(scrollRef);
+  const isMobile = useMedia("(max-width: 1024px)");
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
@@ -34,13 +39,22 @@ const ChatMessages = ({
       conversationId: conversation?.id,
     });
 
-  useChatScroll({
+  const { showScrollButton } = useChatScroll({
     bottomRef,
     chatRef,
+    scrollRef,
+    isMobile,
+    y,
     messagesCount: data?.pages[0]?.items?.length || 0,
     loadMore: fetchNextPage,
     shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
   });
+
+  const onScrollButton = () => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   if (status === "loading") {
     return (
@@ -67,7 +81,7 @@ const ChatMessages = ({
   return (
     <div
       ref={chatRef}
-      className="flex-1 overflow-y-auto no-scrollbar my-4 px-10 md:px-20"
+      className="flex-1 relative overflow-y-auto no-scrollbar my-4 px-16 md:px-20"
     >
       {data?.pages[0]?.items?.length === 0 && (
         <StartQuestions
@@ -93,10 +107,14 @@ const ChatMessages = ({
       )}
 
       {
-        <div className="relative flex flex-col-reverse mt-auto w-full h-full overflow-y-auto no-scrollbar">
+        <div
+          ref={scrollRef}
+          className="flex flex-col-reverse mt-auto w-full h-full overflow-y-auto no-scrollbar"
+        >
+          <div ref={bottomRef} />
           {data?.pages.map((group, idx) => (
             <Fragment key={idx}>
-              {group.items.map((message: Message) => (
+              {group.items.map((message: Message, messageIdx: number) => (
                 <div key={message.id} className="flex flex-col py-4">
                   <ChatItem
                     type="user"
@@ -112,9 +130,20 @@ const ChatMessages = ({
               ))}
             </Fragment>
           ))}
+          {showScrollButton && (
+            <div className="absolute bottom-2 right-4 border bg-zinc-700/10 rounded-full flex justify-center items-center p-2 hover:scale-110 transition-all">
+              <div className="absolute h-[50%] w-[50%] -z-20 blur-sm animate-blob animation-delay-75 bg-primary/70 dark:bg-primary/40" />
+              <button
+                onClick={() => {
+                  onScrollButton();
+                }}
+              >
+                <ArrowDown className="h-6 w-6 text-zinc-500" />
+              </button>
+            </div>
+          )}
         </div>
       }
-      <div ref={bottomRef} />
     </div>
   );
 };

@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 
+const SCROLL_THRESHOLD = 200;
+
 type ChatScrollProps = {
   chatRef: React.RefObject<HTMLDivElement>;
   bottomRef: React.RefObject<HTMLDivElement>;
+  scrollRef: React.RefObject<HTMLDivElement>;
+  y: number;
+  isMobile: boolean;
   messagesCount: number;
   loadMore: () => void;
   shouldLoadMore: boolean;
@@ -11,11 +16,27 @@ type ChatScrollProps = {
 export function useChatScroll({
   bottomRef,
   chatRef,
+  scrollRef,
+  y,
+  isMobile,
   messagesCount,
   loadMore,
   shouldLoadMore,
 }: ChatScrollProps) {
   const [hasInitialized, setHasInitialized] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
+  useEffect(() => {
+    if (!isMobile) {
+      return;
+    }
+
+    if (y * -1 > SCROLL_THRESHOLD) {
+      setShowScrollButton(true);
+    } else {
+      setShowScrollButton(false);
+    }
+  }, [y, bottomRef, hasInitialized, scrollRef, isMobile]);
 
   useEffect(() => {
     const topDiv = chatRef.current;
@@ -63,4 +84,5 @@ export function useChatScroll({
       }, 100);
     }
   }, [bottomRef, chatRef, messagesCount, hasInitialized]);
+  return { showScrollButton };
 }
