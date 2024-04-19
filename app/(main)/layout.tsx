@@ -1,5 +1,4 @@
-import { redirectToSignIn } from "@clerk/nextjs";
-
+import { redirect } from "next/navigation";
 import { initialUser } from "@/lib/initial-user";
 import { userLimitCount } from "@/lib/user-limit";
 import { checkSubscription } from "@/lib/user-subscription";
@@ -10,12 +9,13 @@ import { NavToggleProvider } from "@/components/providers/nav-toggle";
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await initialUser();
-  const userLimit = await userLimitCount();
-  const isSubscribed = await checkSubscription();
 
   if (!user) {
-    return redirectToSignIn();
+    return redirect("/");
   }
+
+  const userLimit = await userLimitCount();
+  const isSubscribed = await checkSubscription();
 
   return (
     <div>

@@ -75,7 +75,7 @@ const ChatMessages = ({
   return (
     <div
       ref={chatRef}
-      className="flex-1 relative overflow-y-auto no-scrollbar my-4 px-16 md:px-20"
+      className="flex-1 relative overflow-y-auto no-scrollbar w-full px-2 lg:w-[1200px] mx-auto my-4"
     >
       {data?.pages[0]?.items?.length === 0 && (
         <StartQuestions

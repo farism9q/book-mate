@@ -8,6 +8,7 @@ import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import NavigationSidebar from "./navigation/navigation-sidebar";
 import { useNavToggle } from "@/hooks/use-nav-toggle";
+import Link from "next/link";
 
 interface MobileSidebarProps {
   user: User;
@@ -33,7 +34,9 @@ export default function MobileSidebar({
 
   return (
     <Sheet open={open} onOpenChange={() => onOpenChange()}>
-      <h1 className="text-primary text-lg font-bold p-2">Book mate.</h1>
+      <Link href={"/"}>
+        <h1 className="text-primary text-lg font-bold p-2">Book mate.</h1>
+      </Link>
       <SheetTrigger className="ml-auto">
         <button className="p-2">
           <Menu className="w-5 h-5" />

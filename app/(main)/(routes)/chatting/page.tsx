@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "query-string";
 import Link from "next/link";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 import { formatRelative } from "date-fns";
 
 import { db } from "@/lib/db";
@@ -10,6 +10,7 @@ import { Book } from "@/types/book";
 import { EntityAvatar } from "@/components/entity-avatar";
 import RoutePage from "@/components/route-page";
 import Empty from "@/components/empty";
+import { redirect } from "next/navigation";
 
 const sortOpt = [
   { value: "desc", label: "Newest" },
@@ -28,7 +29,7 @@ const ChattingPage = async ({ searchParams }: Props) => {
   const { date } = searchParams;
 
   if (!userId) {
-    return redirectToSignIn();
+    return redirect("/");
   }
 
   const conversations = await db.conversation.findMany({

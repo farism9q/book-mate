@@ -1,7 +1,7 @@
 import { UserProfile } from "@/components/profile/user-profile";
 import { initialUser } from "@/lib/initial-user";
-import { redirectToSignIn } from "@clerk/nextjs";
 import { User, UserSettings } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 const AccountPage = async () => {
   const user = (await initialUser()) as User & {
@@ -10,7 +10,7 @@ const AccountPage = async () => {
   };
 
   if (!user) {
-    return redirectToSignIn();
+    return redirect("/");
   }
 
   return (

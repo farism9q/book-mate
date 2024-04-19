@@ -39,7 +39,9 @@ const ChatItem = ({ type, text, avatar }: ChatItemProps) => {
           className="w-6 h-6 md:w-8 md:h-8"
         />
         <div className="relative w-full">
-          <p className="text-white pr-2">{text}</p>
+          <p className="text-sm md:text-lg leading-relaxed pr-2 font-sans">
+            {text}
+          </p>
 
           {type === "chatgpt" && (
             <button

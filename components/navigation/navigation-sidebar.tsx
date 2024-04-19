@@ -34,7 +34,7 @@ const NavigationSidebar = ({
   if (!isMounted) return null;
 
   if (!sessionId) {
-    router.replace("/sign-in");
+    router.replace("/");
     return;
   }
 

@@ -47,20 +47,25 @@ const BookTitlePage = async ({ params, searchParams }: BookTitlePageProps) => {
   });
 
   const response = await axios.get(url);
-  const books = response.data.items;
+  const books = response.data.items || [];
 
   return (
     <RoutePage title={title} className="space-y-4">
       <SearchBooksAction />
       <div className="flex flex-col justify-center items-center pt-24 space-y-24 overflow-y-auto">
         <div className="flex flex-col items-center space-y-6">
+          {books.length === 0 && (
+            <div className="text-center text-lg text-gray-500">
+              No books found.
+            </div>
+          )}
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {books.map((book: Book) => (
               <BookCard key={book.id} book={book} />
             ))}
           </div>
 
-          <CustomPagination />
+          {books.length > 0 && <CustomPagination />}
         </div>
       </div>
     </RoutePage>

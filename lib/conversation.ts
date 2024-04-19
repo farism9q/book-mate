@@ -1,11 +1,12 @@
 import { db } from "@/lib/db";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 export const createUpdateConversation = async (bookId: string) => {
   const { userId } = auth();
 
   if (!userId) {
-    return redirectToSignIn();
+    return redirect("/");
   }
 
   let conversation = await db.conversation.findFirst({

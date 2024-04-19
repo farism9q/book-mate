@@ -20,6 +20,10 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         premium:
           "bg-gradient-to-b from-[#D13F3F] via-[#3B3B3A]/72 to-[#6AB2DB] text-white border-0",
+        header:
+          "bg-primary/15 text-primary border-primary/70 border-2 hover:bg-primary/20 transition-none",
+        signedOutUpgrade:
+          "bg-sky-500/15 text-sky-500 border-sky-500/70 border-2 hover:bg-sky-500/20 transition-none",
       },
       size: {
         default: "h-10 px-4 py-2",

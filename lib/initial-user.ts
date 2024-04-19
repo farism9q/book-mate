@@ -1,4 +1,4 @@
-import { currentUser, redirectToSignIn } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
 import { db } from "./db";
 import { cache } from "react";
 
@@ -6,7 +6,7 @@ export const initialUser = cache(async () => {
   const clerkUser = await currentUser();
 
   if (!clerkUser) {
-    return redirectToSignIn();
+    return null;
   }
   const user = await db.user.findUnique({
     where: {
