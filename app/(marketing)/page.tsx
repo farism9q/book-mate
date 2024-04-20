@@ -3,6 +3,39 @@ import { FeatureCard } from "./feature-card";
 import { Section } from "./section";
 import { PriceCard } from "./price-card";
 
+const features = [
+  {
+    imgSrc: "/search-books.png",
+    title: "Manage Your Reading List",
+    description:
+      "Explore a vast collection of books from various genres and authors.",
+  },
+  {
+    imgSrc: "/track-books.png",
+    title: "Track Your Progress",
+    description:
+      "Keep track of your reading progress and set goals to stay motivated.",
+  },
+  {
+    imgSrc: "/book-chat.png",
+    title: "Know More About the Book",
+    description:
+      "Use chatGPT to get a summary of the book or ask questions about it.",
+  },
+  {
+    imgSrc: "/share-your-thoughts.png",
+    title: "Engage with the Community",
+    description:
+      "Connect with other readers, share your thoughts, and discover new books.",
+  },
+  {
+    imgSrc: "/share-your-books-list.png",
+    title: "Share Your Favorite Books",
+    description:
+      "Share your favorite books with friends and get recommendations from them.",
+  },
+];
+
 const MarketingPage = () => {
   return (
     <div className="py-20">
@@ -20,32 +53,16 @@ const MarketingPage = () => {
       </div>
 
       <Section title="Features" id="features">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <FeatureCard
-            imgSrc="/search-books.png"
-            title="Manage Your Reading List"
-            description="Explore a vast collection of books from various genres and authors."
-          />
-          <FeatureCard
-            imgSrc="/track-books.png"
-            title="Track Your Progress"
-            description="Keep track of your reading progress and set goals to stay motivated."
-          />
-          <FeatureCard
-            imgSrc="/book-chat.png"
-            title="Know More About the Book"
-            description="Use chatGPT to get a summary of the book or ask questions about it."
-          />
-          <FeatureCard
-            imgSrc="/share-your-thoughts.png"
-            title="Engage with the Community"
-            description="Connect with other readers, share your thoughts, and discover new books."
-          />
-          <FeatureCard
-            imgSrc="/share-your-books-list.png"
-            title="Share Your Favorite Books"
-            description="Share your favorite books with friends and get recommendations from them."
-          />
+        <div className="grid grid-cols-1">
+          {features.map((feature, index) => (
+            <FeatureCard
+              key={feature.title}
+              count={index}
+              imgSrc={feature.imgSrc}
+              title={feature.title}
+              description={feature.description}
+            />
+          ))}
         </div>
       </Section>
 
@@ -74,15 +91,3 @@ const MarketingPage = () => {
 };
 
 export default MarketingPage;
-
-{
-  /* <button className="group relative rounded-full p-px text-sm/6 text-zinc-400 duration-300 hover:text-zinc-100 hover:shadow-glow">
-        <span className="absolute inset-0 overflow-hidden rounded-full">
-          <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(56,189,248,0.6)_0%,rgba(56,189,248,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        </span>
-        <div className="relative z-10 rounded-full bg-zinc-950 px-4 py-1.5 ring-1 ring-white/10">
-          CLICK HERE
-        </div>
-        <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-cyan-400/0 via-cyan-400/90 to-cyan-400/0 transition-opacity duration-500 group-hover:opacity-40" />
-      </button> */
-}

@@ -6,6 +6,7 @@ import { SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { ClerkButtonState } from "./clerk-button-state";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const navItems = [
   {
@@ -40,6 +41,8 @@ export const Header = () => {
             ))}
           </nav>
         </div>
+
+        <ModeToggle />
 
         <div className="flex items-center gap-x-2">
           <ClerkButtonState

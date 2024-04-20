@@ -11,7 +11,7 @@ const routes = [
   {
     label: "Home",
     icon: <Book className="w-4 h-4" />,
-    href: "/",
+    href: "/books",
   },
   {
     label: "Favorite books",
