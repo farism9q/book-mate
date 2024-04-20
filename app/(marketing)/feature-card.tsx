@@ -9,9 +9,6 @@ type Props = {
 };
 
 export const FeatureCard = ({ imgSrc, title, description, count }: Props) => {
-  console.log("count:count:count:");
-  console.log(count);
-  console.log(count % 2 === 0);
   return (
     <div className="relative overflow-hidden h-[400px] rounded-md rounded-r-3xl rounded-l-2xl shadow-2xl">
       <div

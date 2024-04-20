@@ -4,16 +4,26 @@ import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { EntityAvatar } from "../entity-avatar";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, Share } from "lucide-react";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface ChatItemProps {
   type: "user" | "chatgpt";
   text: string;
   avatar: string;
+  bookTitle?: string;
+  bookImageUrl?: string;
 }
 
-const ChatItem = ({ type, text, avatar }: ChatItemProps) => {
+const ChatItem = ({
+  type,
+  text,
+  avatar,
+  bookTitle,
+  bookImageUrl,
+}: ChatItemProps) => {
   const [copied, setCopied] = useState(false);
+  const { onOpen } = useModal();
 
   const onCopy = () => {
     navigator.clipboard.writeText(type === "chatgpt" ? text : "");
@@ -39,21 +49,38 @@ const ChatItem = ({ type, text, avatar }: ChatItemProps) => {
           className="w-6 h-6 md:w-8 md:h-8"
         />
         <div className="relative w-full">
-          <p className="text-sm md:text-lg leading-relaxed pr-2 font-sans">
+          <p className="text-white text-sm md:text-lg leading-relaxed pr-2 font-sans">
             {text}
           </p>
 
           {type === "chatgpt" && (
-            <button
-              onClick={onCopy}
-              className="absolute text-white md:hidden group-hover:flex bottom-0 right-0"
-            >
-              {copied ? (
-                <Check className="w-4 h-4" />
-              ) : (
-                <Copy className="w-4 h-4" />
-              )}
-            </button>
+            <div className="absolute bottom-0 right-0 flex items-center gap-x-4">
+              <button
+                onClick={onCopy}
+                className=" text-white md:hidden group-hover:flex "
+              >
+                {copied ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  onOpen("sendEmail", {
+                    email: {
+                      bookText: text,
+                      bookImageUrl: bookImageUrl || "",
+                      bookTitle: bookTitle || "Book title",
+                    },
+                  });
+                }}
+                className=" text-white md:hidden group-hover:flex"
+              >
+                <Share className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
       </div>

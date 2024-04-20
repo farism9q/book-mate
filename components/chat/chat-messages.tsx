@@ -119,6 +119,8 @@ const ChatMessages = ({
                     type="chatgpt"
                     avatar={"/chatgpt-logo.png"}
                     text={message.chatGPTResponse}
+                    bookTitle={book.volumeInfo.title}
+                    bookImageUrl={book.volumeInfo.imageLinks.thumbnail}
                   />
                 </div>
               ))}

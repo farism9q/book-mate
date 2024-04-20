@@ -7,6 +7,7 @@ type Props = {
   toggleStatusInfo?: string;
   turnedOn: boolean;
   onToggle: (status: boolean) => void;
+  className?: string;
 };
 
 export const Toggle = ({
@@ -14,6 +15,7 @@ export const Toggle = ({
   turnedOn,
   onToggle,
   toggleStatusInfo,
+  className = "",
 }: Props) => {
   return (
     <div className="flex items-center gap-x-2 mr-2">
@@ -41,7 +43,7 @@ export const Toggle = ({
         </div>
       </div>
 
-      {toggleStatusInfo && <p>{toggleStatusInfo}</p>}
+      {toggleStatusInfo && <p className={className}>{toggleStatusInfo}</p>}
     </div>
   );
 };

@@ -6,13 +6,15 @@ export type ModalType =
   | "removeFavBook"
   | "upgradePlan"
   | "finishBook"
-  | "editUserProfile";
+  | "editUserProfile"
+  | "sendEmail";
 
 interface ModalData {
   bookId?: string;
   favBookId?: string;
   finishedBooks?: Book[];
   user?: User & { externalAccounts: boolean };
+  email?: { bookText: string; bookTitle: string; bookImageUrl: string };
 }
 
 interface ModalStore {
@@ -37,7 +39,10 @@ export const useModal = create<ModalStore>((set, get) => ({
         ...(data.finishedBooks || []),
       ],
     };
-    return set({ isOpen: true, type, data: newData });
+    if (type === "finishBook")
+      return set({ isOpen: true, type, data: newData });
+
+    return set({ isOpen: true, type, data });
   },
   onClose: () => {
     // If modal type is finishBook, remove the first book from the list.

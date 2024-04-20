@@ -42,8 +42,6 @@ export const Header = () => {
           </nav>
         </div>
 
-        <ModeToggle />
-
         <div className="flex items-center gap-x-2">
           <ClerkButtonState
             signIn={
