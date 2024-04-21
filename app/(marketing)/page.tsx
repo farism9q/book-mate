@@ -53,7 +53,7 @@ const MarketingPage = () => {
       </div>
 
       <Section title="Features" id="features">
-        <div className="grid grid-cols-1">
+        <div className="grid grid-cols-1 -space-y-32 md:space-y-0">
           {features.map((feature, index) => (
             <FeatureCard
               key={feature.title}

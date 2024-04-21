@@ -22,7 +22,7 @@ export const Toggle = ({
       <div
         onClick={() => onToggle(!turnedOn)}
         className={cn(
-          "flex items-center w-24 h-10 rounded-2xl rounded-e-3xl rounded-s-3xl hover:cursor-pointer",
+          "flex items-center min-w-24 h-10 rounded-2xl rounded-e-3xl rounded-s-3xl hover:cursor-pointer",
           turnedOn ? "bg-primary/20" : "bg-gray-200/20",
           disabled && "hover:cursor-not-allowed opacity-50"
         )}

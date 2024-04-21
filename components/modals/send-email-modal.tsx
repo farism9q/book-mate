@@ -133,7 +133,7 @@ export const SendEmailModal = () => {
                       ? "Let your friend view your name"
                       : "Don't let your friend view your name"
                   }
-                  className="pl-6 sm:pl-2 md:pl-0 text-muted-foreground"
+                  className="text-muted-foreground text-sm"
                 />
                 <Button disabled={isLoading}>Send via email</Button>
               </div>

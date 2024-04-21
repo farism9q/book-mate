@@ -49,7 +49,7 @@ const ChatItem = ({
           className="w-6 h-6 md:w-8 md:h-8"
         />
         <div className="relative w-full">
-          <p className="text-white text-sm md:text-lg leading-relaxed pr-2 font-sans">
+          <p className="text-white text-sm md:text-lg leading-relaxed pr-6 font-sans">
             {text}
           </p>
 
