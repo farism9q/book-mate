@@ -53,7 +53,7 @@ export const SearchBooksAction = () => {
               type="submit"
               className="dark:text-white bg-primary flex justify-center items-center rounded-e-md w-full h-full"
             >
-              <Search className="w-4 h-4" />
+              <Search className="w-4 h-4 text-white" />
             </button>
           </div>
         </div>

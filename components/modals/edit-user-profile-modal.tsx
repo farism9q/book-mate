@@ -13,7 +13,7 @@ import { useKey } from "react-use";
 
 import { useModal } from "@/hooks/use-modal-store";
 import { deleteImage } from "@/actions/uploadthing";
-import { UploadProfileImage } from "../upload-profile-image";
+import { UploadImage } from "../upload-image";
 
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -213,13 +213,14 @@ export const EditUserProfileModal = () => {
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <DialogHeader className="mx-8 flex justify-center items-center">
-              <UploadProfileImage
+              <UploadImage
                 onUploadComplete={handleOnCompeteUpload}
                 onUploadError={handleOnUploadError}
                 onUploadBegin={() => setIsUploading(true)}
                 onImageCancel={handleImageCancel}
+                endpoint="profilePicture"
                 isUploading={isUploading}
-                avatar={avatar}
+                images={[{ imageUrl: avatar, imageKey: avatarKey }]}
                 isDeleting={isDeleting}
                 error={formState.errors.avatar?.message}
               />

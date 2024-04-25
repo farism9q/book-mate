@@ -17,6 +17,10 @@ const navItems = [
     title: "Pricing",
     href: "#pricing",
   },
+  {
+    title: "Changelog",
+    href: "/changelog",
+  },
 ];
 
 export const Header = () => {
@@ -68,7 +72,7 @@ export const Header = () => {
             <SheetTrigger className="md:hidden">
               <Menu className="w-6 h-6 text-muted-foreground" />
             </SheetTrigger>
-            <SheetContent side={"top"}>
+            <SheetContent side={"top"} className="bg-zinc-900 border-none">
               <nav className="flex flex-col items-center justify-center gap-y-4 py-20">
                 {navItems.map(item => (
                   <a

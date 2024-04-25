@@ -1,40 +1,55 @@
 import Image from "next/image";
-import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
+import { UploadButton } from "@/lib/uploadthing";
 import { ClientUploadedFileData } from "uploadthing/types";
 import { Loader, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type Props = {
   onUploadComplete: (res: ClientUploadedFileData<null>[]) => void;
   onUploadError: (error: Error) => void;
   onUploadBegin?: () => void;
-  onImageCancel: () => void;
+  onImageCancel: (idx: number) => void;
+  endpoint: "imageUploader" | "profilePicture";
   isUploading?: boolean;
   isDeleting?: boolean;
-  avatar?: string;
+  images?: { imageUrl: string; imageKey: string }[];
   error?: string;
 };
 
-export const UploadProfileImage = ({
+export const UploadImage = ({
   onUploadComplete,
   onUploadError,
   onUploadBegin,
+  endpoint,
   onImageCancel,
   isUploading,
   isDeleting,
-  avatar,
+  images,
   error,
 }: Props) => {
-  if (avatar && !isUploading && !isDeleting) {
+  if (images && images[0].imageUrl !== "" && !isUploading && !isDeleting) {
     return (
-      <div className="relative h-[200px] w-full">
-        <Image fill src={avatar} alt="image" className="rounded-md" />
-        <button
-          onClick={onImageCancel}
-          className="absolute text-white p-1 bg-rose-500 rounded-full -top-2 -right-3 shadow-sm"
-          type="button"
-        >
-          <X className="w-4 h-4" />
-        </button>
+      <div
+        className={cn(
+          "grid w-full",
+          images.length === 1 && "grid-cols-1",
+          images.length === 2 && "grid-cols-2",
+          images.length === 3 && "grid-cols-3",
+          images.length === 4 && "grid-cols-4"
+        )}
+      >
+        {images?.map((img, index) => (
+          <div key={index} className="relative h-[200px] w-full">
+            <Image fill src={img.imageUrl} alt="image" className="rounded-md" />
+            <button
+              onClick={() => onImageCancel(index)}
+              className="z-50 absolute text-white p-1 bg-rose-500 rounded-full -top-2 -right-3 shadow-sm"
+              type="button"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ))}
       </div>
     );
   }
@@ -52,9 +67,9 @@ export const UploadProfileImage = ({
             </div>
           ) : (
             <UploadButton
-              endpoint="profilePicture"
+              endpoint={endpoint}
               content={{
-                button: avatar ? "Upload again ?" : "Upload Avatar",
+                button: "Upload image",
                 clearBtn: "Clear",
               }}
               appearance={{
@@ -67,7 +82,6 @@ export const UploadProfileImage = ({
                   border: "2px dashed #323131",
                   borderRadius: "8px",
                   backgroundColor: "#363333",
-                  backgroundImage: `url(${avatar})`,
                   backgroundSize: "cover",
                 },
                 clearBtn: {
