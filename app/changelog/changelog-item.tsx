@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, truncateTxt } from "@/lib/utils";
 import { Footer } from "./footer";
 import Image from "next/image";
 import {
@@ -13,6 +13,7 @@ import {
 import { ChangelogCategory } from "@prisma/client";
 import { format } from "date-fns";
 import { useMedia } from "react-use";
+import { useState } from "react";
 
 const categoryColor: Record<ChangelogCategory, string> = {
   "IMPROVEMENT": "bg-amber-500",
@@ -47,6 +48,12 @@ export const ChangelogItem = ({
   nbLikes,
 }: Props) => {
   const isMobile = useMedia("(max-width: 750px)", false);
+  const truncatedDescription = truncateTxt({
+    text: description,
+    nbChars: 250,
+  });
+
+  const [extendedDescription, setExtendedDescription] = useState(false);
   return (
     <div className="flex flex-col mx-6">
       <div
@@ -74,9 +81,11 @@ export const ChangelogItem = ({
           ))}
         </div>
 
-        <p className="text-lg pt-4 line-clamp-5 text-muted-foreground">
-          {description}
-        </p>
+        <div onClick={() => setExtendedDescription(!extendedDescription)}>
+          <p className="text-lg pt-4 text-muted-foreground">
+            {extendedDescription ? description : truncatedDescription.text}
+          </p>
+        </div>
 
         <div className="flex items-center justify-center pt-12 pb-4">
           <Carousel className="max-w-lg">

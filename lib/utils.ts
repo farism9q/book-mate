@@ -17,10 +17,10 @@ export function truncateTxt({
 }: {
   text: string;
   nbChars: number;
-}): string {
+}) {
   if (text.length > nbChars) {
-    return text.substring(0, nbChars) + "...";
+    return { text: text.substring(0, nbChars) + "...", isTruncated: true };
   } else {
-    return text;
+    return { text, isTruncated: false };
   }
 }

@@ -100,10 +100,12 @@ export const FinishBookModal = () => {
           <DialogTitle className="text-2xl text-center font-bold">
             Congratulations! You&apos;ve finished the book.
             <span className="text-primary text-center line-clamp-1">
-              {truncateTxt({
-                text: currentFinishedBook.volumeInfo.title,
-                nbChars: 30,
-              })}
+              {
+                truncateTxt({
+                  text: currentFinishedBook.volumeInfo.title,
+                  nbChars: 30,
+                }).text
+              }
             </span>
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
