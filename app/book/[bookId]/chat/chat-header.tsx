@@ -4,15 +4,19 @@ import { useEffect, useState } from "react";
 
 import { Book } from "@/types/book";
 
-import { EntityAvatar } from "../entity-avatar";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { EntityAvatar } from "../../../../components/entity-avatar";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "../../../../components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeft } from "lucide-react";
-import { Button } from "../ui/button";
-import BookDescription from "../book/book-description";
-import { Badge } from "../ui/badge";
+import { Button } from "../../../../components/ui/button";
+import BookDescription from "../../../../components/book/book-description";
+import { Badge } from "../../../../components/ui/badge";
 import { useModal } from "@/hooks/use-modal-store";
-import { ActionTooltip } from "../action-tooltip";
+import { ActionTooltip } from "../../../../components/action-tooltip";
 import { CHAT_LIMIT_PER_BOOK } from "@/constants";
 
 interface ChatHeaderProps {

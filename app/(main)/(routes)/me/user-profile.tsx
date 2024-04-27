@@ -9,8 +9,8 @@ import Image from "next/image";
 import { FavoriteBooksStatus } from "./favorite-books-status";
 import { useModal } from "@/hooks/use-modal-store";
 
-import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
+import { Button } from "../../../../components/ui/button";
+import { Separator } from "../../../../components/ui/separator";
 import { Footer } from "./footer";
 import { updateUserSettings } from "@/actions/user-settings";
 

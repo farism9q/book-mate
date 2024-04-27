@@ -10,7 +10,7 @@ import { useUserFavBooksByStatus } from "./use-favorite-books-status";
 import { FavoriteBookStatus } from "@prisma/client";
 
 import { Loader } from "lucide-react";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea } from "../../../../components/ui/scroll-area";
 import {
   Carousel,
   type CarouselApi,
@@ -18,7 +18,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "../ui/carousel";
+} from "../../../../components/ui/carousel";
 
 type Props = {
   userId: string;

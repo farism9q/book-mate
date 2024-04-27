@@ -6,9 +6,9 @@ import { initialUser } from "@/lib/initial-user";
 import { db } from "@/lib/db";
 
 import { Book } from "@/types/book";
-import ChatHeader from "@/components/chat/chat-header";
+import ChatHeader from "@/app/book/[bookId]/chat/chat-header";
 import { createUpdateConversation } from "@/lib/conversation";
-import { ChatPannel } from "@/components/chat/chat-pannel";
+import { ChatPannel } from "@/app/book/[bookId]/chat/chat-pannel";
 import { checkSubscription } from "@/lib/user-subscription";
 import { userChatLimits, userHasFreeLimit } from "@/lib/user-limit";
 
