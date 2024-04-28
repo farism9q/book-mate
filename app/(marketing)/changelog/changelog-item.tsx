@@ -24,7 +24,6 @@ const categoryColor: Record<ChangelogCategory, string> = {
 };
 
 type Props = {
-  userId: string | null;
   changelogId: string;
   date: Date;
   title: string;
@@ -37,7 +36,6 @@ type Props = {
 };
 
 export const ChangelogItem = ({
-  userId,
   changelogId,
   title,
   categories,

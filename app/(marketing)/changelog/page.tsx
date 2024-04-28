@@ -37,7 +37,6 @@ const ChangelogPage = async () => {
             return (
               <ChangelogItem
                 key={changelog.id}
-                userId={userId}
                 changelogId={changelog.id}
                 categories={changelog.categories}
                 reaction={userReaction?.reaction}

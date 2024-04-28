@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         bookTitle,
         bookText,
         friendName: allowViewName
-          ? user.firstName! + user.lastName
+          ? user.firstName! + " " + user.lastName
           : "a friend",
       }),
     });
