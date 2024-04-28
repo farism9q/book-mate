@@ -30,6 +30,7 @@ const InitialPage = () => {
         <div className="mt-12 px-2">
           <SearchBooksAction
             isFetching={isFetching}
+            type="initial"
             onCategoryChange={handleCategoryOnChange}
           />
         </div>

@@ -25,10 +25,15 @@ const formSchema = z.object({
 
 type Props = {
   isFetching: boolean;
-  onCategoryChange: (category: Category) => void;
+  type: "search" | "initial";
+  onCategoryChange?: (category: Category) => void;
 };
 
-export const SearchBooksAction = ({ isFetching, onCategoryChange }: Props) => {
+export const SearchBooksAction = ({
+  isFetching,
+  type,
+  onCategoryChange,
+}: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,8 +45,10 @@ export const SearchBooksAction = ({ isFetching, onCategoryChange }: Props) => {
   const category = form.watch("type") as Category;
 
   useEffect(() => {
-    onCategoryChange(category);
-  }, [category, onCategoryChange]);
+    if (onCategoryChange && type === "initial") {
+      onCategoryChange(category);
+    }
+  }, [category, type, onCategoryChange]);
 
   const router = useRouter();
 
@@ -82,37 +89,39 @@ export const SearchBooksAction = ({ isFetching, onCategoryChange }: Props) => {
             </div>
           </div>
 
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem>
-                <Select
-                  disabled={isFetching}
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="h-full sm:ml-2 border focus:ring-0 ring-offset-0 focus:ring-offset-0 capitalize outline-none">
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {Object.values(Category).map(type => (
-                      <SelectItem
-                        key={type}
-                        value={type}
-                        className="capitalize"
-                      >
-                        {type.toLowerCase()}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {type === "initial" && (
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    disabled={isFetching}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="h-full sm:ml-2 border focus:ring-0 ring-offset-0 focus:ring-offset-0 capitalize outline-none">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.values(Category).map(type => (
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="capitalize"
+                        >
+                          {type.toLowerCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
       </form>
     </Form>
