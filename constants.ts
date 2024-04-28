@@ -5,6 +5,7 @@ export const CHAT_LIMIT_PER_BOOK = 5;
 export enum ErrorType {
   ALREADY_FAV = "ALREADY_FAV",
   UPGRADE_PLAN = "UPGRADE_PLAN",
+  SIGN_IN_REQUIRED = "SIGN_IN_REQUIRED",
 }
 
 export const CategoriesColors: Record<string, string> = {

@@ -1,5 +1,6 @@
 "use server";
 
+import { ErrorType } from "@/constants";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { revalidatePath } from "next/cache";
@@ -16,7 +17,7 @@ export async function upsertChangelogReaction({
   const { userId } = auth();
 
   if (!userId) {
-    throw new Error("Not authenticated");
+    return { error: ErrorType.SIGN_IN_REQUIRED };
   }
 
   const changelogReaction = await db.changelogReaction.findFirst({

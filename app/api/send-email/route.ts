@@ -29,7 +29,9 @@ export async function POST(req: Request) {
         bookImageUrl,
         bookTitle,
         bookText,
-        friendName: allowViewName ? user.firstName! : "a friend",
+        friendName: allowViewName
+          ? user.firstName! + user.lastName
+          : "a friend",
       }),
     });
 

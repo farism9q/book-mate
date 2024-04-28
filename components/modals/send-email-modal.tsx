@@ -30,6 +30,19 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { Toggle } from "../toggle";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+enum EmailDomains {
+  GMAIL = "gmail.com",
+  YAHOO = "yahoo.com",
+  HOTMAIL = "hotmail.com",
+}
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -54,6 +67,12 @@ export const SendEmailModal = () => {
   const isModalOpen = isOpen && type === "sendEmail";
 
   if (!isModalOpen) return null;
+
+  const handleSelectChange = (domain: EmailDomains) => {
+    const email = form.getValues("email").split("@")[0];
+    if (!email) return;
+    form.setValue("email", `${email}@${domain}`);
+  };
 
   const onClick = async (values: z.infer<typeof formSchema>) => {
     if (!data.email) {
@@ -104,26 +123,44 @@ export const SendEmailModal = () => {
             </DialogHeader>
             <DialogFooter className="px-6 py-4">
               <div className="grid w-full gap-x-2 gap-y-4">
-                <div className="space-y-2">
-                  <FormField
-                    disabled={isLoading}
-                    control={control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Friend email</FormLabel>
-                        <FormControl>
+                <FormField
+                  disabled={isLoading}
+                  control={control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Friend email</FormLabel>
+                      <FormControl>
+                        <div className="flex flex-col py-3 gap-y-2 md:relative md:py-0">
                           <Input
                             placeholder="Your friend email..."
                             {...field}
                           />
-                        </FormControl>
+                          <div className="md:absolute right-0 top-0">
+                            <Select onValueChange={handleSelectChange}>
+                              <SelectTrigger className="bg-transparent focus:ring-0 ring-offset-0 focus:ring-offset-0 outline-none">
+                                <SelectValue placeholder="Email Domain" />
+                              </SelectTrigger>
+                              <SelectContent className="p-0">
+                                {Object.values(EmailDomains).map(domain => (
+                                  <SelectItem
+                                    className="lowercase"
+                                    key={domain}
+                                    value={domain}
+                                  >
+                                    @{domain}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </FormControl>
 
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Toggle
                   disabled={isLoading}
                   turnedOn={allowViewName}

@@ -19,6 +19,7 @@ const categoryColor: Record<ChangelogCategory, string> = {
   "IMPROVEMENT": "bg-amber-500",
   "NEW_FEATURE": "bg-green-500",
   "BUG_FIX": "bg-rose-500",
+  "USER_EXPERIENCE_ENHANCEMENT": "bg-blue-500",
   "OTHER": "bg-gray-500",
 };
 
@@ -66,7 +67,7 @@ export const ChangelogItem = ({
         <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-primary/20 via-primary/80 animate-ping transition-opacity duration-1000 group-hover:opacity-40" />
       </div>
       <div className="flex flex-col justify-between rounded-lg border rounded-s-none p-2 h-full">
-        <h1 className="text-3xl md:text-5xl font-semibold">{title}</h1>
+        <h1 className="text-3xl md:text-4xl font-semibold">{title}</h1>
         <div className="flex items-center gap-x-4 flex-1 py-4">
           {categories.map(category => (
             <div key={category} className="flex items-center gap-x-1">
@@ -76,7 +77,7 @@ export const ChangelogItem = ({
                   categoryColor[category as ChangelogCategory]
                 )}
               />
-              <p className="text-xs">{category.replace("_", " ")}</p>
+              <p className="text-xs">{category.replaceAll("_", " ")}</p>
             </div>
           ))}
         </div>
@@ -113,13 +114,11 @@ export const ChangelogItem = ({
           </Carousel>
         </div>
 
-        {userId && (
-          <Footer
-            changelogId={changelogId}
-            reaction={reaction}
-            feedback={feedback}
-          />
-        )}
+        <Footer
+          changelogId={changelogId}
+          reaction={reaction}
+          feedback={feedback}
+        />
 
         {nbLikes > 0 && (
           <div className="flex items-center justify-between pt-4">
