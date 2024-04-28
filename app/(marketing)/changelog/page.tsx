@@ -10,7 +10,7 @@ const ChangelogPage = async () => {
     <div className="md:w-[760px] lg:w-[870px] mx-auto duration-300 animate-in animate fade-in-5 slide-in-from-bottom-2.5">
       <span
         className={
-          "absolute -left-20 -top-20 h-64 w-64 rounded-full -z-20 blur-2xl animate-blob animation-delay-300 bg-primary/15 opacity-100"
+          "absolute left-10 top-16 h-64 w-72 rounded-full z-50 blur-2xl animate-blob animation-delay-300 bg-primary/15 opacity-100"
         }
       />
 
@@ -37,7 +37,6 @@ const ChangelogPage = async () => {
             return (
               <ChangelogItem
                 key={changelog.id}
-                userId={userId}
                 changelogId={changelog.id}
                 categories={changelog.categories}
                 reaction={userReaction?.reaction}

@@ -1,4 +1,4 @@
-import { UserProfile } from "@/components/profile/user-profile";
+import { UserProfile } from "@/app/(main)/(routes)/me/user-profile";
 import { initialUser } from "@/lib/initial-user";
 import { User, UserSettings } from "@prisma/client";
 import { redirect } from "next/navigation";

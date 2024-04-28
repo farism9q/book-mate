@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
-import { EntityAvatar } from "../entity-avatar";
+import { EntityAvatar } from "../../../../components/entity-avatar";
 import { Check, Copy, Share } from "lucide-react";
 import { useModal } from "@/hooks/use-modal-store";
 

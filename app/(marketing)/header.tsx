@@ -11,11 +11,11 @@ import { ModeToggle } from "@/components/mode-toggle";
 const navItems = [
   {
     title: "Features",
-    href: "#features",
+    href: "/#features",
   },
   {
     title: "Pricing",
-    href: "#pricing",
+    href: "/#pricing",
   },
   {
     title: "Changelog",

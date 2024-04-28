@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ErrorType } from "@/constants";
 import { cn } from "@/lib/utils";
+import { SignInButton } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ThumbsDown, ThumbsUp, X } from "lucide-react";
 import { useState, useTransition } from "react";
@@ -35,11 +37,37 @@ export const Footer = ({ changelogId, reaction, feedback }: Props) => {
   const [allowEditFeedback, setAllowEditFeedback] = useState(false);
 
   const onReactionClick = (reaction: boolean) => {
+    if (reaction === userReview) return;
+
     setUserReview(reaction);
 
     startTransition(() => {
       upsertChangelogReaction({ changelogId, reaction, feedback: "" })
-        .then(() => {
+        .then(res => {
+          if (res?.error === ErrorType.SIGN_IN_REQUIRED) {
+            setUserReview(null);
+            toast.info(
+              <div className="flex items-center justify-between w-full">
+                {/*  */}
+                <span className="text-transparent bg-clip-text bg-gradient-to-br from-zinc-200 to-zinc-400 font-semibold text-lg">
+                  You need to sign in
+                </span>
+                <SignInButton
+                  mode="modal"
+                  afterSignInUrl="/changelog"
+                  afterSignUpUrl="/changelog"
+                >
+                  <Button variant={"secondary"}>Sign in</Button>
+                </SignInButton>
+              </div>,
+
+              {
+                duration: 10000,
+              }
+            );
+            return;
+          }
+
           toast.success("Thank you for your feedback");
         })
         .catch(err => {

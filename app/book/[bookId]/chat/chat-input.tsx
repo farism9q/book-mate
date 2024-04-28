@@ -4,8 +4,13 @@ import { useForm } from "react-hook-form";
 
 import { Book } from "@/types/book";
 
-import { Form, FormControl, FormField, FormItem } from "../ui/form";
-import { Input } from "../ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+} from "../../../../components/ui/form";
+import { Input } from "../../../../components/ui/input";
 
 const formSchema = z.object({
   question: z.string().min(1),

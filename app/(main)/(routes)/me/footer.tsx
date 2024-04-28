@@ -1,4 +1,4 @@
-import { Toggle } from "../toggle";
+import { Toggle } from "../../../../components/toggle";
 
 type Props = {
   isPending: boolean;

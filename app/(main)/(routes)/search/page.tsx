@@ -10,7 +10,6 @@ import { BookCard } from "@/components/book/book-card";
 import { SearchBooksAction } from "@/components/search-books-action";
 import CustomPagination from "@/components/custom-pagination";
 import RoutePage from "@/components/route-page";
-
 type BookTitlePageProps = {
   params: {};
   searchParams: { title: string; page: string };
@@ -51,7 +50,7 @@ const BookTitlePage = async ({ params, searchParams }: BookTitlePageProps) => {
 
   return (
     <RoutePage title={title} className="space-y-4">
-      <SearchBooksAction />
+      <SearchBooksAction isFetching={false} type="search" />
       <div className="flex flex-col justify-center items-center pt-24 space-y-24 overflow-y-auto">
         <div className="flex flex-col items-center space-y-6">
           {books.length === 0 && (
