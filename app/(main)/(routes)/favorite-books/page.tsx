@@ -73,14 +73,30 @@ const FavoriteBooksPage = async ({ searchParams }: Props) => {
     } as Book;
   });
 
+  const noFavBooks =
+    (filter === "all" || filter === undefined) && books.length === 0;
+
+  const emptyLabel = noFavBooks
+    ? "There is no favorite book"
+    : "No books found";
+  const emptyDescription = noFavBooks
+    ? "Save your favorite books to see them here."
+    : `Couldn't find any books with the filter "${filter}"`;
+
   return (
     <RoutePage
       title="Favorite Books"
-      filter={{ options: filterOpt, urlQuery: "filter" }}
-      sort={{
-        options: sortOpt,
-        urlQuery: "date",
-      }}
+      filter={
+        noFavBooks ? undefined : { options: filterOpt, urlQuery: "filter" }
+      }
+      sort={
+        noFavBooks
+          ? undefined
+          : {
+              options: sortOpt,
+              urlQuery: "date",
+            }
+      }
     >
       {books.length > 0 ? (
         <div className="flex flex-col justify-center items-center space-y-24 overflow-y-auto">
@@ -98,7 +114,16 @@ const FavoriteBooksPage = async ({ searchParams }: Props) => {
           </div>
         </div>
       ) : (
-        <Empty label="There is no favorite book" />
+        <Empty
+          label={emptyLabel}
+          description={emptyDescription}
+          img={{
+            src: noFavBooks ? "/add-book.png" : "/not-found.png",
+            alt: noFavBooks ? "Add book" : "Not found",
+          }}
+          clickable={noFavBooks ? true : false}
+          onClickHrf={noFavBooks ? "/books" : undefined}
+        />
       )}
     </RoutePage>
   );

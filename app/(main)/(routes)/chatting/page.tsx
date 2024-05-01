@@ -76,10 +76,14 @@ const ChattingPage = async ({ searchParams }: Props) => {
     <RoutePage
       title="Chatting"
       className="space-y-4 px-4"
-      sort={{
-        options: sortOpt,
-        urlQuery: "date",
-      }}
+      sort={
+        hasNoConversations
+          ? undefined
+          : {
+              options: sortOpt,
+              urlQuery: "date",
+            }
+      }
     >
       {!hasNoConversations ? (
         conversations.map(
@@ -114,7 +118,11 @@ const ChattingPage = async ({ searchParams }: Props) => {
             )
         )
       ) : (
-        <Empty label="No chatting started yet" />
+        <Empty
+          label="No chats started yet"
+          description="Start a chat with a book to see them here."
+          img={{ src: "/no-chats.png", alt: "No chats" }}
+        />
       )}
     </RoutePage>
   );

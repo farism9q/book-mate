@@ -26,7 +26,7 @@ export const Footer = () => {
           <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-amber-400/0 via-amber-400/90 animate-ping transition-opacity duration-1000 group-hover:opacity-40" />
         </div>
       </div>
-      <div className="lg:w-[950px] px-4 lg:px-0 mx-auto flex h-full bg-[#030813] items-center justify-center gap-x-3">
+      <div className="px-4 lg:px-0 mx-auto flex h-full bg-[#030813] items-center justify-center gap-x-3">
         <Link href={"https://github.com/farism9q"} target="_blank">
           <Image
             src={"/github.svg"}
