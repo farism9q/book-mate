@@ -57,16 +57,18 @@ export const ChangelogItem = ({
     <div className="flex flex-col mx-6">
       <div
         className={cn(
-          "group relative flex flex-col items-center space-y-2 border-t border-l border-r p-2 rounded-t-lg w-fit text-sm/6 text-zinc-400 dark:hover:text-zinc-100 hover:text-zinc-900 hover:shadow-glow"
+          "group relative flex flex-col items-center space-y-2 border-zinc-800 border-t border-l border-r p-2 rounded-t-lg w-fit text-sm/6 text-zinc-400 dark:hover:text-zinc-100 hover:text-zinc-900 hover:shadow-glow"
         )}
       >
         <h2 className="text-2xl md:text-3xl font-bold">{format(date, "PP")}</h2>
 
         <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-primary/20 via-primary/80 animate-ping transition-opacity duration-1000 group-hover:opacity-40" />
       </div>
-      <div className="flex flex-col justify-between rounded-lg border rounded-s-none p-2 h-full">
-        <h1 className="text-3xl md:text-4xl font-semibold">{title}</h1>
-        <div className="flex items-center gap-x-4 flex-1 py-4">
+      <div className="flex flex-col justify-between rounded-lg border border-zinc-800 rounded-s-none p-2 h-full">
+        <h1 className="text-3xl md:text-4xl font-semibold text-white">
+          {title}
+        </h1>
+        <div className="flex items-center gap-x-4 gap-y-2 flex-1 flex-wrap py-4">
           {categories.map(category => (
             <div key={category} className="flex items-center gap-x-1">
               <div
@@ -75,13 +77,15 @@ export const ChangelogItem = ({
                   categoryColor[category as ChangelogCategory]
                 )}
               />
-              <p className="text-xs">{category.replaceAll("_", " ")}</p>
+              <p className="text-xs text-white">
+                {category.replaceAll("_", " ")}
+              </p>
             </div>
           ))}
         </div>
 
         <div onClick={() => setExtendedDescription(!extendedDescription)}>
-          <p className="text-lg pt-4 text-muted-foreground">
+          <p className="text-lg pt-4 text-[#636d82]">
             {extendedDescription ? description : truncatedDescription.text}
           </p>
         </div>
@@ -105,8 +109,8 @@ export const ChangelogItem = ({
             </CarouselContent>
             {!isMobile && (
               <>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious className="bg-transparent text-[#c3cde4]" />
+                <CarouselNext className="bg-transparent text-[#c3cde4]" />
               </>
             )}
           </Carousel>
@@ -120,7 +124,7 @@ export const ChangelogItem = ({
 
         {nbLikes > 0 && (
           <div className="flex items-center justify-between pt-4">
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-[#636d82]">
               {nbLikes} {nbLikes === 1 ? "like" : "likes"}
             </p>
           </div>

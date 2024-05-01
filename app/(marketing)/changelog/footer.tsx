@@ -100,7 +100,7 @@ export const Footer = ({ changelogId, reaction, feedback }: Props) => {
 
   return (
     <div className="flex flex-col pt-6 pb-2 gap-y-2 max-w-sm">
-      <p className="text-lg font-bold">What do you think ?</p>
+      <p className="text-lg font-bold text-white">What do you think ?</p>
       <div className="flex items-center gap-x-4">
         <div
           onClick={() => onReactionClick(true)}
