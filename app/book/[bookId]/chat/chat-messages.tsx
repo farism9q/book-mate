@@ -118,6 +118,7 @@ const ChatMessages = ({
                   <ChatItem
                     type="chatgpt"
                     avatar={"/chatgpt-logo.png"}
+                    question={message.userQuestion}
                     text={message.chatGPTResponse}
                     bookTitle={book.volumeInfo.title}
                     bookImageUrl={book.volumeInfo.imageLinks.thumbnail}

@@ -68,9 +68,8 @@ export const SearchBooksAction = ({
                 <FormItem className="flex-1">
                   <FormControl>
                     <Input
-                      autoFocus
                       placeholder="Search books by title..."
-                      className="h-full focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="h-full focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
                       {...field}
                     />
                   </FormControl>

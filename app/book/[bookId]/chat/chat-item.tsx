@@ -11,12 +11,14 @@ interface ChatItemProps {
   type: "user" | "chatgpt";
   text: string;
   avatar: string;
+  question?: string;
   bookTitle?: string;
   bookImageUrl?: string;
 }
 
 const ChatItem = ({
   type,
+  question,
   text,
   avatar,
   bookTitle,
@@ -73,6 +75,7 @@ const ChatItem = ({
                       bookText: text,
                       bookImageUrl: bookImageUrl || "",
                       bookTitle: bookTitle || "Book title",
+                      question: question || "",
                     },
                   });
                 }}

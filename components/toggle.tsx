@@ -36,7 +36,7 @@ export const Toggle = ({
           )}
         >
           {turnedOn ? (
-            <Eye className="w-6 h-6 text-gray-700" />
+            <Eye className="w-6 h-6 text-slate-200" />
           ) : (
             <EyeOff className="w-6 h-6 text-gray-500" />
           )}

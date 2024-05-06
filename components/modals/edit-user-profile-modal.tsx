@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ClientUploadedFileData } from "uploadthing/types";
-import { useKey } from "react-use";
+import { useKey, useMedia } from "react-use";
 
 import { useModal } from "@/hooks/use-modal-store";
 import { deleteImage } from "@/actions/uploadthing";
@@ -120,6 +120,7 @@ export const EditUserProfileModal = () => {
 
   const isModalOpen = isOpen && type === "editUserProfile";
   const isLoading = formState.isSubmitting || isDeleting || isUploading;
+  const isMobile = useMedia("(max-width: 750px)", false);
 
   if (!isModalOpen) return null;
 
@@ -226,7 +227,15 @@ export const EditUserProfileModal = () => {
               />
             </DialogHeader>
             <div className="flex flex-col justify-center items-center p-2">
-              <div className="w-full max-w-sm space-y-4">
+              <div className="relative w-full max-w-sm space-y-4">
+                {isMobile && (
+                  <input
+                    type="text"
+                    className="absolute opacity-0 -z-50 focus-visible:hidden"
+                    autoFocus
+                  />
+                )}
+
                 <div className="space-y-2">
                   <FormField
                     disabled={isLoading}
@@ -238,6 +247,7 @@ export const EditUserProfileModal = () => {
                         <FormControl>
                           <Textarea
                             placeholder="Your bio"
+                            className="text-base"
                             {...field}
                             rows={4}
                           />
@@ -257,7 +267,11 @@ export const EditUserProfileModal = () => {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your name" {...field} />
+                          <Input
+                            className="text-base"
+                            placeholder="Your name"
+                            {...field}
+                          />
                         </FormControl>
 
                         <FormMessage />
@@ -276,7 +290,11 @@ export const EditUserProfileModal = () => {
                           <FormItem>
                             <FormLabel>Current password</FormLabel>
                             <FormControl>
-                              <Input type="password" {...field} />
+                              <Input
+                                className="text-base"
+                                type="password"
+                                {...field}
+                              />
                             </FormControl>
                             <FormDescription>
                               Leave it blank if you don&apos;t want to change
@@ -287,6 +305,7 @@ export const EditUserProfileModal = () => {
                         )}
                       />
                     </div>
+
                     <div className="space-y-2">
                       <FormField
                         disabled={isLoading}
@@ -296,7 +315,11 @@ export const EditUserProfileModal = () => {
                           <FormItem>
                             <FormLabel>New password</FormLabel>
                             <FormControl>
-                              <Input type="password" {...field} />
+                              <Input
+                                className="text-base"
+                                type="password"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

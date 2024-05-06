@@ -7,8 +7,14 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(req: Request) {
   try {
     const user = await currentUser();
-    const { bookTitle, bookImageUrl, bookText, friendEmail, allowViewName } =
-      await req.json();
+    const {
+      bookTitle,
+      bookImageUrl,
+      bookText,
+      friendEmail,
+      allowViewName,
+      question,
+    } = await req.json();
 
     if (!user) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -32,6 +38,7 @@ export async function POST(req: Request) {
         friendName: allowViewName
           ? user.firstName! + " " + user.lastName
           : "a friend",
+        question,
       }),
     });
 

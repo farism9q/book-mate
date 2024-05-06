@@ -14,7 +14,12 @@ interface ModalData {
   favBookId?: string;
   finishedBooks?: Book[];
   user?: User & { externalAccounts: boolean };
-  email?: { bookText: string; bookTitle: string; bookImageUrl: string };
+  email?: {
+    bookText: string;
+    bookTitle: string;
+    bookImageUrl: string;
+    question?: string;
+  };
 }
 
 interface ModalStore {
