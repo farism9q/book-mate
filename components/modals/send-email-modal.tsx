@@ -10,6 +10,7 @@ import { useModal } from "@/hooks/use-modal-store";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -29,7 +30,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "../ui/input";
-import { Toggle } from "../toggle";
 import {
   Select,
   SelectContent,
@@ -37,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Checkbox } from "../ui/checkbox";
 
 enum EmailDomains {
   GMAIL = "gmail.com",
@@ -54,6 +55,7 @@ export const SendEmailModal = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [allowViewName, setAllowViewName] = useState(false);
+  const [includeQuestion, setIncludeQuestion] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,10 +90,11 @@ export const SendEmailModal = () => {
 
       const response = await axios.post(url, {
         friendEmail: values.email,
+        allowViewName,
         bookTitle: data.email.bookTitle,
         bookImageUrl: data.email.bookImageUrl,
         bookText: data.email.bookText,
-        allowViewName,
+        question: includeQuestion && data.email.question,
       });
 
       if (response.data.error) {
@@ -100,6 +103,9 @@ export const SendEmailModal = () => {
       }
 
       toast.success("Email sent successfully!");
+
+      setAllowViewName(false);
+      setIncludeQuestion(false);
 
       onClose();
       reset();
@@ -118,8 +124,12 @@ export const SendEmailModal = () => {
           <form onSubmit={handleSubmit(onClick)} className="space-y-8">
             <DialogHeader className="pt-8 px-6">
               <DialogTitle className="text-2xl text-center font-bold">
-                Send the selected text to your friend
+                Share Your Highlights!
               </DialogTitle>
+
+              <DialogDescription className="text-center text-muted-foreground">
+                Share your highlights with your friend via email.
+              </DialogDescription>
             </DialogHeader>
             <DialogFooter className="px-6 py-4">
               <div className="grid w-full gap-x-2 gap-y-4">
@@ -133,6 +143,7 @@ export const SendEmailModal = () => {
                       <FormControl>
                         <div className="flex flex-col py-3 gap-y-2 md:relative md:py-0">
                           <Input
+                            className="text-base"
                             placeholder="Your friend email..."
                             {...field}
                           />
@@ -161,7 +172,7 @@ export const SendEmailModal = () => {
                     </FormItem>
                   )}
                 />
-                <Toggle
+                {/* <Toggle
                   disabled={isLoading}
                   turnedOn={allowViewName}
                   onToggle={() => setAllowViewName(!allowViewName)}
@@ -171,7 +182,36 @@ export const SendEmailModal = () => {
                       : "Don't let your friend view your name"
                   }
                   className="text-muted-foreground text-sm"
-                />
+                /> */}
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="allow-name-view"
+                    onCheckedChange={_check =>
+                      setAllowViewName((prev: boolean) => !prev)
+                    }
+                  />
+                  <label
+                    htmlFor="allow-name-view"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Let my friend view my name
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="allow-question-view"
+                    onCheckedChange={_check =>
+                      setIncludeQuestion((prev: boolean) => !prev)
+                    }
+                  />
+                  <label
+                    htmlFor="allow-question-view"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Include the question I asked
+                  </label>
+                </div>
+
                 <Button disabled={isLoading}>Send via email</Button>
               </div>
             </DialogFooter>
