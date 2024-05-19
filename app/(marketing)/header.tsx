@@ -6,7 +6,7 @@ import { SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { ClerkButtonState } from "./clerk-button-state";
-import { ModeToggle } from "@/components/mode-toggle";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   {
@@ -23,7 +23,11 @@ const navItems = [
   },
 ];
 
-export const Header = () => {
+type Props = {
+  isNewUpdate: boolean;
+};
+
+export const Header = ({ isNewUpdate }: Props) => {
   return (
     <header className="w-full h-16 inset-x-0 top-0 z-30 transition-all duration-300 sticky border-b border-zinc-800 bg-zinc-950/75 backdrop-blur-lg">
       <div className="lg:w-[950px] px-4 lg:px-0 mx-auto flex items-center justify-between h-full">
@@ -37,9 +41,16 @@ export const Header = () => {
               <a
                 key={item.title}
                 href={item.href}
-                className="text-sm font-medium text-[#727E8E] hover:text-white 
-                transition-all duration-300"
+                className={cn(
+                  "text-sm font-medium text-[#727E8E] hover:text-white transition-all duration-300",
+                  item.title === "Changelog" && isNewUpdate && "relative"
+                )}
               >
+                {item.title === "Changelog" && isNewUpdate && (
+                  <div className="flex items-center justify-center absolute w-[22px] h-[14px] rounded-full -right-[30%] -top-[30%] -z-50 text-[8px] bg-sky-500 text-sky-100">
+                    <p>New</p>
+                  </div>
+                )}
                 {item.title}
               </a>
             ))}
@@ -78,9 +89,16 @@ export const Header = () => {
                   <a
                     key={item.title}
                     href={item.href}
-                    className="text-2xl font-medium text-muted-foreground hover:text-white 
-                transition-all duration-300"
+                    className={cn(
+                      "text-2xl font-medium text-muted-foreground hover:text-white transition-all duration-300",
+                      item.title === "Changelog" && isNewUpdate && "relative"
+                    )}
                   >
+                    {item.title === "Changelog" && isNewUpdate && (
+                      <div className="flex items-center justify-center absolute w-[22px] h-[14px] rounded-full -right-[17%] -top-[17%] -z-50 text-[8px] bg-sky-500 text-sky-100">
+                        <p>New</p>
+                      </div>
+                    )}
                     {item.title}
                   </a>
                 ))}

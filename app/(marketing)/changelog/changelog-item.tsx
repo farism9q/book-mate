@@ -1,5 +1,9 @@
 "use client";
 
+
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+
 import { cn, truncateTxt } from "@/lib/utils";
 import { Footer } from "./footer";
 import Image from "next/image";
@@ -85,16 +89,46 @@ export const ChangelogItem = ({
         </div>
 
         <div onClick={() => setExtendedDescription(!extendedDescription)}>
-          <p className="text-lg pt-4 text-[#636d82]">
+          <Markdown
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              div: ({ node, ...props }) => (
+                <div className="space-y-2" {...props} />
+              ),
+              h4: ({ node, ...props }) => (
+                <h4
+                  className="text-xl font-semibold text-slate-200"
+                  {...props}
+                />
+              ),
+
+              p: ({ node, ...props }) => (
+                <p className="text-[#bcbec4]" {...props} />
+              ),
+              li: ({ node, ...props }) => (
+                <li className="text-[#bcbec4]" {...props} />
+              ),
+              strong: ({ node, ...props }) => (
+                <div className="w-full relative">
+                  <div className="absolute w-[2px] h-full bg-zinc-500" />
+                  <strong className="ml-2 text-[#7b7c80]" {...props} />
+                </div>
+              ),
+            }}
+          >
             {extendedDescription ? description : truncatedDescription.text}
-          </p>
+          </Markdown>
         </div>
+        <div onClick={() => setExtendedDescription(!extendedDescription)}></div>
 
         <div className="flex items-center justify-center pt-12 pb-4">
           <Carousel className="max-w-lg">
             <CarouselContent>
               {images.map((imgSrc, index) => (
-                <CarouselItem key={index}>
+                <CarouselItem
+                  key={index}
+                  className="flex justify-center items-center"
+                >
                   <div className="p-1">
                     <Image
                       src={imgSrc}
