@@ -1,6 +1,6 @@
 "use client";
 
-import { User, UserSettings } from "@prisma/client";
+import { User, UserProfileImage, UserSettings } from "@prisma/client";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -13,9 +13,14 @@ import { Button } from "../../../../components/ui/button";
 import { Separator } from "../../../../components/ui/separator";
 import { Footer } from "./footer";
 import { updateUserSettings } from "@/actions/user-settings";
+import { useEditProfileSheet } from "@/hooks/use-edit-profile";
 
 type Props = {
-  user: User & { userSettings: UserSettings; externalAccounts: boolean };
+  user: User & {
+    userSettings: UserSettings;
+    profileImage: UserProfileImage;
+    externalAccounts: boolean;
+  };
 };
 export const UserProfile = ({ user }: Props) => {
   const [showUserBooksToggle, setShowUserBooksToggle] = useState(
@@ -24,7 +29,8 @@ export const UserProfile = ({ user }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const { onOpen } = useModal();
+  // const { onOpen } = useModal();
+  const { onOpen } = useEditProfileSheet();
   const handleShowUserBooksToggle = (status: boolean) => {
     setShowUserBooksToggle(status);
     startTransition(() => {
@@ -56,7 +62,7 @@ export const UserProfile = ({ user }: Props) => {
       <div className="flex items-end justify-end w-full p-2">
         <Button
           variant={"secondary"}
-          onClick={() => onOpen("editUserProfile", { user })}
+          onClick={() => onOpen({ user })}
           size="sm"
           className="border-2 border-zinc-600/30 hover:bg-primary/10 transition-colors duration-300"
         >

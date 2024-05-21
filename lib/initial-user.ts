@@ -14,10 +14,22 @@ export const initialUser = cache(async () => {
     },
     include: {
       userSettings: true,
+      userProfileImage: true,
     },
   });
 
   if (user) {
+    if (!user.userProfileImage?.imageUrl) {
+      await db.user.update({
+        where: {
+          userClerkId: clerkUser.id,
+        },
+        data: {
+          imageURL: clerkUser.imageUrl,
+        },
+      });
+    }
+
     return { ...user, externalAccounts: !!clerkUser?.externalAccounts.length };
   }
 
