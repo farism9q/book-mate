@@ -1,6 +1,5 @@
 "use client";
 
-// Modal shadow is from: https://manuarora.in/boxshadows
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
@@ -8,22 +7,14 @@ import axios from "axios";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ClientUploadedFileData } from "uploadthing/types";
 import { useKey, useMedia } from "react-use";
 
-import { useModal } from "@/hooks/use-modal-store";
-import { deleteImage } from "@/actions/uploadthing";
 import { UploadImage } from "../upload-image";
 
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-} from "../ui/dialog";
+
 import { UserAccountUpdate } from "@/types/user-account";
 import {
   Form,
@@ -35,6 +26,9 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Loader } from "lucide-react";
+import { Sheet, SheetContent, SheetFooter, SheetHeader } from "../ui/sheet";
+import { useEditProfileSheet } from "@/hooks/use-edit-profile";
+import { cn } from "@/lib/utils";
 
 const formSchema = z
   .object({
@@ -60,13 +54,10 @@ const formSchema = z
     return true;
   });
 
-export const EditUserProfileModal = () => {
+export const EditUserProfileSheet = () => {
   const router = useRouter();
-  const { isOpen, onClose, type, data } = useModal();
+  const { data, isOpen, onClose } = useEditProfileSheet();
   const { user } = data;
-
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
 
   const [avatar, setAvatar] = useState("");
   const [avatarKey, setAvatarKey] = useState("");
@@ -98,6 +89,7 @@ export const EditUserProfileModal = () => {
     if (user) {
       setValue("name", user.name);
       setValue("bio", user.bio);
+      setValue("avatar", user.imageURL);
     }
   }, [user, setValue]);
 
@@ -118,11 +110,9 @@ export const EditUserProfileModal = () => {
     }
   }, [currentPassword, newPassword, setError, getValues]);
 
-  const isModalOpen = isOpen && type === "editUserProfile";
-  const isLoading = formState.isSubmitting || isDeleting || isUploading;
+  // const isModalOpen = isOpen && type === "editUserProfile";
+  const isLoading = formState.isSubmitting;
   const isMobile = useMedia("(max-width: 750px)", false);
-
-  if (!isModalOpen) return null;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { name, bio, newPassword, currentPassword } = values;
@@ -158,8 +148,9 @@ export const EditUserProfileModal = () => {
         userFields.clerkUpdateFields.currentPassword = currentPassword;
         userFields.clerkUpdateFields.newPassword = newPassword;
       }
-      if (avatar) {
-        userFields.clerkUpdateFields.avatar = avatar;
+      if (avatar && avatarKey) {
+        userFields.userUpdateFields.avatar = avatar;
+        userFields.userUpdateFields.avatarKey = avatarKey;
       }
       const response = await axios.post("api/user-update", userFields);
 
@@ -180,6 +171,11 @@ export const EditUserProfileModal = () => {
     }
   };
 
+  const handleOnUpload = (image: { imageUrl: string; imageKey: string }[]) => {
+    setAvatar(image[0].imageUrl);
+    setAvatarKey(image[0].imageKey);
+  };
+
   const handleClearChanges = async () => {
     setValue("name", user?.name || "");
     setValue("bio", user?.bio || "");
@@ -187,47 +183,30 @@ export const EditUserProfileModal = () => {
     setValue("newPassword", "");
   };
 
-  const handleOnCompeteUpload = (res: ClientUploadedFileData<null>[]) => {
-    setAvatar(res[0].url);
-    setAvatarKey(res[0].key);
-
-    setIsUploading(false);
-  };
-
-  const handleOnUploadError = (error: Error) => {
-    setError("avatar", {
-      type: "manual",
-      message: error.message,
-    });
-  };
-
-  const handleImageCancel = async () => {
-    setIsDeleting(true);
-    await deleteImage(avatarKey);
-    setIsDeleting(false);
-    setAvatar("");
-  };
-
   return (
-    <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="h-[80%] overflow-auto no-scrollbar pt-16">
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetContent
+        side={"right"}
+        className="h-full overflow-auto no-scrollbar pt-16"
+      >
         <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            <DialogHeader className="mx-8 flex justify-center items-center">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 h-[65%]">
+            <SheetHeader className="mx-8 flex justify-center items-center">
               <UploadImage
-                onUploadComplete={handleOnCompeteUpload}
-                onUploadError={handleOnUploadError}
-                onUploadBegin={() => setIsUploading(true)}
-                onImageCancel={handleImageCancel}
+                onChange={handleOnUpload}
                 endpoint="profilePicture"
-                isUploading={isUploading}
-                images={[{ imageUrl: avatar, imageKey: avatarKey }]}
-                isDeleting={isDeleting}
-                error={formState.errors.avatar?.message}
+                maxFiles={1}
+                images={[
+                  {
+                    imageUrl:
+                      user?.profileImage?.imageUrl || user?.imageURL || "",
+                    imageKey: user?.profileImage?.imageKey || "",
+                  },
+                ]}
               />
-            </DialogHeader>
-            <div className="flex flex-col justify-center items-center p-2">
-              <div className="relative w-full max-w-sm space-y-4">
+            </SheetHeader>
+            <div className="flex flex-col h-full items-center p-2">
+              <div className="relative w-full space-y-4">
                 {isMobile && (
                   <input
                     type="text"
@@ -328,31 +307,39 @@ export const EditUserProfileModal = () => {
                     </div>
                   </>
                 )}
-
-                <DialogFooter>
-                  {isLoading ? (
-                    <Button size={"icon"} className="w-full">
-                      <Loader className="w-6 h-6 animate-spin stroke-[2px]" />
-                    </Button>
-                  ) : (
-                    <div className="flex flex-col w-full md:flex-row md:items-end md:justify-end gap-2">
-                      <Button
-                        type="button"
-                        onClick={handleClearChanges}
-                        variant={"secondary"}
-                        size="sm"
-                      >
-                        Clear changes
-                      </Button>
-                      <Button size="sm">Save changes</Button>
-                    </div>
-                  )}
-                </DialogFooter>
               </div>
+              <SheetFooter className="mt-auto pt-12 pb-4 w-full">
+                {isLoading ? (
+                  <Button size={"icon"} className="w-full">
+                    <Loader className="w-6 h-6 animate-spin stroke-[2px]" />
+                  </Button>
+                ) : (
+                  <div
+                    className={cn(
+                      "w-full flex items-center justify-center gap-x-2 flex-row-reverse",
+                      isMobile &&
+                        "w-full flex-col items-start justify-start gap-y-2"
+                    )}
+                  >
+                    <Button size="sm" className="w-full">
+                      Save changes
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={handleClearChanges}
+                      variant={"secondary"}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Clear changes
+                    </Button>
+                  </div>
+                )}
+              </SheetFooter>
             </div>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 };
