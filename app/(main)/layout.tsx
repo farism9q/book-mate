@@ -28,7 +28,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
           />
         </nav>
 
-        <nav className="lg:hidden h-12 sticky px-2 mx-2 mt-4 top-4 z-50 flex justify-center items-center bg-white dark:bg-black border border-border rounded-2xl">
+        <nav className="lg:hidden h-14 sticky px-2 mx-2 mt-4 top-4 z-50 flex justify-center items-center bg-white dark:bg-black border border-border rounded-2xl">
           <MobileSidebar
             user={user}
             userLimitCount={userLimit}

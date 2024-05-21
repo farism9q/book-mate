@@ -44,13 +44,16 @@ const NavigationSidebar = ({
     border-zinc-800 dark:bg-[#04090A] gap-y-6"
     >
       <div className="flex flex-col items-center px-0">
-        <div className="relative w-40 h-32">
-          <Image
-            fill
-            src={user?.imageURL}
-            alt={user?.name || ""}
-            className="rounded-md"
-          />
+        <div className="relative mx-auto">
+          <div className="absolute rounded-md h-full w-full -z-20 blur-md animate-blob animation-delay-75 bg-primary/70 dark:bg-primary/40" />
+          <div className="w-40 h-32">
+            <Image
+              src={user.imageURL}
+              alt={user.name}
+              className="rounded-md mx-auto"
+              fill
+            />
+          </div>
         </div>
         <span className="text-lg font-semibold mt-4">{user?.name}</span>
       </div>

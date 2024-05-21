@@ -24,7 +24,7 @@ export function useChatScroll({
   const [hasInitialized, setHasInitialized] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
 
-  const isMobile = useMedia("(max-width: 1024px)", false);
+  const isMobile = useMedia("(max-width: 1366px)", false);
 
   useEffect(() => {
     const bottomDiv = bottomRef.current;

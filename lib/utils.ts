@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import { isAfter, subDays } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -23,4 +24,12 @@ export function truncateTxt({
   } else {
     return { text, isTruncated: false };
   }
+}
+
+export function isNewUpdate(updateDate?: Date) {
+  if (!updateDate) return false;
+
+  const dateThreshold = subDays(new Date(), 30);
+
+  return isAfter(new Date(updateDate), dateThreshold);
 }

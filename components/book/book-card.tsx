@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import qs from "query-string";
 import axios from "axios";
@@ -45,6 +45,7 @@ interface BookCardProps {
 export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const { onOpen, data } = useModal();
 
   const onBookStatusChange = async (status: FavoriteBookStatus) => {
@@ -82,6 +83,11 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
     router.push(`/books/${bookId}`);
   };
 
+  const onChatClick = (bookId: string) => {
+    sessionStorage.setItem("prevPath", pathname);
+    router.push(`/book/${bookId}/chat`);
+  };
+
   const onAddBookAsFav = async (bookId: string) => {
     try {
       const url = qs.stringifyUrl({
@@ -90,8 +96,8 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
 
       toast.promise(axios.post(url, { bookId }), {
         loading: "Adding to favorite",
-        success(data) {
-          router.push(`/book/${book.id}/chat`);
+        success() {
+          onChatClick(bookId);
           router.refresh();
           return "Added to favorite";
         },
@@ -213,7 +219,7 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
                     <DropdownMenuItem
                       onClick={e => {
                         e.stopPropagation();
-                        router.push(`/book/${book.id}/chat`);
+                        onChatClick(book.id);
                       }}
                       className="px-3 py-2 text-sm cursor-pointer"
                     >

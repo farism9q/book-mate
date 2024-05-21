@@ -4,12 +4,13 @@ export type UserAccountUpdate = {
     lastName?: string;
     primaryEmailAddressID?: string;
     profileImageID?: string;
-    avatar?: string;
     currentPassword?: string;
     newPassword?: string;
     signOutOfOtherSessions?: boolean;
   };
   userUpdateFields: {
     bio: string;
+    avatar?: string;
+    avatarKey?: string;
   };
 };

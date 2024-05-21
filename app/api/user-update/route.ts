@@ -42,11 +42,57 @@ export async function POST(req: NextRequest) {
 
         data: {
           name: clerkUser.value.firstName + " " + clerkUser.value.lastName,
-          bio: userUpdateFields.bio,
-          imageURL: clerkUpdateFields.avatar,
         },
       });
     }
+
+    db.$transaction(async tx => {
+      if (userUpdateFields.bio) {
+        await tx.user.update({
+          where: {
+            userClerkId: userId,
+          },
+          data: {
+            bio: userUpdateFields.bio,
+          },
+        });
+      }
+
+      if (userUpdateFields.avatar && userUpdateFields.avatarKey) {
+        let userProfileImagePromise;
+        const userProfileImage = await tx.userProfileImage.findFirst({
+          where: {
+            userId,
+          },
+        });
+
+        if (userProfileImage) {
+          userProfileImagePromise = await tx.userProfileImage.update({
+            where: {
+              id: userProfileImage.id,
+            },
+            data: {
+              imageUrl: userUpdateFields.avatar,
+              imageKey: userUpdateFields.avatarKey,
+            },
+          });
+        }
+
+        const userPromise = tx.user.update({
+          where: {
+            userClerkId: userId,
+          },
+          data: {
+            imageURL: userUpdateFields.avatar,
+          },
+        });
+        let _x;
+        [_x, updatedUser] = await Promise.all([
+          userProfileImagePromise,
+          userPromise,
+        ]);
+      }
+    });
 
     if (verifiedPassword.status === "fulfilled") {
       await clerkClient.users.updateUser(userId, {

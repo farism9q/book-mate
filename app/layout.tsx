@@ -9,6 +9,7 @@ import { ModalProvider } from "@/components/providers/modal-provider";
 import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Check, Loader, X } from "lucide-react";
+import { SheetProvider } from "@/components/providers/sheet-provider";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -36,6 +37,7 @@ export default function RootLayout({
             storageKey="book-mate-theme"
           >
             <ModalProvider />
+            <SheetProvider />
             <Toaster
               toastOptions={{
                 classNames: {

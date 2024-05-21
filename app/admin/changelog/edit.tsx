@@ -1,4 +1,3 @@
-import { deleteImage } from "@/actions/uploadthing";
 import { UploadImage } from "@/components/upload-image";
 import { ChangelogCategory } from "@prisma/client";
 import { useState } from "react";
@@ -21,13 +20,6 @@ export const ChangelogEdit = () => {
     id: recordId,
   });
 
-  const categories = Object.values(ChangelogCategory).map(category => ({
-    name: category,
-    id: category,
-  }));
-
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const [update] = useUpdate("changelog", { id: recordId, data: {} });
 
   const [images, setImages] = useState<
@@ -44,22 +36,17 @@ export const ChangelogEdit = () => {
     return undefined;
   });
 
-  const [error, setError] = useState("");
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const categories = Object.values(ChangelogCategory).map(category => ({
+    name: category,
+    id: category,
+  }));
 
   const handleOnCompeteUpload = (res: ClientUploadedFileData<null>[]) => {
     setImages(res.map(r => ({ imageUrl: r.url, imageKey: r.key })));
-    setIsUploading(false);
-  };
-  const handleOnUploadError = (error: Error) => {
-    setError(error.message);
-  };
-
-  const handleImageCancel = async (idx: number) => {
-    if (images === undefined) return;
-    setIsDeleting(true);
-    await deleteImage(images[idx].imageKey);
-    setIsDeleting(false);
-    setImages(images?.filter((_, index) => index !== idx));
   };
 
   // Need to do it in this way to pass the images url to json body
@@ -90,15 +77,10 @@ export const ChangelogEdit = () => {
           defaultValue={changelog.categories}
         />
         <UploadImage
-          onUploadComplete={handleOnCompeteUpload}
-          onUploadError={handleOnUploadError}
-          onUploadBegin={() => setIsUploading(true)}
-          onImageCancel={handleImageCancel}
+          onChange={handleOnCompeteUpload}
+          maxFiles={6}
           endpoint="imageUploader"
-          isUploading={isUploading}
-          images={images}
-          isDeleting={isDeleting}
-          error={error}
+          images={changelog.images}
         />
       </SimpleForm>
     </SaveContextProvider>

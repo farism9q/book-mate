@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { RemoveFavoriteBookModal } from "../modals/remove-favBook-modal";
 import { UpgradePlanModal } from "../modals/upgrade-plan-modal";
 import { FinishBookModal } from "../modals/finish-book-modal";
-import { EditUserProfileModal } from "../modals/edit-user-profile-modal";
+import { EditUserProfileSheet } from "../modals/edit-user-profile-sheet";
 import { SendEmailModal } from "../modals/send-email-modal";
 
 export const ModalProvider = () => {
@@ -24,7 +24,7 @@ export const ModalProvider = () => {
       <RemoveFavoriteBookModal />
       <UpgradePlanModal />
       <FinishBookModal />
-      <EditUserProfileModal />
+      <EditUserProfileSheet />
       <SendEmailModal />
     </>
   );

@@ -1,105 +1,187 @@
+"use client";
+import { useCallback, useEffect, useState } from "react";
+
 import Image from "next/image";
-import { UploadButton } from "@/lib/uploadthing";
-import { ClientUploadedFileData } from "uploadthing/types";
-import { Loader, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ControllerRenderProps } from "react-hook-form";
+import type { FileWithPath } from "react-dropzone";
+import { deleteImage } from "@/actions/uploadthing";
+import { useDropzone } from "@uploadthing/react";
+import { generateClientDropzoneAccept } from "uploadthing/client";
+import { useUploadThing } from "@/lib/uploadthing";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import { Download, Edit, Loader2, X } from "lucide-react";
 
 type Props = {
-  onUploadComplete: (res: ClientUploadedFileData<null>[]) => void;
-  onUploadError: (error: Error) => void;
-  onUploadBegin?: () => void;
-  onImageCancel: (idx: number) => void;
+  onChange: ControllerRenderProps["onChange"];
+  maxFiles: number;
   endpoint: "imageUploader" | "profilePicture";
-  isUploading?: boolean;
-  isDeleting?: boolean;
   images?: { imageUrl: string; imageKey: string }[];
-  error?: string;
 };
 
 export const UploadImage = ({
-  onUploadComplete,
-  onUploadError,
-  onUploadBegin,
+  onChange,
+  maxFiles = 1,
   endpoint,
-  onImageCancel,
-  isUploading,
-  isDeleting,
   images,
-  error,
 }: Props) => {
-  if (images && images[0].imageUrl !== "" && !isUploading && !isDeleting) {
-    return (
-      <div
-        className={cn(
-          "grid w-full",
-          images.length === 1 && "grid-cols-1",
-          images.length === 2 && "grid-cols-2",
-          images.length === 3 && "grid-cols-3",
-          images.length === 4 && "grid-cols-4"
-        )}
-      >
-        {images?.map((img, index) => (
-          <div key={index} className="relative h-[200px] w-full">
-            <Image fill src={img.imageUrl} alt="image" className="rounded-md" />
-            <button
-              onClick={() => onImageCancel(index)}
-              className="z-50 absolute text-white p-1 bg-rose-500 rounded-full -top-2 -right-3 shadow-sm"
-              type="button"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        ))}
-      </div>
-    );
-  }
+  const [startedUploading, setStartedUploading] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const [preview, setPreview] = useState<string[] | null>(() => {
+    if (images) {
+      return images.map(img => img.imageUrl);
+    }
+    return null;
+  });
+
+  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
+    if (acceptedFiles.length === 0) return;
+    const files = acceptedFiles.map(file => file as File);
+    const urls = files.map(file => URL.createObjectURL(file));
+
+    setStartedUploading(true);
+
+    setFiles(prevFiles => [...prevFiles, ...files]);
+    setPreview(prevImgUrls => [...(prevImgUrls || []), ...urls]);
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: generateClientDropzoneAccept(["image"]),
+    maxFiles,
+    multiple: maxFiles > 1,
+  });
+
+  const { startUpload, isUploading } = useUploadThing(endpoint, {
+    onClientUploadComplete: res => {
+      if (res.length > 0) {
+        const images = res.map(r => ({ imageUrl: r.url, imageKey: r.key }));
+        setStartedUploading(false);
+        onChange(images);
+        toast.success("Uploaded successfully!");
+      }
+    },
+    onUploadError: e => {
+      toast.error("Error occurred while uploading!");
+    },
+  });
+
+  const handleCancel = useCallback(() => {
+    if (preview && preview?.length > 0) {
+      URL.revokeObjectURL(preview?.map(p => p as string)[0]);
+    }
+    setFiles([]);
+    setPreview(null);
+  }, [preview]);
+
+  useEffect(() => {
+    if (!preview || preview?.length === 0) {
+      handleCancel();
+    }
+  }, [handleCancel, preview]);
+
+  const handleUpload = () => {
+    startUpload(files);
+  };
+
+  const handleCancelOneImage = async (previewUrl: string, idx: number) => {
+    if (preview?.length === 0) return;
+
+    // Delete the image from the server
+    if (images && images?.length > 0) {
+      const image = images.find(img => img.imageUrl === previewUrl);
+      if (!image || !image.imageKey) return;
+      await deleteImage(image.imageKey);
+    }
+
+    URL.revokeObjectURL(previewUrl);
+    setPreview(prePrev => prePrev && prePrev.filter(p => p !== previewUrl));
+    setFiles(preFiles => preFiles.filter((_, index) => index !== idx));
+  };
+
   return (
     <>
-      {isUploading ? (
-        <div className="flex items-center justify-center w-full h-28">
-          <Loader className="w-6 h-6 animate-spin stroke-[2px]" />
+      <div>
+        <div>
+          <div className="absolute left-0 top-0 flex h-28 w-28 cursor-pointer items-center justify-center rounded-full bg-primary/40 text-white opacity-0 group-hover:opacity-100 dark:bg-secondary/40">
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              className="text-xs hover:bg-transparent hover:text-white"
+            >
+              <Edit className="mr-1 h-3 w-3" />
+            </Button>
+          </div>
         </div>
-      ) : (
-        <div className="w-full flex flex-col items-center justify-cente gap-y-2">
-          {isDeleting ? (
-            <div className="flex items-center justify-center w-full h-28">
-              <Loader className="w-6 h-6 animate-spin stroke-[2px]" />
-            </div>
-          ) : (
-            <UploadButton
-              endpoint={endpoint}
-              content={{
-                button: "Upload image",
-                clearBtn: "Clear",
-              }}
-              appearance={{
-                container: {
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                  height: "200px",
-                  border: "2px dashed #323131",
-                  borderRadius: "8px",
-                  backgroundColor: "#363333",
-                  backgroundSize: "cover",
-                },
-                clearBtn: {
-                  backgroundColor: "#F3F4F6",
-                  color: "#000",
-                  border: "1px solid #E5E7EB",
-                  borderRadius: "8px",
-                  padding: "4px 8px",
-                },
-              }}
-              onClientUploadComplete={onUploadComplete}
-              onUploadError={onUploadError}
-              onUploadBegin={onUploadBegin}
-            />
-          )}
-          {error && <div className="text-rose-500">{error}</div>}
+        <div>
+          <div>
+            {preview && (
+              <div className="flex items-center justify-center gap-x-3">
+                {preview.map((url, idx) => (
+                  <div key={url} className="relative h-40 w-40">
+                    <button
+                      onClick={() => {
+                        handleCancelOneImage(url, idx);
+                        setPreview(preview.filter(p => p !== url));
+                      }}
+                      className="absolute z-10 -top-[11px] -right-[11px] text-white p-1 bg-rose-500 rounded-full shadow-sm"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    <Image
+                      src={url}
+                      alt="File preview"
+                      className="w-full h-[200px] rounded-md"
+                      fill
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            {startedUploading && preview && preview?.length > 0 && (
+              <div className="mt-10 mb-5 w-full flex items-center justify-center gap-x-3">
+                <Button
+                  disabled={isUploading}
+                  onClick={handleCancel}
+                  className="text-destructive hover:text-destructive"
+                  variant="outline"
+                >
+                  Cancel
+                </Button>
+                <Button disabled={isUploading} onClick={handleUpload}>
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Uploading...
+                    </>
+                  ) : (
+                    "Upload"
+                  )}
+                </Button>
+              </div>
+            )}{" "}
+            {preview?.length !== maxFiles && (
+              <div
+                className=" flex h-60 items-center justify-center border border-dashed focus-visible:outline-none "
+                {...getRootProps()}
+              >
+                <input {...getInputProps()} />
+                <div className="space-y-2 text-center">
+                  <div className="flex cursor-pointer flex-col items-center gap-y-2">
+                    <span className=" text-md">Drop Here</span>
+                    <Download size={40} />
+                  </div>
+                  <p className=" text-muted-foreground">OR</p>
+                  <p className=" cursor-pointer text-sm">Click here</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </>
   );
 };

@@ -43,16 +43,24 @@ const ChatHeader = ({
     return null;
   }
 
+  const onBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    // Get the previous path
+    const prevPath = sessionStorage.getItem("prevPath");
+    if (prevPath) {
+      router.push(prevPath);
+    } else {
+      router.push("/favorite-books");
+    }
+  };
+
   return (
     <Sheet>
       <SheetTrigger>
         <div className="flex items-center gap-2 bg-zinc-200/90 dark:bg-[#212121]">
           <Button
             variant={"ghost"}
-            onClick={e => {
-              e.stopPropagation();
-              router.back();
-            }}
+            onClick={onBackClick}
             className="ml-2 p-2 rounded-md hover:bg-zinc-300/90 dark:hover:bg-[#333]"
           >
             <ChevronLeft className="w-6 h-6" />

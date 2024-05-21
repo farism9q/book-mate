@@ -8,35 +8,6 @@ export enum ErrorType {
   SIGN_IN_REQUIRED = "SIGN_IN_REQUIRED",
 }
 
-export const CategoriesColors: Record<string, string> = {
-  "fiction": "bg-blue-500",
-  "business": "bg-green-500",
-  "technology": "bg-red-500",
-  "science": "bg-purple-500",
-  "art": "bg-pink-500",
-  "biography": "bg-purple-500",
-  "history": "bg-gray-500",
-  "travel": "bg-green-500",
-  "religion": "bg-red-500",
-  "cooking": "bg-purple-500",
-  "sports": "bg-pink-500",
-  "education": "bg-indigo-500",
-  "comics": "bg-gray-500",
-  "psychology": "bg-green-500",
-  "family": "bg-purple-500",
-  "relationships": "bg-purple-500",
-  "wars": "bg-pink-500",
-  "general": "bg-gray-500",
-  "autobiography": "bg-yellow-500",
-  "political": "bg-green-500",
-  "health": "bg-green-500",
-  "fitness": "bg-red-500",
-  "vitamins": "bg-purple-500",
-  "diet": "bg-pink-500",
-  "nutrition": "bg-indigo-500",
-  "computers": "bg-gray-500",
-};
-
 export enum Category {
   FICTION = "fiction",
   BUSINESS = "business",
