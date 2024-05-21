@@ -4,35 +4,26 @@ import { SearchBooksAction } from "@/components/search-books-action";
 import CustomPagination from "@/components/custom-pagination";
 import { useSearchParams } from "next/navigation";
 import { useInitialBooks } from "@/hooks/use-initial-books";
-import { useState } from "react";
 import { Category } from "@/constants";
 import BookCardSkeleton from "@/components/book/book-card-skeleton";
 import { BookCard } from "@/components/book/book-card";
 import { Book } from "@/types/book";
-
 const InitialPage = () => {
-  const [category, setCategory] = useState<Category>(Category.HEALTH);
-
-  const handleCategoryOnChange = (category: Category) => {
-    setCategory(category);
-  };
-
   const searchParams = useSearchParams();
-  const currPage =
-    searchParams.get("page") !== null ? Number(searchParams.get("page")) : 0;
+
+  const category =
+    (searchParams.get("category") as Category) || Category.HEALTH;
+  const page = searchParams.get("page") || 0;
+
   const { data, status, isFetching } = useInitialBooks({
     category,
-    currPage: currPage || 0,
+    currPage: Number(page),
   });
   return (
     <div className="flex flex-col w-full overflow-y-auto no-scrollbar px-4">
       <div className="space-y-8">
         <div className="mt-12 px-2">
-          <SearchBooksAction
-            isFetching={isFetching}
-            type="initial"
-            onCategoryChange={handleCategoryOnChange}
-          />
+          <SearchBooksAction isFetching={isFetching} type="initial" />
         </div>
 
         {/* Is fetching */}

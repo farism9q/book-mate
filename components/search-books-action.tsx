@@ -1,10 +1,11 @@
 "use client";
+import qs from "query-string";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { z } from "zod";
 import { Input } from "./ui/input";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { Category } from "@/constants";
 import {
@@ -14,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useEffect } from "react";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -26,31 +26,34 @@ const formSchema = z.object({
 type Props = {
   isFetching: boolean;
   type: "search" | "initial";
-  onCategoryChange?: (category: Category) => void;
 };
 
-export const SearchBooksAction = ({
-  isFetching,
-  type,
-  onCategoryChange,
-}: Props) => {
+export const SearchBooksAction = ({ isFetching, type }: Props) => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      type: Category.HEALTH,
+      type: (searchParams.get("category") as Category) || Category.HEALTH,
     },
   });
 
-  const category = form.watch("type") as Category;
-
-  useEffect(() => {
-    if (onCategoryChange && type === "initial") {
-      onCategoryChange(category);
-    }
-  }, [category, type, onCategoryChange]);
-
-  const router = useRouter();
+  const handleCategoryOnChange = (category: Category) => {
+    const query = {
+      category,
+    };
+    const url = qs.stringifyUrl(
+      {
+        url: pathname,
+        query,
+      },
+      { skipEmptyString: true, skipNull: true }
+    );
+    router.push(url);
+  };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     return router.push(`search?title=${values.title}`);
@@ -69,7 +72,7 @@ export const SearchBooksAction = ({
                   <FormControl>
                     <Input
                       placeholder="Search books by title..."
-                      className="h-full focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
+                      className="h-full focus-visible:ring-0 focus-visible:ring-offset-0 text-base rounded-e-none"
                       {...field}
                     />
                   </FormControl>
@@ -96,7 +99,7 @@ export const SearchBooksAction = ({
                 <FormItem>
                   <Select
                     disabled={isFetching}
-                    onValueChange={field.onChange}
+                    onValueChange={handleCategoryOnChange}
                     defaultValue={field.value}
                   >
                     <FormControl>

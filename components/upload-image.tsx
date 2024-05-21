@@ -30,7 +30,6 @@ export const UploadImage = ({
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string[] | null>(() => {
     if (images) {
-      console.log({ images });
       return images.map(img => img.imageUrl);
     }
     return null;
@@ -92,8 +91,8 @@ export const UploadImage = ({
     // Delete the image from the server
     if (images && images?.length > 0) {
       const image = images.find(img => img.imageUrl === previewUrl);
-      if (!image) return;
-      await deleteImage(image?.imageKey);
+      if (!image || !image.imageKey) return;
+      await deleteImage(image.imageKey);
     }
 
     URL.revokeObjectURL(previewUrl);

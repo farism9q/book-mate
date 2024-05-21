@@ -1,9 +1,9 @@
 "use client";
 
+import qs from "query-string";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
 type Props = {
   options: Array<{ value: string; label: string }>;
   urlQuery: string;
@@ -14,31 +14,29 @@ export const Filter = ({ options, urlQuery }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const onClick = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(urlQuery, value);
-
-    router.push(pathname + "?" + params.toString());
+  const onTabChange = (value: string) => {
+    const query = {
+      [urlQuery]: value,
+    };
+    const url = qs.stringifyUrl({
+      url: pathname,
+      query,
+    });
+    router.push(url);
   };
 
-  const currentFilter = searchParams.get(urlQuery);
+  const currentFilter = searchParams.get(urlQuery) || options[0].value;
 
   return (
-    <Tabs defaultValue={options[0].value}>
+    <Tabs defaultValue={currentFilter} onValueChange={onTabChange}>
       <TabsList>
         {options.map(option => (
           <TabsTrigger
-            onClick={() => onClick(option.value)}
             key={option.value}
             value={option.value}
             className={cn(
-              "capitalize text-sm",
-              currentFilter === option.value
-                ? "text-primary dark:text-primary"
-                : "text-zinc-500 dark:text-zinc-400",
-              !currentFilter &&
-                options[0].value === option.value &&
-                "text-primary dark:text-primary"
+              "capitalize text-sm text-zinc-500 dark:text-zinc-400 bg-transparent",
+              currentFilter === option.value && "text-primary dark:text-primary"
             )}
           >
             {option.label}

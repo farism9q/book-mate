@@ -35,11 +35,13 @@ export default function MobileSidebar({
   return (
     <Sheet open={open} onOpenChange={() => onOpenChange()}>
       <Link href={"/"}>
-        <h1 className="text-primary text-lg font-bold p-2">Book mate.</h1>
+        <h1 className="text-gradient text-2xl font-bold uppercase tracking-widest">
+          Book mate
+        </h1>
       </Link>
       <SheetTrigger className="ml-auto">
         <button className="p-2">
-          <Menu className="w-5 h-5" />
+          <Menu className="size-6" />
         </button>
       </SheetTrigger>
       <SheetContent side={"right"} className="p-0">

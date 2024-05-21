@@ -79,9 +79,12 @@ const FavoriteBooksPage = async ({ searchParams }: Props) => {
   const emptyLabel = noFavBooks
     ? "There is no favorite book"
     : "No books found";
+
+  const alteredFilter = filter?.replaceAll("_", " ").toUpperCase();
+
   const emptyDescription = noFavBooks
     ? "Save your favorite books to see them here."
-    : `Couldn't find any books with the filter "${filter}"`;
+    : `Couldn't find any books with the filter "${alteredFilter}"`;
 
   return (
     <RoutePage
