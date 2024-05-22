@@ -10,14 +10,15 @@ import ChatHeader from "@/app/book/[bookId]/chat/chat-header";
 import { createUpdateConversation } from "@/lib/conversation";
 import { ChatPannel } from "@/app/book/[bookId]/chat/chat-pannel";
 import { checkSubscription } from "@/lib/user-subscription";
-import { userChatLimits, userHasFreeLimit } from "@/lib/user-limit";
+import { userChatLimits } from "@/lib/user-limit";
+import { InitialUserType } from "@/types/initial-user";
 
 interface BookChatPageProps {
   params: { bookId: string };
 }
 
 const BookChatPage = async ({ params }: BookChatPageProps) => {
-  const user = await initialUser();
+  const user = (await initialUser()) as InitialUserType;
 
   if (!user) {
     return redirect("/");

@@ -8,10 +8,11 @@ import { useChatQuery } from "@/hooks/use-chat-query";
 import { ArrowDown, Loader2, ServerCrash } from "lucide-react";
 import { ElementRef, Fragment, useRef } from "react";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
+import { InitialUserType } from "@/types/initial-user";
 
 interface ChatMessagesProps {
   book: Book;
-  user: User;
+  user: InitialUserType;
   conversation: Conversation | null;
   onSendMessage: (message: string) => void;
   isPending: boolean;
@@ -112,7 +113,7 @@ const ChatMessages = ({
                 <div key={message.id} className="flex flex-col py-4 space-y-2">
                   <ChatItem
                     type="user"
-                    avatar={user.imageURL}
+                    avatar={user.userProfileImage.imageUrl || user.imageURL}
                     text={message.userQuestion}
                   />
                   <ChatItem

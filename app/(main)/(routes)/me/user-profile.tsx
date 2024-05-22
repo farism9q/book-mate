@@ -70,7 +70,7 @@ export const UserProfile = ({ user }: Props) => {
           <div className="absolute rounded-md h-full w-full -z-20 blur-md animate-blob animation-delay-75 bg-primary/70 dark:bg-primary/40" />
           <div className="w-[200px] h-[200px] md:w-[320px] md:h-[320px]">
             <Image
-              src={user.userProfileImage.imageUrl}
+              src={user.userProfileImage.imageUrl || user.imageURL}
               alt={user.name}
               className="rounded-md mx-auto"
               fill
