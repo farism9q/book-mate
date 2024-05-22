@@ -109,7 +109,7 @@ const ChatMessages = ({
           {data?.pages.map((group, idx) => (
             <Fragment key={idx}>
               {group.items.map((message: Message, messageIdx: number) => (
-                <div key={message.id} className="flex flex-col py-4 -z-20">
+                <div key={message.id} className="flex flex-col py-4 space-y-2">
                   <ChatItem
                     type="user"
                     avatar={user.imageURL}
@@ -129,19 +129,15 @@ const ChatMessages = ({
           ))}
           {showScrollButton && (
             <div
-              className="absolute bottom-2 right-4 bg-zinc-700/40
+              className="absolute bottom-2 right-4 bg-zinc-900/20 dark:bg-zinc-700/40
             rounded-full flex justify-center items-center p-2 hover:scale-110 transition-all"
             >
-              <div
-                className="absolute h-[50%] w-[50%] -z-20 blur-sm animate-blob animation-delay-75 
-              bg-primary/70"
-              />
               <button
                 onClick={() => {
                   onScrollButton();
                 }}
               >
-                <ArrowDown className="h-6 w-6 text-slate-100" />
+                <ArrowDown className="h-6 w-6 text-slate-50 dark:text-slate-100" />
               </button>
             </div>
           )}

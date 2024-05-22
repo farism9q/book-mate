@@ -199,8 +199,8 @@ export const EditUserProfileSheet = () => {
                 images={[
                   {
                     imageUrl:
-                      user?.profileImage?.imageUrl || user?.imageURL || "",
-                    imageKey: user?.profileImage?.imageKey || "",
+                      user?.userProfileImage?.imageUrl || user?.imageURL || "",
+                    imageKey: user?.userProfileImage?.imageKey || "",
                   },
                 ]}
               />

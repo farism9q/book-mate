@@ -13,6 +13,7 @@ export async function checkSubscription() {
   const userSubscription = await db.userSubscription.findUnique({
     where: { userId },
     select: {
+      type: true,
       stripeCurrentPeriodEnd: true,
       stripeCustomerId: true,
       stripeSubscriptionId: true,
@@ -25,6 +26,7 @@ export async function checkSubscription() {
   }
 
   const isValid =
+    userSubscription.type === "PRODUCTION" &&
     userSubscription.stripePriceId &&
     userSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS >
       Date.now();

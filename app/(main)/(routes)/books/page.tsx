@@ -8,8 +8,16 @@ import { Category } from "@/constants";
 import BookCardSkeleton from "@/components/book/book-card-skeleton";
 import { BookCard } from "@/components/book/book-card";
 import { Book } from "@/types/book";
+import { useModal } from "@/hooks/use-modal-store";
+import { useEffect, useState } from "react";
+import { subscriptionType } from "@/types/subscription";
+
 const InitialPage = () => {
   const searchParams = useSearchParams();
+  const { onOpen } = useModal();
+  const [hasOpenedModal, setHasOpenedModal] = useState(false);
+
+  const cameFromSubscription = searchParams.get("subscription");
 
   const category =
     (searchParams.get("category") as Category) || Category.HEALTH;
@@ -19,6 +27,18 @@ const InitialPage = () => {
     category,
     currPage: Number(page),
   });
+
+  useEffect(() => {
+    if (
+      (cameFromSubscription === subscriptionType.SUBSCRIBE.toLowerCase() ||
+        cameFromSubscription === subscriptionType.UPDATE.toLowerCase()) &&
+      !hasOpenedModal
+    ) {
+      onOpen("subscriptionSuccess");
+      setHasOpenedModal(true);
+    }
+  }, [cameFromSubscription, hasOpenedModal, onOpen]);
+
   return (
     <div className="flex flex-col w-full overflow-y-auto no-scrollbar px-4">
       <div className="space-y-8">

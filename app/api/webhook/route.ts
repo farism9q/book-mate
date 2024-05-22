@@ -35,6 +35,7 @@ export async function POST(req: Request) {
 
     await db.userSubscription.create({
       data: {
+        type: session.livemode ? "PRODUCTION" : "TEST",
         userId: session?.metadata?.userId,
         stripeSubscriptionId: subscription.id,
         stripeCustomerId: subscription.customer as string,

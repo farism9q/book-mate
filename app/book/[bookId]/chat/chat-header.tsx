@@ -57,11 +57,11 @@ const ChatHeader = ({
   return (
     <Sheet>
       <SheetTrigger>
-        <div className="flex items-center gap-2 bg-zinc-200/90 dark:bg-[#212121]">
+        <div className="flex items-center gap-2 border border-slate-200 bg-slate-100 dark:bg-gray-900 dark:border-gray-800">
           <Button
             variant={"ghost"}
             onClick={onBackClick}
-            className="ml-2 p-2 rounded-md hover:bg-zinc-300/90 dark:hover:bg-[#333]"
+            className="ml-2 p-2 rounded-md hover:bg-slate-200 dark:hover:bg-gray-800 transition-colors"
           >
             <ChevronLeft className="w-6 h-6" />
           </Button>

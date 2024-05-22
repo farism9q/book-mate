@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SignOutButton, useAuth } from "@clerk/nextjs";
-import { User } from "@prisma/client";
+import { User, UserProfileImage } from "@prisma/client";
 
 import UserFreeLimit from "../user-free-limit";
 
@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
 interface NavigationSidebarProps {
-  user: User;
+  user: User & { userProfileImage: UserProfileImage };
   userLimitCount: number;
   isSubscribed: boolean;
 }
@@ -40,7 +40,7 @@ const NavigationSidebar = ({
 
   return (
     <div
-      className="flex flex-col h-full lg:fixed left-0 top-0 items-center pt-6 px-2 bg-white border-r-2
+      className="w-full md:w-[272px] flex flex-col h-full lg:fixed left-0 top-0 items-center pt-6 px-2 bg-white border-r-2
     border-zinc-800 dark:bg-[#04090A] gap-y-6"
     >
       <div className="flex flex-col items-center px-0">
@@ -48,7 +48,7 @@ const NavigationSidebar = ({
           <div className="absolute rounded-md h-full w-full -z-20 blur-md animate-blob animation-delay-75 bg-primary/70 dark:bg-primary/40" />
           <div className="w-40 h-32">
             <Image
-              src={user.imageURL}
+              src={user.userProfileImage.imageUrl}
               alt={user.name}
               className="rounded-md mx-auto"
               fill
@@ -62,16 +62,17 @@ const NavigationSidebar = ({
         <NavigationItems />
       </div>
 
-      <div className="overflow-y-auto no-scrollbar flex flex-col pb-6">
-        <UserFreeLimit
-          userLimitCount={userLimitCount}
-          isSubscribed={isSubscribed}
-        />
+      <div className="w-full overflow-y-auto no-scrollbar flex flex-col pb-6">
+        {!isSubscribed && <UserFreeLimit userLimitCount={userLimitCount} />}
         <div className="flex flex-col items-center justify-center gap-y-6 mt-2 pr-2">
           <ModeToggle />
-          <SignOutButton signOutOptions={{ sessionId }}>
-            <Button variant={"destructive"}>Sign out</Button>
-          </SignOutButton>
+          <div className="w-full">
+            <SignOutButton signOutOptions={{ sessionId }}>
+              <Button variant={"destructive"} className="w-full h-12 text-xl">
+                Sign out
+              </Button>
+            </SignOutButton>
+          </div>
         </div>
       </div>
     </div>

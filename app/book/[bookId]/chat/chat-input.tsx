@@ -43,7 +43,7 @@ const ChatInput = ({ onSendMessage, isPending }: Props) => {
                 <div className="relative px-4">
                   <Input
                     disabled={isPending}
-                    className="text-base px-4 py-6 bg-zinc-200/90 dark:bg-[#212121] border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
+                    className="text-base px-4 py-6 border-slate-200 bg-slate-100 dark:bg-gray-900 dark:border-gray-800 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
                     placeholder={"Ask your question here..."}
                     {...field}
                   />
