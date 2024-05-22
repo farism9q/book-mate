@@ -9,9 +9,10 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import NavigationSidebar from "./navigation/navigation-sidebar";
 import { useNavToggle } from "@/hooks/use-nav-toggle";
 import Link from "next/link";
+import { InitialUserType } from "@/types/initial-user";
 
 interface MobileSidebarProps {
-  user: User;
+  user: InitialUserType;
   userLimitCount: number;
   isSubscribed: boolean;
 }

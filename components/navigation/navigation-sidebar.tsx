@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { SignOutButton, useAuth } from "@clerk/nextjs";
-import { User, UserProfileImage } from "@prisma/client";
 
 import UserFreeLimit from "../user-free-limit";
 
@@ -11,9 +10,10 @@ import { NavigationItems } from "./navigation-items";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { InitialUserType } from "@/types/initial-user";
 
 interface NavigationSidebarProps {
-  user: User & { userProfileImage: UserProfileImage };
+  user: InitialUserType;
   userLimitCount: number;
   isSubscribed: boolean;
 }
