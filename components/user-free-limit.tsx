@@ -7,18 +7,10 @@ import { Progress } from "./ui/progress";
 
 interface UserFreeLimitProps {
   userLimitCount: number;
-  isSubscribed: boolean;
 }
 
-export default function UserFreeLimit({
-  userLimitCount,
-  isSubscribed,
-}: UserFreeLimitProps) {
+export default function UserFreeLimit({ userLimitCount }: UserFreeLimitProps) {
   const { onOpen } = useModal();
-
-  if (isSubscribed) {
-    return null;
-  }
 
   const onUpgrade = () => {
     onOpen("upgradePlan");

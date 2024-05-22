@@ -25,7 +25,7 @@ export async function GET() {
     if (userSubscription && userSubscription.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
         customer: userSubscription.stripeCustomerId,
-        return_url: url,
+        return_url: `${url}/books?subscription=update`,
       });
 
       return new NextResponse(JSON.stringify({ url: stripeSession.url }));
@@ -33,7 +33,7 @@ export async function GET() {
 
     // First time subscription:
     const stripeSession = await stripe.checkout.sessions.create({
-      success_url: url,
+      success_url: `${url}/books?subscription=subscribe`,
       cancel_url: url,
       payment_method_types: ["card"],
       mode: "subscription",

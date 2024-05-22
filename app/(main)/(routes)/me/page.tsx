@@ -1,14 +1,10 @@
 import { UserProfile } from "@/app/(main)/(routes)/me/user-profile";
 import { initialUser } from "@/lib/initial-user";
-import { User, UserProfileImage, UserSettings } from "@prisma/client";
+import { InitialUserType } from "@/types/initial-user";
 import { redirect } from "next/navigation";
 
 const AccountPage = async () => {
-  const user = (await initialUser()) as User & {
-    userSettings: UserSettings;
-    profileImage: UserProfileImage;
-    externalAccounts: boolean;
-  };
+  const user = (await initialUser()) as InitialUserType;
 
   if (!user) {
     return redirect("/");

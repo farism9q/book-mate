@@ -76,6 +76,18 @@ export async function POST(req: NextRequest) {
               imageKey: userUpdateFields.avatarKey,
             },
           });
+        } else {
+          userProfileImagePromise = await tx.userProfileImage.create({
+            data: {
+              imageUrl: userUpdateFields.avatar,
+              imageKey: userUpdateFields.avatarKey,
+              user: {
+                connect: {
+                  userClerkId: userId,
+                },
+              },
+            },
+          });
         }
 
         const userPromise = tx.user.update({

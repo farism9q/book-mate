@@ -1,5 +1,6 @@
 import { Book } from "@/types/book";
-import { User } from "@prisma/client";
+import { subscriptionType } from "@/types/subscription";
+import { User, UserProfileImage } from "@prisma/client";
 import { create } from "zustand";
 
 export type ModalType =
@@ -7,13 +8,17 @@ export type ModalType =
   | "upgradePlan"
   | "finishBook"
   | "editUserProfile"
-  | "sendEmail";
+  | "sendEmail"
+  | "subscriptionSuccess";
 
 interface ModalData {
   bookId?: string;
   favBookId?: string;
   finishedBooks?: Book[];
-  user?: User & { externalAccounts: boolean };
+  user?: User & {
+    externalAccounts: boolean;
+    userProfileImage: UserProfileImage;
+  };
   email?: {
     bookText: string;
     bookTitle: string;
@@ -35,17 +40,19 @@ export const useModal = create<ModalStore>((set, get) => ({
   data: {},
   isOpen: false,
   onOpen: (type, data = { finishedBooks: [] }) => {
-    const oldData = get().data;
-    const newData = {
-      ...oldData,
-      ...data,
-      finishedBooks: [
-        ...(oldData.finishedBooks || []),
-        ...(data.finishedBooks || []),
-      ],
-    };
-    if (type === "finishBook")
+    if (type === "finishBook") {
+      const oldData = get().data;
+      const newData = {
+        ...oldData,
+        ...data,
+        finishedBooks: [
+          ...(oldData.finishedBooks || []),
+          ...(data.finishedBooks || []),
+        ],
+      };
+
       return set({ isOpen: true, type, data: newData });
+    }
 
     return set({ isOpen: true, type, data });
   },

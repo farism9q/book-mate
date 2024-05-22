@@ -6,9 +6,10 @@ import { checkSubscription } from "@/lib/user-subscription";
 import MobileSidebar from "@/components/mobile-sidebar";
 import NavigationSidebar from "@/components/navigation/navigation-sidebar";
 import { NavToggleProvider } from "@/components/providers/nav-toggle";
+import { InitialUserType } from "@/types/initial-user";
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await initialUser();
+  const user = (await initialUser()) as InitialUserType;
 
   if (!user) {
     return redirect("/");

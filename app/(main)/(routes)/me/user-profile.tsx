@@ -14,13 +14,10 @@ import { Separator } from "../../../../components/ui/separator";
 import { Footer } from "./footer";
 import { updateUserSettings } from "@/actions/user-settings";
 import { useEditProfileSheet } from "@/hooks/use-edit-profile";
+import { InitialUserType } from "@/types/initial-user";
 
 type Props = {
-  user: User & {
-    userSettings: UserSettings;
-    profileImage: UserProfileImage;
-    externalAccounts: boolean;
-  };
+  user: InitialUserType;
 };
 export const UserProfile = ({ user }: Props) => {
   const [showUserBooksToggle, setShowUserBooksToggle] = useState(
@@ -29,7 +26,6 @@ export const UserProfile = ({ user }: Props) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  // const { onOpen } = useModal();
   const { onOpen } = useEditProfileSheet();
   const handleShowUserBooksToggle = (status: boolean) => {
     setShowUserBooksToggle(status);
@@ -74,7 +70,7 @@ export const UserProfile = ({ user }: Props) => {
           <div className="absolute rounded-md h-full w-full -z-20 blur-md animate-blob animation-delay-75 bg-primary/70 dark:bg-primary/40" />
           <div className="w-[200px] h-[200px] md:w-[320px] md:h-[320px]">
             <Image
-              src={user.imageURL}
+              src={user.userProfileImage?.imageUrl || user.imageURL}
               alt={user.name}
               className="rounded-md mx-auto"
               fill

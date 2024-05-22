@@ -11,10 +11,11 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { ErrorType } from "@/constants";
 import { useModal } from "@/hooks/use-modal-store";
+import { InitialUserType } from "@/types/initial-user";
 
 interface Props {
   book: Book;
-  user: User;
+  user: InitialUserType;
   conversation: Conversation;
 }
 

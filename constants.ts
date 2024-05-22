@@ -6,6 +6,7 @@ export enum ErrorType {
   ALREADY_FAV = "ALREADY_FAV",
   UPGRADE_PLAN = "UPGRADE_PLAN",
   SIGN_IN_REQUIRED = "SIGN_IN_REQUIRED",
+  STRIPE_TEST_MODE = "STRIPE_TEST_MODE",
 }
 
 export enum Category {

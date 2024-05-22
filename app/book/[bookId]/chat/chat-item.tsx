@@ -37,12 +37,9 @@ const ChatItem = ({
   };
   return (
     <div
-      className={cn(
-        "group p-2",
-        type === "user"
-          ? "bg-zinc-600 dark:bg-primary/60 rounded-t-sm"
-          : "bg-zinc-800 dark:bg-primary/20 rounded-b-sm"
-      )}
+      className={
+        "p-2 pt-2 border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600"
+      }
     >
       <div className={"flex gap-2"}>
         <EntityAvatar
@@ -50,16 +47,19 @@ const ChatItem = ({
           alt={type === "user" ? "User avatar" : "ChatGPT avatar"}
           className="w-6 h-6 md:w-8 md:h-8"
         />
-        <div className="relative w-full">
-          <p className="text-white text-sm md:text-lg leading-relaxed pr-6 font-sans">
-            {text}
-          </p>
+        <div
+          className={cn(
+            "w-full flex flex-col px-2 md:px-4",
+            type === "chatgpt" ? "justify-between gap-y-1" : "justify-center"
+          )}
+        >
+          <p className="text-gray-800 dark:text-gray-200">{text}</p>
 
           {type === "chatgpt" && (
-            <div className="absolute bottom-0 right-0 flex items-center gap-x-4">
+            <div className="p-1 w-full flex items-center gap-x-4">
               <button
                 onClick={onCopy}
-                className=" text-white md:hidden group-hover:flex "
+                className="group-hover:flex items-center justify-center"
               >
                 {copied ? (
                   <Check className="w-4 h-4" />
@@ -79,7 +79,7 @@ const ChatItem = ({
                     },
                   });
                 }}
-                className=" text-white md:hidden group-hover:flex"
+                className="group-hover:flex items-center justify-center"
               >
                 <Share className="w-4 h-4" />
               </button>

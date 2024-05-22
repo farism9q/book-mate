@@ -1,9 +1,8 @@
-import { Book } from "@/types/book";
-import { User, UserProfileImage } from "@prisma/client";
+import { InitialUserType } from "@/types/initial-user";
 import { create } from "zustand";
 
 interface SheetData {
-  user?: User & { externalAccounts: boolean; profileImage: UserProfileImage };
+  user?: InitialUserType;
 }
 
 interface SheetStore {

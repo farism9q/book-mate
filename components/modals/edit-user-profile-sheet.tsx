@@ -89,7 +89,7 @@ export const EditUserProfileSheet = () => {
     if (user) {
       setValue("name", user.name);
       setValue("bio", user.bio);
-      setValue("avatar", user.imageURL);
+      setValue("avatar", user.userProfileImage?.imageUrl || user.imageURL);
     }
   }, [user, setValue]);
 
@@ -199,8 +199,8 @@ export const EditUserProfileSheet = () => {
                 images={[
                   {
                     imageUrl:
-                      user?.profileImage?.imageUrl || user?.imageURL || "",
-                    imageKey: user?.profileImage?.imageKey || "",
+                      user?.userProfileImage?.imageUrl || user?.imageURL || "",
+                    imageKey: user?.userProfileImage?.imageKey || "",
                   },
                 ]}
               />
