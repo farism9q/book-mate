@@ -10,6 +10,6 @@ export type InitialUserType = {
   bio: string;
 
   externalAccounts: boolean;
-  userProfileImage: UserProfileImage;
+  userProfileImage?: UserProfileImage;
   userSettings: UserSettings;
 };

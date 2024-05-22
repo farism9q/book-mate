@@ -113,7 +113,7 @@ const ChatMessages = ({
                 <div key={message.id} className="flex flex-col py-4 space-y-2">
                   <ChatItem
                     type="user"
-                    avatar={user.userProfileImage.imageUrl || user.imageURL}
+                    avatar={user.userProfileImage?.imageUrl || user.imageURL}
                     text={message.userQuestion}
                   />
                   <ChatItem
