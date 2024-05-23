@@ -48,17 +48,28 @@ This web application is designed for readers to search for books, view book deta
   
   > ![Searching book](https://github.com/farism9q/book-mate/blob/dev/gifs/Searching%20book.gif)
 
+---
+
 ### Add book to favorite list
 
 - Users can save their favorite books for later reference.
   
   > ![Add book to favorite list](https://github.com/farism9q/book-mate/blob/dev/gifs/Add%20book%20to%20favorite%20list.gif)
 
+---
+
 ### ChatGPT Integration
 
 - Users can ask questions about the books using ChatGPT.
 
- > ![ChatGPT Integration](https://github.com/farism9q/book-mate/blob/dev/gifs/ChatGPT%20Integration.gif)
+  > ![ChatGPT Integration](https://github.com/farism9q/book-mate/blob/dev/gifs/ChatGPT%20Integration.gif)
+
+  <div align="center">
+  <h3>This how the receiver will view your email</h3>
+  <img src="https://github.com/farism9q/hosting/blob/main/friend-email.png" alt="Receiver email">
+</div>
+
+---
 
 ### Stripe Subscription
 
@@ -67,12 +78,16 @@ This web application is designed for readers to search for books, view book deta
   
   > ![Stripe subscription](https://github.com/farism9q/book-mate/blob/dev/gifs/Stripe%20subscription.gif)
 
+---
+
 ### Dark Mode
 
 - Users can toggle the mode to their preference, choosing between dark or light mode.
 - The theme preference is saved in the browser's local storage, ensuring the website remembers your preference even after you close and reopen it.
   
   > ![Dark Mode](https://github.com/farism9q/book-mate/blob/dev/gifs/Dark%20mode.gif)
+
+---
 
 ## Live Demo
 
