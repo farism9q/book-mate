@@ -11,14 +11,14 @@ import { createUpdateConversation } from "@/lib/conversation";
 import { ChatPannel } from "@/app/book/[bookId]/chat/chat-pannel";
 import { checkSubscription } from "@/lib/user-subscription";
 import { userChatLimits } from "@/lib/user-limit";
-import { InitialUserType } from "@/types/initial-user";
+import { ChatProvider } from "@/components/providers/chat-provider";
 
 interface BookChatPageProps {
   params: { bookId: string };
 }
 
 const BookChatPage = async ({ params }: BookChatPageProps) => {
-  const user = (await initialUser()) as InitialUserType;
+  const user = await initialUser();
 
   if (!user) {
     return redirect("/");
@@ -71,14 +71,16 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
   ]);
 
   return (
-    <div className="flex flex-col h-full w-full">
-      <ChatHeader
-        book={book}
-        bookChatCountsLimit={bookChatCountsLimit || 0}
-        isSubscribed={isSubscribed}
-      />
-      <ChatPannel book={book} user={user} conversation={conversation} />
-    </div>
+    <ChatProvider>
+      <div className="flex flex-col h-full w-full">
+        <ChatHeader
+          book={book}
+          bookChatCountsLimit={bookChatCountsLimit || 0}
+          isSubscribed={isSubscribed}
+        />
+        <ChatPannel book={book} user={user} conversation={conversation} />
+      </div>
+    </ChatProvider>
   );
 };
 

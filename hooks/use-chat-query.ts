@@ -2,16 +2,10 @@ import qs from "query-string";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 interface ChatQueryProps {
-  bookId: string;
-  userId: string;
   conversationId?: string;
 }
 
-export function useChatQuery({
-  bookId,
-  userId,
-  conversationId,
-}: ChatQueryProps) {
+export function useChatQuery({ conversationId }: ChatQueryProps) {
   const fetchMessages = async ({ pageParam = undefined }) => {
     const url = qs.stringifyUrl(
       {
@@ -30,7 +24,7 @@ export function useChatQuery({
     useInfiniteQuery({
       queryKey: [`chat-${conversationId}`],
       queryFn: fetchMessages,
-      getNextPageParam: lastPage => lastPage.nextCursor,
+      getNextPageParam: lastPage => lastPage?.nextCursor,
       refetchInterval: 1000,
     });
 

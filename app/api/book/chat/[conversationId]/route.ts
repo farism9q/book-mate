@@ -24,7 +24,8 @@ export async function GET(
         where: {
           conversationId: params.conversationId,
         },
-        take: MESSAGES_BATCH_SIZE + 1,
+        take: MESSAGES_BATCH_SIZE,
+        skip: 1,
         cursor: {
           id: cursor,
         },
@@ -37,7 +38,7 @@ export async function GET(
         where: {
           conversationId: params.conversationId,
         },
-        take: MESSAGES_BATCH_SIZE + 1,
+        take: MESSAGES_BATCH_SIZE,
         orderBy: {
           createdAt: "desc",
         },
@@ -46,12 +47,12 @@ export async function GET(
 
     let nextCursor = null;
 
-    if (messages.length === MESSAGES_BATCH_SIZE + 1) {
+    if (messages.length === MESSAGES_BATCH_SIZE) {
       nextCursor = messages[messages.length - 1].id;
     }
 
     return NextResponse.json({
-      items: !nextCursor ? messages : messages.slice(0, messages.length - 1),
+      messages,
       nextCursor,
     });
   } catch (err) {

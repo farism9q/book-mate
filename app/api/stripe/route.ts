@@ -15,7 +15,7 @@ export async function GET() {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const userSubscription = await db.userSubscription.findUnique({
+    const userSubscription = await db.userSubscription.findFirst({
       where: {
         userId,
       },

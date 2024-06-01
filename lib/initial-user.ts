@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs";
 import { db } from "./db";
 import { cache } from "react";
+import { InitialUserType } from "@/types/initial-user";
 
 export const initialUser = cache(async () => {
   const clerkUser = await currentUser();
@@ -30,7 +31,10 @@ export const initialUser = cache(async () => {
       });
     }
 
-    return { ...user, externalAccounts: !!clerkUser?.externalAccounts.length };
+    return {
+      ...user,
+      externalAccounts: !!clerkUser?.externalAccounts.length,
+    };
   }
 
   const newUser = await db.user.create({
@@ -52,4 +56,4 @@ export const initialUser = cache(async () => {
   });
 
   return { ...newUser, externalAccounts: !!clerkUser?.externalAccounts.length };
-});
+}) as () => Promise<InitialUserType> | null;

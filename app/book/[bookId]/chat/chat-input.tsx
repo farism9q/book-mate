@@ -9,16 +9,13 @@ import {
   FormItem,
 } from "../../../../components/ui/form";
 import { Input } from "../../../../components/ui/input";
+import { useChatProvider } from "@/components/providers/chat-provider";
 
 const formSchema = z.object({
   question: z.string().min(1),
 });
 
-type Props = {
-  onSendMessage: (message: string) => void;
-  isPending: boolean;
-};
-const ChatInput = ({ onSendMessage, isPending }: Props) => {
+const ChatInput = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -26,14 +23,26 @@ const ChatInput = ({ onSendMessage, isPending }: Props) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    onSendMessage(values.question);
+  const { onSubmitMessage, isStreaming } = useChatProvider();
+
+  const onSubmit = () => {
+    const question = form.getValues("question");
+    if (!question) return;
+
+    onSubmitMessage(question);
+
     form.reset();
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="pb-4">
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          onSubmit();
+        }}
+        className="pb-4"
+      >
         <FormField
           control={form.control}
           name="question"
@@ -42,7 +51,7 @@ const ChatInput = ({ onSendMessage, isPending }: Props) => {
               <FormControl>
                 <div className="relative px-4">
                   <Input
-                    disabled={isPending}
+                    disabled={isStreaming}
                     className="text-base px-4 py-6 border-slate-200 bg-slate-100 dark:bg-gray-900 dark:border-gray-800 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
                     placeholder={"Ask your question here..."}
                     {...field}

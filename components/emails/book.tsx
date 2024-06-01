@@ -10,6 +10,7 @@ import {
   Preview,
   Section,
   Text,
+  Markdown,
 } from "@react-email/components";
 import * as React from "react";
 
@@ -132,7 +133,7 @@ export const BookEmailTemplate = ({
                   borderRadius: "0px 5px 5px 5px",
                 }}
               >
-                {bookText}
+                <Markdown>{bookText}</Markdown>
               </Text>
             </Section>
           </Section>

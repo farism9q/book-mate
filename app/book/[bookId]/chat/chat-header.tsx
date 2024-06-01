@@ -1,4 +1,3 @@
-"use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -18,6 +17,7 @@ import { Badge } from "../../../../components/ui/badge";
 import { useModal } from "@/hooks/use-modal-store";
 import { ActionTooltip } from "../../../../components/action-tooltip";
 import { CHAT_LIMIT_PER_BOOK } from "@/constants";
+import { useChatProvider } from "@/components/providers/chat-provider";
 
 interface ChatHeaderProps {
   book: Book;
@@ -34,6 +34,13 @@ const ChatHeader = ({
   const { onOpen } = useModal();
 
   const [isMoutned, setIsMoutned] = useState(false);
+
+  const { setBookChatLimit, bookChatLimit: sharedBookChatLimit } =
+    useChatProvider();
+
+  if (!sharedBookChatLimit) {
+    setBookChatLimit(bookChatCountsLimit);
+  }
 
   useEffect(() => {
     setIsMoutned(true);
@@ -78,7 +85,7 @@ const ChatHeader = ({
           {!isSubscribed && (
             <ActionTooltip
               label={`${
-                CHAT_LIMIT_PER_BOOK - bookChatCountsLimit
+                CHAT_LIMIT_PER_BOOK - sharedBookChatLimit
               } chats left for this book`}
             >
               <div className="min-w-fit pr-2">
@@ -90,7 +97,7 @@ const ChatHeader = ({
                     onOpen("upgradePlan");
                   }}
                 >
-                  <p className="text-white">{bookChatCountsLimit} / 5</p>
+                  <p className="text-white">{sharedBookChatLimit} / 5</p>
                 </Badge>
               </div>
             </ActionTooltip>

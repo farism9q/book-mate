@@ -1,5 +1,3 @@
-import { Book } from "@/types/book";
-
 const StartQuestionsData = [
   {
     question: "Who wrote the book?",
@@ -22,14 +20,11 @@ const StartQuestionsData = [
   },
 ];
 type Props = {
-  userId: string;
-  book: Book;
-  onSendMessage: (message: string) => void;
-  isPending: boolean;
+  onSubmitMessage: (question: string) => void;
 };
-const StartQuestions = ({ userId, book, onSendMessage, isPending }: Props) => {
+const StartQuestions = ({ onSubmitMessage }: Props) => {
   return (
-    <div className="flex flex-col items-center justify-center h-full px-4 overflow-auto no-scrollbar ">
+    <div className="flex flex-col items-center justify-center h-full w-full px-4 overflow-auto no-scrollbar">
       <div className="text-center py-6">
         <h3 className="dark:text-white text-2xl">Start Questions</h3>
         <p className="text-zinc-400 text-sm">
@@ -40,13 +35,8 @@ const StartQuestions = ({ userId, book, onSendMessage, isPending }: Props) => {
         {StartQuestionsData.map(data => (
           <button
             key={data.question}
-            disabled={isPending}
-            onClick={() => onSendMessage(data.question)}
-            className={
-              isPending
-                ? "cursor-not-allowed opacity-40 transition-all"
-                : "hover:opacity-40"
-            }
+            onClick={() => onSubmitMessage(data.question)}
+            className="hover:opacity-40"
           >
             <div className="flex flex-col justify-center h-full space-y-2 bg-primary/20 border-2 border-primary rounded-lg p-3">
               <h3 className="dark:text-white text-sm md:text-lg">

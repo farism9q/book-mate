@@ -47,25 +47,25 @@ export const Header = ({ isNewUpdate }: Props) => {
 
           <nav className="hidden md:flex items-center gap-x-4">
             {navItems.map(item => (
-              <Button
+              <button
                 key={item.title}
-                variant={"ghost"}
                 onClick={() => onClick(item.href)}
                 className={cn(
-                  "text-sm font-medium text-[#727E8E] hover:text-white transition-all duration-300",
+                  "text-sm font-medium rounded-md p-4 hover:text-white transition-all duration-300",
+                  "text-[#727E8E] hover:text-white transition-all duration-300",
                   item.title === "Changelog" && isNewUpdate && "relative"
                 )}
               >
                 {item.title === "Changelog" && isNewUpdate && (
                   <div
                     className="flex items-center justify-center absolute w-[26px] h-[14px] rounded-full 
-                  -right-[5%] -top-[5%] z-50 text-[8px] bg-sky-500 text-sky-100"
+                -right-[5%] -top-[5%] z-50 text-[8px] bg-sky-500 text-sky-100"
                   >
                     <p>New</p>
                   </div>
                 )}
                 {item.title}
-              </Button>
+              </button>
             ))}
           </nav>
         </div>
@@ -94,17 +94,17 @@ export const Header = ({ isNewUpdate }: Props) => {
 
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className="md:hidden">
-              <Menu className="size-6" />
+              <Menu className="size-6 text-white" />
             </SheetTrigger>
             <SheetContent side={"top"} className="bg-zinc-900 border-none">
-              <nav className="flex flex-col items-center justify-center gap-y-4 py-20">
+              <nav className="flex flex-col items-center justify-center gap-y-2 py-20">
                 {navItems.map(item => (
-                  <Button
+                  <button
                     key={item.title}
-                    variant={"ghost"}
                     onClick={() => onClick(item.href)}
                     className={cn(
-                      "text-2xl font-medium text-muted-foreground hover:text-white transition-all duration-300",
+                      "text-2xl font-medium rounded-md p-4 hover:text-white transition-all duration-300",
+                      "text-[#727E8E] hover:text-white transition-all duration-300",
                       item.title === "Changelog" && isNewUpdate && "relative"
                     )}
                   >
@@ -117,7 +117,7 @@ export const Header = ({ isNewUpdate }: Props) => {
                       </div>
                     )}
                     {item.title}
-                  </Button>
+                  </button>
                 ))}
               </nav>
             </SheetContent>

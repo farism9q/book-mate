@@ -10,7 +10,7 @@ export async function checkSubscription() {
   if (!userId) {
     return false;
   }
-  const userSubscription = await db.userSubscription.findUnique({
+  const userSubscription = await db.userSubscription.findFirst({
     where: { userId },
     select: {
       type: true,
