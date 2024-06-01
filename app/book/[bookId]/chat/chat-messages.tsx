@@ -1,3 +1,5 @@
+"use client";
+
 import { ElementRef, Fragment, useRef } from "react";
 
 import { Message } from "@prisma/client";

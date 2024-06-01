@@ -1,3 +1,4 @@
+"use client";
 import { Conversation } from "@prisma/client";
 import { Book } from "@/types/book";
 import { InitialUserType } from "@/types/initial-user";
