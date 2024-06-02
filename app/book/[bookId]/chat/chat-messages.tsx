@@ -2,7 +2,7 @@
 
 import { ElementRef, Fragment, useRef } from "react";
 
-import { Message } from "@prisma/client";
+import { Conversation, Message } from "@prisma/client";
 
 import StartQuestions from "./start-questions";
 import ChatItem from "./chat-item";
@@ -12,17 +12,22 @@ import { useChatScroll } from "@/hooks/use-chat-scroll";
 import { ChatStream } from "./chat-stream";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { useChatProvider } from "@/components/providers/chat-provider";
+import { Book } from "@/types/book";
+import { InitialUserType } from "@/types/initial-user";
 
-const ChatMessages = () => {
+type Props = {
+  book: Book;
+  user: InitialUserType;
+  conversation: Conversation;
+};
+
+const ChatMessages = ({ book, conversation, user }: Props) => {
   const chatRef = useRef<ElementRef<"div">>(null);
   const bottomRef = useRef<ElementRef<"div">>(null);
   const scrollRef = useRef<ElementRef<"div">>(null);
 
   const {
-    conversation,
     messages: chatMessages,
-    user,
-    book,
     onSubmitMessage,
     isStreaming,
   } = useChatProvider();

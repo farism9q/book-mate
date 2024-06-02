@@ -17,18 +17,20 @@ import { useModal } from "@/hooks/use-modal-store";
 import { ActionTooltip } from "@/components/action-tooltip";
 import { CHAT_LIMIT_PER_BOOK } from "@/constants";
 import { useChatProvider } from "@/components/providers/chat-provider";
+import { Book } from "@/types/book";
 
 interface ChatHeaderProps {
   isSubscribed: boolean;
+  book: Book;
 }
 
-const ChatHeader = ({ isSubscribed }: ChatHeaderProps) => {
+const ChatHeader = ({ isSubscribed, book }: ChatHeaderProps) => {
   const router = useRouter();
   const { onOpen } = useModal();
 
   const [isMoutned, setIsMoutned] = useState(false);
 
-  const { bookChatLimit: sharedBookChatLimit, book } = useChatProvider();
+  const { bookChatLimit: sharedBookChatLimit } = useChatProvider();
 
   useEffect(() => {
     setIsMoutned(true);

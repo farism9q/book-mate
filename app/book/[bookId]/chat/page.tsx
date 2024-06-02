@@ -43,6 +43,7 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
     return redirect(`/books/${params.bookId}`);
   }
 
+  let conversation = await createUpdateConversation(params.bookId);
   const url = qs.stringifyUrl({
     url: `https://www.googleapis.com/books/v1/volumes/${params.bookId}`,
     query: {
@@ -50,24 +51,23 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
     },
   });
 
-  const response = await axios.get(url);
-
-  const book: Book = {
-    id: response.data.id,
-    volumeInfo: response.data.volumeInfo,
-  };
-
-  let conversation = await createUpdateConversation(params.bookId);
+  const responsePromise = axios.get(url);
 
   const isSubscribedPromise = checkSubscription();
   const bookChatCountsLimitPromise = userChatLimits({
     conversationId: conversation.id,
   });
 
-  const [isSubscribed, bookChatCountsLimit] = await Promise.all([
+  const [response, isSubscribed, bookChatCountsLimit] = await Promise.all([
+    responsePromise,
     isSubscribedPromise,
     bookChatCountsLimitPromise,
   ]);
+
+  const book: Book = {
+    id: response.data.id,
+    volumeInfo: response.data.volumeInfo,
+  };
 
   return (
     <ChatProvider>
