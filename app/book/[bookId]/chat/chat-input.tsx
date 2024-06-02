@@ -27,10 +27,10 @@ const ChatInput = () => {
 
   const onSubmit = () => {
     const question = form.getValues("question");
+
     if (!question) return;
 
     onSubmitMessage(question);
-
     form.reset();
   };
 

@@ -24,8 +24,28 @@ export const ChatPannel = ({
   bookChatCountsLimit,
   isSubscribed,
 }: Props) => {
-  const { bookChatLimit: sharedBookChatLimit, setBookChatLimit } =
-    useChatProvider();
+  const {
+    bookChatLimit: sharedBookChatLimit,
+    setBookChatLimit,
+    setBook,
+    book: sharedBook,
+    setConversation,
+    conversation: sharedConversation,
+    setUser,
+    user: sharedUser,
+  } = useChatProvider();
+
+  if (!sharedBook) {
+    setBook(book);
+  }
+
+  if (!sharedConversation) {
+    setConversation(conversation);
+  }
+
+  if (!sharedUser) {
+    setUser(user);
+  }
 
   if (!sharedBookChatLimit) {
     setBookChatLimit(bookChatCountsLimit);

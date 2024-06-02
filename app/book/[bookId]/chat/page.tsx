@@ -1,3 +1,5 @@
+export const maxDuration = 30;
+
 import { redirect } from "next/navigation";
 import qs from "query-string";
 import axios from "axios";
