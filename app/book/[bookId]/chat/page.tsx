@@ -6,7 +6,6 @@ import { initialUser } from "@/lib/initial-user";
 import { db } from "@/lib/db";
 
 import { Book } from "@/types/book";
-import ChatHeader from "@/app/book/[bookId]/chat/chat-header";
 import { createUpdateConversation } from "@/lib/conversation";
 import { ChatPannel } from "@/app/book/[bookId]/chat/chat-pannel";
 import { checkSubscription } from "@/lib/user-subscription";
@@ -73,12 +72,13 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
   return (
     <ChatProvider>
       <div className="flex flex-col h-full w-full">
-        <ChatHeader
+        <ChatPannel
           book={book}
+          user={user}
+          conversation={conversation}
           bookChatCountsLimit={bookChatCountsLimit || 0}
           isSubscribed={isSubscribed}
         />
-        <ChatPannel book={book} user={user} conversation={conversation} />
       </div>
     </ChatProvider>
   );

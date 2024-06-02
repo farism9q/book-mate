@@ -7,14 +7,23 @@ import ChatMessages from "./chat-messages";
 import ChatInput from "./chat-input";
 
 import { useChatProvider } from "@/components/providers/chat-provider";
+import ChatHeader from "./chat-header";
 
 interface Props {
   book: Book;
   user: InitialUserType;
   conversation: Conversation;
+  bookChatCountsLimit: number;
+  isSubscribed: boolean;
 }
 
-export const ChatPannel = ({ book, user, conversation }: Props) => {
+export const ChatPannel = ({
+  book,
+  user,
+  conversation,
+  bookChatCountsLimit,
+  isSubscribed,
+}: Props) => {
   const {
     conversation: sharedConversation,
     setConversation,
@@ -22,6 +31,8 @@ export const ChatPannel = ({ book, user, conversation }: Props) => {
     setBook,
     user: sharedUser,
     setUser,
+    bookChatLimit: sharedBookChatLimit,
+    setBookChatLimit,
   } = useChatProvider();
 
   if (!sharedConversation) {
@@ -36,10 +47,14 @@ export const ChatPannel = ({ book, user, conversation }: Props) => {
     setUser(user);
   }
 
+  if (!sharedBookChatLimit) {
+    setBookChatLimit(bookChatCountsLimit);
+  }
+
   return (
     <>
+      <ChatHeader isSubscribed={isSubscribed} />
       <ChatMessages />
-
       <ChatInput />
     </>
   );
