@@ -59,7 +59,7 @@ export const Header = ({ isNewUpdate }: Props) => {
                 {item.title === "Changelog" && isNewUpdate && (
                   <div
                     className="flex items-center justify-center absolute w-[26px] h-[14px] rounded-full 
-                -right-[5%] -top-[5%] z-50 text-[8px] bg-sky-500 text-sky-100"
+                -right-2 top-2 z-50 text-[8px] bg-sky-500 text-sky-100"
                   >
                     <p>New</p>
                   </div>
@@ -111,7 +111,7 @@ export const Header = ({ isNewUpdate }: Props) => {
                     {item.title === "Changelog" && isNewUpdate && (
                       <div
                         className="flex items-center justify-center absolute w-[26px] h-[14px] rounded-full 
-                      -right-[5%] -top-[5%] z-50 text-[8px] bg-sky-500 text-sky-100"
+                        -right-2 top-3 z-50 text-[8px] bg-sky-500 text-sky-100"
                       >
                         <p>New</p>
                       </div>
