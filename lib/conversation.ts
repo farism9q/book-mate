@@ -13,24 +13,13 @@ export const createUpdateConversation = async (bookId: string) => {
     where: {
       bookId,
       userId,
+      deleted: false,
     },
     include: {
       messages: true,
     },
   });
 
-  // Since we are using soft delete, we need to update the conversation to undelete it
-  if (conversation?.deleted) {
-    return await db.conversation.update({
-      where: {
-        id: conversation.id,
-      },
-      data: {
-        deleted: false,
-        updatedAt: conversation.messages.at(-1)?.updatedAt || new Date(),
-      },
-    });
-  }
 
   // If the conversation doesn't exist, create it
   if (!conversation) {
