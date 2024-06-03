@@ -7,17 +7,22 @@ interface ChatQueryProps {
 
 export function useChatQuery({ conversationId }: ChatQueryProps) {
   const fetchMessages = async ({ pageParam = undefined }) => {
-    const url = qs.stringifyUrl(
-      {
-        url: `/api/book/chat/${conversationId}`,
-        query: {
-          cursor: pageParam,
+    try {
+      const url = qs.stringifyUrl(
+        {
+          url: `/api/book/chat/${conversationId}`,
+          query: {
+            cursor: pageParam,
+          },
         },
-      },
-      { skipNull: true }
-    );
-    const response = await fetch(url);
-    return response.json(); // The fetched messages. (messages and nextCursor)
+        { skipNull: true }
+      );
+
+      const response = await fetch(url);
+      return response.json(); // The fetched messages. (messages and nextCursor)
+    } catch (error) {
+      throw new Error("Something went wrong. Please try again.");
+    }
   };
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
@@ -25,7 +30,6 @@ export function useChatQuery({ conversationId }: ChatQueryProps) {
       queryKey: [`chat-${conversationId}`],
       queryFn: fetchMessages,
       getNextPageParam: lastPage => lastPage?.nextCursor,
-      refetchInterval: 1000,
     });
 
   return {

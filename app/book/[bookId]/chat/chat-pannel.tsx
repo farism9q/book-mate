@@ -31,8 +31,8 @@ export const ChatPannel = ({
     book: sharedBook,
     setConversation,
     conversation: sharedConversation,
-    setUser,
-    user: sharedUser,
+    isSubscribed: sharedIsSubscribed,
+    setSubscribed,
   } = useChatProvider();
 
   if (!sharedBook) {
@@ -43,12 +43,12 @@ export const ChatPannel = ({
     setConversation(conversation);
   }
 
-  if (!sharedUser) {
-    setUser(user);
-  }
-
   if (!sharedBookChatLimit) {
     setBookChatLimit(bookChatCountsLimit);
+  }
+
+  if (sharedIsSubscribed === null) {
+    setSubscribed(isSubscribed);
   }
 
   return (

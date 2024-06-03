@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs";
 import { Message } from "@prisma/client";
 import { NextResponse } from "next/server";
 
@@ -9,6 +10,12 @@ export async function GET(
   { params }: { params: { conversationId: string } }
 ) {
   try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const cursor = searchParams.get("cursor");
 
@@ -16,7 +23,7 @@ export async function GET(
 
     // There might be no conversationId if the user hasn't started a conversation yet
     if (!params.conversationId) {
-      return NextResponse.json({ items: [], nextCursor: null });
+      return NextResponse.json({ messages: [], nextCursor: null });
     }
 
     if (cursor) {

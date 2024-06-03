@@ -2,7 +2,7 @@ import axios from "axios";
 import qs from "query-string";
 import { useQuery } from "@tanstack/react-query";
 
-import { getUserBooksByStatus } from "@/actions/user-books-status";
+import { getUserBooksByStatus } from "@/actions/books";
 
 import { FavoriteBookStatus } from "@prisma/client";
 import { Book } from "@/types/book";

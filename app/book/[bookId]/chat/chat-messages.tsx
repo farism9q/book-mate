@@ -44,7 +44,7 @@ const ChatMessages = ({ book, conversation, user }: Props) => {
     chatRef,
     scrollRef,
     messagesCount,
-    chatMessagesLength: chatMessages.length,
+    chatMessagesLength: chatMessages?.length || 0,
     loadMore: fetchNextPage,
     shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
   });
@@ -57,7 +57,7 @@ const ChatMessages = ({ book, conversation, user }: Props) => {
 
   const isPending = isStreaming || chatMessages.length > 0;
 
-  if (status === "loading") {
+  if (status === "loading" || !data?.pages[0]?.messages) {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
         <Loader2 className="h-7 w-7 text-zinc-500 animate-spin my-4" />
@@ -105,7 +105,7 @@ const ChatMessages = ({ book, conversation, user }: Props) => {
 
           {data?.pages?.map((group, idx) => (
             <Fragment key={idx}>
-              {group.messages?.map((message: Message) => (
+              {group?.messages?.map((message: Message) => (
                 <div key={message.id} className="flex flex-col py-4 space-y-2">
                   <ChatItem
                     type="user"

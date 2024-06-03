@@ -24,8 +24,6 @@ const ChatContext = createContext({
   conversation: null as Conversation | null,
   setBook: (book: Book) => {},
   book: null as Book | null,
-  setUser: (user: InitialUserType) => {},
-  user: null as InitialUserType | null,
   bookChatLimit: 0,
   setBookChatLimit: (limit: number) => {},
   messages: [] as ChatMessage[],
@@ -33,13 +31,15 @@ const ChatContext = createContext({
   setStreaming: (isStreaming: boolean) => {},
   isStreaming: false,
   onSubmitMessage: (question: string) => {},
+  isSubscribed: null as boolean | null,
+  setSubscribed: (isSubscribed: boolean) => {},
 });
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [book, setBook] = useState<Book | null>(null);
-  const [user, setUser] = useState<InitialUserType | null>(null);
   const [bookChatLimit, setBookChatLimit] = useState(0);
+  const [isSubscribed, setSubscribed] = useState<null | boolean>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setStreaming] = useState(false);
 
@@ -51,8 +51,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const conversationMessages =
-    data?.pages.map(group =>
-      group.messages.map((message: Message) => message)
+    data?.pages?.map(group =>
+      group?.messages?.map((message: Message) => message)
     )[0] || [];
 
   const isLastMessageSaved =
@@ -71,7 +71,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    if (bookChatLimit >= CHAT_LIMIT_PER_BOOK) {
+    if (bookChatLimit >= CHAT_LIMIT_PER_BOOK && !isSubscribed) {
       onOpen("upgradePlan");
       toast.error("Upgrade your plan to send more questions.");
       return;
@@ -85,9 +85,12 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     setMessages([userMessage]);
-    setBookChatLimit(prev => {
-      return prev + 1 > CHAT_LIMIT_PER_BOOK ? prev : prev + 1;
-    });
+
+    if (!isSubscribed) {
+      setBookChatLimit(prev => {
+        return prev + 1 > CHAT_LIMIT_PER_BOOK ? prev : prev + 1;
+      });
+    }
     let chatgptResponse = "";
 
     try {
@@ -103,9 +106,12 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         onOpen("upgradePlan");
         setMessages([]);
         setStreaming(false);
-        setBookChatLimit(prev => {
-          return prev - 1;
-        });
+
+        if (!isSubscribed) {
+          setBookChatLimit(prev => {
+            return prev - 1;
+          });
+        }
 
         return;
       }
@@ -154,8 +160,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         book,
         setBookChatLimit,
         bookChatLimit,
-        setUser,
-        user,
+        isSubscribed,
+        setSubscribed,
         setStreaming,
         isStreaming,
         setMessages,
