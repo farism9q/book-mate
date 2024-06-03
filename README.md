@@ -4,7 +4,6 @@
 
 > This project is currently being improved to add more features.
 
-
 ## Table of Contents
 
 - [Overview](#overview)
@@ -14,6 +13,8 @@
   - [Searching book](#searching-book)
   - [Add book to favorite list](#add-book-to-favorite-list)
   - [ChatGPT Integration](#chatGPT-integration)
+    - [Saved chat history](#Saved-chat-history)
+  - [Share highlights with friends](#Share-highlights-with-friends)
   - [Stripe Subscription](#stripe-subscription)
   - [Dark Mode](#dark-mode)
 - [Live Demo](#live-demo)
@@ -33,6 +34,7 @@ This web application is designed for readers to search for books, view book deta
 - **[TailwindCSS](https://tailwindcss.com/)**: A utility-first CSS framework for building custom designs quickly and easily.
 - **[Stripe](https://stripe.com/)**: A payment processing platform that allows businesses to accept payments online and in mobile apps.
 - **[Clerk](https://clerk.com/)**: An authentication provider built for the modern web.
+- **[Pinecone](https://www.pinecone.io/)**: The vector database used to store and retrieve embeddings for maintaining conversation context and providing relevant responses.
 
 ### Hosting
 
@@ -45,7 +47,7 @@ This web application is designed for readers to search for books, view book deta
 
 - Users can search for books by providing the book title.
 - They can select a book to view detailed information about the book, including title, author, description, and more.
-  
+
   > ![Searching book](https://github.com/farism9q/book-mate/blob/dev/gifs/Searching%20book.gif)
 
 ---
@@ -53,7 +55,7 @@ This web application is designed for readers to search for books, view book deta
 ### Add book to favorite list
 
 - Users can save their favorite books for later reference.
-  
+
   > ![Add book to favorite list](https://github.com/farism9q/book-mate/blob/dev/gifs/Add%20book%20to%20favorite%20list.gif)
 
 ---
@@ -62,9 +64,24 @@ This web application is designed for readers to search for books, view book deta
 
 - Users can ask questions about the books using ChatGPT.
 
-  > ![ChatGPT Integration](https://github.com/farism9q/book-mate/blob/dev/gifs/ChatGPT%20Integration.gif)
+  > ![ChatGPT Integration](https://github.com/farism9q/hosting/blob/main/chat-stream.gif)
 
-  <div align="center">
+#### Saved chat history
+
+- The context of conversations related to the book you're inquiring are maintained, ensuring the conversation history remains intact and enabling more relevant and accurate responses.
+- This feature utilizes Pinecone to store and retrieve vectors, enabling the preservation of conversation context related to the book you're inquiring about. By leveraging embedding vectors, previous conversations are matched and retrieved.
+
+  > ![Saved chat history](https://github.com/farism9q/hosting/blob/main/conversation-history.gif)
+
+---
+
+### Share highlights with friends
+
+- Share conversation highlights via email. Just select on the chat and send directly to an email address of your choice, making it easy to share valuable insights and information with your friends.
+
+  > ![Share highlights](https://github.com/farism9q/hosting/blob/main/share%20highlights%20with%20friends.gif)
+
+<div align="center">
   <h3>This how the receiver will view your email</h3>
   <img src="https://github.com/farism9q/hosting/blob/main/friend-email.png" alt="Receiver email">
 </div>
@@ -75,7 +92,7 @@ This web application is designed for readers to search for books, view book deta
 
 - Users are limited to saving up to 5 favorite books. Additional books can be purchased with Stripe integration.
 - Users can ask questions about the books using ChatGPT.
-  
+
   > ![Stripe subscription](https://github.com/farism9q/book-mate/blob/dev/gifs/Stripe%20subscription.gif)
 
 ---
@@ -84,7 +101,7 @@ This web application is designed for readers to search for books, view book deta
 
 - Users can toggle the mode to their preference, choosing between dark or light mode.
 - The theme preference is saved in the browser's local storage, ensuring the website remembers your preference even after you close and reopen it.
-  
+
   > ![Dark Mode](https://github.com/farism9q/book-mate/blob/dev/gifs/Dark%20mode.gif)
 
 ---
