@@ -21,8 +21,16 @@ export async function GET(
 
     let messages: Message[];
 
+    const conversation = await db.conversation.findFirst({
+      where: {
+        id: params.conversationId,
+        userId,
+        deleted: false,
+      },
+    });
+
     // There might be no conversationId if the user hasn't started a conversation yet
-    if (!params.conversationId) {
+    if (!conversation) {
       return NextResponse.json({ messages: [], nextCursor: null });
     }
 
