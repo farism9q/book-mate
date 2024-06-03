@@ -1,10 +1,9 @@
 import { UserProfile } from "@/app/(main)/(routes)/me/user-profile";
 import { initialUser } from "@/lib/initial-user";
-import { InitialUserType } from "@/types/initial-user";
 import { redirect } from "next/navigation";
 
 const AccountPage = async () => {
-  const user = (await initialUser()) as InitialUserType;
+  const user = await initialUser();
 
   if (!user) {
     return redirect("/");

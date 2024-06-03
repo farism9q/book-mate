@@ -1,3 +1,5 @@
+export const maxDuration = 30;
+
 import { redirect } from "next/navigation";
 import qs from "query-string";
 import axios from "axios";
@@ -6,19 +8,18 @@ import { initialUser } from "@/lib/initial-user";
 import { db } from "@/lib/db";
 
 import { Book } from "@/types/book";
-import ChatHeader from "@/app/book/[bookId]/chat/chat-header";
 import { createUpdateConversation } from "@/lib/conversation";
 import { ChatPannel } from "@/app/book/[bookId]/chat/chat-pannel";
 import { checkSubscription } from "@/lib/user-subscription";
 import { userChatLimits } from "@/lib/user-limit";
-import { InitialUserType } from "@/types/initial-user";
+import { ChatProvider } from "@/components/providers/chat-provider";
 
 interface BookChatPageProps {
   params: { bookId: string };
 }
 
 const BookChatPage = async ({ params }: BookChatPageProps) => {
-  const user = (await initialUser()) as InitialUserType;
+  const user = await initialUser();
 
   if (!user) {
     return redirect("/");
@@ -44,6 +45,7 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
     return redirect(`/books/${params.bookId}`);
   }
 
+  let conversation = await createUpdateConversation(params.bookId);
   const url = qs.stringifyUrl({
     url: `https://www.googleapis.com/books/v1/volumes/${params.bookId}`,
     query: {
@@ -51,34 +53,36 @@ const BookChatPage = async ({ params }: BookChatPageProps) => {
     },
   });
 
-  const response = await axios.get(url);
-
-  const book: Book = {
-    id: response.data.id,
-    volumeInfo: response.data.volumeInfo,
-  };
-
-  let conversation = await createUpdateConversation(params.bookId);
+  const responsePromise = axios.get(url);
 
   const isSubscribedPromise = checkSubscription();
   const bookChatCountsLimitPromise = userChatLimits({
     conversationId: conversation.id,
   });
 
-  const [isSubscribed, bookChatCountsLimit] = await Promise.all([
+  const [response, isSubscribed, bookChatCountsLimit] = await Promise.all([
+    responsePromise,
     isSubscribedPromise,
     bookChatCountsLimitPromise,
   ]);
 
+  const book: Book = {
+    id: response.data.id,
+    volumeInfo: response.data.volumeInfo,
+  };
+
   return (
-    <div className="flex flex-col h-full w-full">
-      <ChatHeader
-        book={book}
-        bookChatCountsLimit={bookChatCountsLimit || 0}
-        isSubscribed={isSubscribed}
-      />
-      <ChatPannel book={book} user={user} conversation={conversation} />
-    </div>
+    <ChatProvider>
+      <div className="flex flex-col h-full w-full">
+        <ChatPannel
+          book={book}
+          user={user}
+          conversation={conversation}
+          bookChatCountsLimit={bookChatCountsLimit || 0}
+          isSubscribed={isSubscribed}
+        />
+      </div>
+    </ChatProvider>
   );
 };
 

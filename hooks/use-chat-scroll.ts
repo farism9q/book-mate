@@ -9,6 +9,7 @@ type ChatScrollProps = {
   bottomRef: React.RefObject<HTMLDivElement>;
   scrollRef: React.RefObject<HTMLDivElement>;
   messagesCount: number;
+  chatMessagesLength: number | undefined;
   loadMore: () => void;
   shouldLoadMore: boolean;
 };
@@ -18,6 +19,7 @@ export function useChatScroll({
   chatRef,
   scrollRef,
   messagesCount,
+  chatMessagesLength,
   loadMore,
   shouldLoadMore,
 }: ChatScrollProps) {
@@ -25,6 +27,12 @@ export function useChatScroll({
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   const isMobile = useMedia("(max-width: 1366px)", false);
+
+  useEffect(() => {
+    if (chatRef.current && chatMessagesLength && chatMessagesLength > 0) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [chatRef, chatMessagesLength]);
 
   useEffect(() => {
     const bottomDiv = bottomRef.current;
@@ -72,17 +80,17 @@ export function useChatScroll({
   }, [chatRef, shouldLoadMore, loadMore]);
 
   useEffect(() => {
-    const topDiv = chatRef.current;
-    const bottomDiv = bottomRef.current;
-    const handleScroll = () => {
+    const topDiv = chatRef?.current;
+    const bottomDiv = bottomRef?.current;
+    const shouldAutoScroll = () => {
       if (!topDiv || !bottomDiv) {
         return;
       }
 
       // // First mount, scroll to bottom
-      if (bottomDiv && !hasInitialized) {
+      if (!hasInitialized && bottomDiv) {
         setHasInitialized(true);
-        return;
+        return true;
       }
 
       const distanceFromBottom =
@@ -91,9 +99,9 @@ export function useChatScroll({
       // If distance from bottom is less than 100px, scroll to bottom
       return distanceFromBottom >= 100;
     };
-    if (handleScroll()) {
+    if (shouldAutoScroll()) {
       setTimeout(() => {
-        bottomDiv?.scrollIntoView({
+        bottomRef.current?.scrollIntoView({
           behavior: "smooth",
         });
       }, 100);

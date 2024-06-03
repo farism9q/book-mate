@@ -2,9 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Book } from "@/types/book";
-
-import { EntityAvatar } from "../../../../components/entity-avatar";
+import { EntityAvatar } from "@/components/entity-avatar";
 import {
   Sheet,
   SheetContent,
@@ -12,28 +10,27 @@ import {
 } from "../../../../components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeft } from "lucide-react";
-import { Button } from "../../../../components/ui/button";
-import BookDescription from "../../../../components/book/book-description";
-import { Badge } from "../../../../components/ui/badge";
+import { Button } from "@/components/ui/button";
+import BookDescription from "@/components/book/book-description";
+import { Badge } from "@/components/ui/badge";
 import { useModal } from "@/hooks/use-modal-store";
-import { ActionTooltip } from "../../../../components/action-tooltip";
+import { ActionTooltip } from "@/components/action-tooltip";
 import { CHAT_LIMIT_PER_BOOK } from "@/constants";
+import { useChatProvider } from "@/components/providers/chat-provider";
+import { Book } from "@/types/book";
 
 interface ChatHeaderProps {
-  book: Book;
-  bookChatCountsLimit: number;
   isSubscribed: boolean;
+  book: Book;
 }
 
-const ChatHeader = ({
-  book,
-  bookChatCountsLimit,
-  isSubscribed,
-}: ChatHeaderProps) => {
+const ChatHeader = ({ isSubscribed, book }: ChatHeaderProps) => {
   const router = useRouter();
   const { onOpen } = useModal();
 
   const [isMoutned, setIsMoutned] = useState(false);
+
+  const { bookChatLimit: sharedBookChatLimit } = useChatProvider();
 
   useEffect(() => {
     setIsMoutned(true);
@@ -53,6 +50,10 @@ const ChatHeader = ({
       router.push("/favorite-books");
     }
   };
+
+  if (!book) {
+    return null;
+  }
 
   return (
     <Sheet>
@@ -78,7 +79,7 @@ const ChatHeader = ({
           {!isSubscribed && (
             <ActionTooltip
               label={`${
-                CHAT_LIMIT_PER_BOOK - bookChatCountsLimit
+                CHAT_LIMIT_PER_BOOK - sharedBookChatLimit
               } chats left for this book`}
             >
               <div className="min-w-fit pr-2">
@@ -90,7 +91,7 @@ const ChatHeader = ({
                     onOpen("upgradePlan");
                   }}
                 >
-                  <p className="text-white">{bookChatCountsLimit} / 5</p>
+                  <p className="text-white">{sharedBookChatLimit} / 5</p>
                 </Badge>
               </div>
             </ActionTooltip>

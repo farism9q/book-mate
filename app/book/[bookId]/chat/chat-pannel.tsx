@@ -1,75 +1,61 @@
 "use client";
-import qs from "query-string";
-import axios from "axios";
-import { toast } from "sonner";
-
-import { Book, BookInfoForChatGPT } from "@/types/book";
-import ChatInput from "./chat-input";
-import ChatMessages from "./chat-messages";
-import { Conversation, User } from "@prisma/client";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
-import { ErrorType } from "@/constants";
-import { useModal } from "@/hooks/use-modal-store";
+import { Conversation } from "@prisma/client";
+import { Book } from "@/types/book";
 import { InitialUserType } from "@/types/initial-user";
+
+import ChatMessages from "./chat-messages";
+import ChatInput from "./chat-input";
+
+import { useChatProvider } from "@/components/providers/chat-provider";
+import ChatHeader from "./chat-header";
 
 interface Props {
   book: Book;
   user: InitialUserType;
   conversation: Conversation;
+  bookChatCountsLimit: number;
+  isSubscribed: boolean;
 }
 
-export const ChatPannel = ({ book, user, conversation }: Props) => {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const { onOpen } = useModal();
+export const ChatPannel = ({
+  book,
+  user,
+  conversation,
+  bookChatCountsLimit,
+  isSubscribed,
+}: Props) => {
+  const {
+    bookChatLimit: sharedBookChatLimit,
+    setBookChatLimit,
+    setBook,
+    book: sharedBook,
+    setConversation,
+    conversation: sharedConversation,
+    isSubscribed: sharedIsSubscribed,
+    setSubscribed,
+  } = useChatProvider();
 
-  const onSendMessage = (question: string) => {
-    startTransition(async () => {
-      try {
-        const url = qs.stringifyUrl({
-          url: `/api/book/chat`,
-          query: {
-            userId: user.userClerkId,
-          },
-        });
+  if (!sharedBook) {
+    setBook(book);
+  }
 
-        await axios.post(url, {
-          question,
-          book: {
-            id: book.id,
-            title: book.volumeInfo.title,
-            publisher: book.volumeInfo.publisher,
-            authors: book.volumeInfo.authors,
-            publishedDate: book.volumeInfo.publishedDate,
-          } as BookInfoForChatGPT,
-        });
+  if (!sharedConversation) {
+    setConversation(conversation);
+  }
 
-        router.refresh();
-      } catch (error: any) {
-        if (
-          error?.response?.status === 403 &&
-          error.response.data?.type === ErrorType.UPGRADE_PLAN
-        ) {
-          toast.error(error.response.data.message);
-          onOpen("upgradePlan");
-        } else {
-          toast.error("Failed to send question");
-        }
-      }
-    });
-  };
+  if (!sharedBookChatLimit) {
+    setBookChatLimit(bookChatCountsLimit);
+  }
+
+  if (sharedIsSubscribed === null) {
+    setSubscribed(isSubscribed);
+  }
 
   return (
     <>
-      <ChatMessages
-        book={book}
-        user={user}
-        conversation={conversation}
-        onSendMessage={onSendMessage}
-        isPending={isPending}
-      />
-      <ChatInput onSendMessage={onSendMessage} isPending={isPending} />
+      <ChatHeader isSubscribed={isSubscribed} book={book} />
+      <ChatMessages book={book} user={user} conversation={conversation} />
+      <ChatInput />
     </>
   );
 };

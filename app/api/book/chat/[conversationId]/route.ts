@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs";
 import { Message } from "@prisma/client";
 import { NextResponse } from "next/server";
 
@@ -9,6 +10,12 @@ export async function GET(
   { params }: { params: { conversationId: string } }
 ) {
   try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const cursor = searchParams.get("cursor");
 
@@ -16,7 +23,7 @@ export async function GET(
 
     // There might be no conversationId if the user hasn't started a conversation yet
     if (!params.conversationId) {
-      return NextResponse.json({ items: [], nextCursor: null });
+      return NextResponse.json({ messages: [], nextCursor: null });
     }
 
     if (cursor) {
@@ -24,7 +31,8 @@ export async function GET(
         where: {
           conversationId: params.conversationId,
         },
-        take: MESSAGES_BATCH_SIZE + 1,
+        take: MESSAGES_BATCH_SIZE,
+        skip: 1,
         cursor: {
           id: cursor,
         },
@@ -37,7 +45,7 @@ export async function GET(
         where: {
           conversationId: params.conversationId,
         },
-        take: MESSAGES_BATCH_SIZE + 1,
+        take: MESSAGES_BATCH_SIZE,
         orderBy: {
           createdAt: "desc",
         },
@@ -46,12 +54,12 @@ export async function GET(
 
     let nextCursor = null;
 
-    if (messages.length === MESSAGES_BATCH_SIZE + 1) {
+    if (messages.length === MESSAGES_BATCH_SIZE) {
       nextCursor = messages[messages.length - 1].id;
     }
 
     return NextResponse.json({
-      items: !nextCursor ? messages : messages.slice(0, messages.length - 1),
+      messages,
       nextCursor,
     });
   } catch (err) {
