@@ -1,16 +1,27 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
+import { cn } from "@/lib/utils";
+
+import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function ModeToggle() {
+type Props = {
+  direction?: "horizontal" | "vertical";
+};
+
+export function ModeToggle({ direction = "horizontal" }: Props) {
   const { setTheme, theme } = useTheme();
 
   return (
-    <div className="flex items-center gap-x-2">
+    <div
+      className={cn(
+        "flex items-center gap-x-2",
+        direction === "vertical" && "flex-col gap-y-2"
+      )}
+    >
       <Button
         onClick={() => setTheme("light")}
         variant="outline"

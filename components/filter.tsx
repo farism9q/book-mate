@@ -1,9 +1,10 @@
 "use client";
 
-import qs from "query-string";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 type Props = {
   options: Array<{ value: string; label: string }>;
   urlQuery: string;
@@ -15,14 +16,10 @@ export const Filter = ({ options, urlQuery }: Props) => {
   const pathname = usePathname();
 
   const onTabChange = (value: string) => {
-    const query = {
-      [urlQuery]: value,
-    };
-    const url = qs.stringifyUrl({
-      url: pathname,
-      query,
-    });
-    router.push(url);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(urlQuery, value);
+
+    router.push(pathname + "?" + params.toString());
   };
 
   const currentFilter = searchParams.get(urlQuery) || options[0].value;

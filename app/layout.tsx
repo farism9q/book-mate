@@ -30,36 +30,38 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={cn(font.className, "bg-white dark:bg-[#080808]")}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem={true}
-            storageKey="book-mate-theme"
-          >
-            <ModalProvider />
-            <SheetProvider />
-            <Toaster
-              toastOptions={{
-                classNames: {
-                  error: "border border-rose-500",
-                  loading: "border border-zinc-700",
-                  success: "border border-emerald-500",
-                },
-              }}
-              icons={{
-                success: (
-                  <Check className="bg-emerald-500 text-white w-5 h-5 p-[2px] rounded-full" />
-                ),
-                loading: (
-                  <Loader className="bg-zinc-700 text-white w-5 h-5 p-[2px] rounded-full animate-spin" />
-                ),
-                error: (
-                  <X className="bg-rose-500 text-white w-5 h-5 p-[2px] rounded-full" />
-                ),
-              }}
-            />
-            <QueryProvider>{children}</QueryProvider>
-          </ThemeProvider>
+          <QueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem={true}
+              storageKey="book-mate-theme"
+            >
+              <ModalProvider />
+              <SheetProvider />
+              <Toaster
+                toastOptions={{
+                  classNames: {
+                    error: "border border-rose-500",
+                    loading: "border border-zinc-700",
+                    success: "border border-emerald-500",
+                  },
+                }}
+                icons={{
+                  success: (
+                    <Check className="bg-emerald-500 text-white w-5 h-5 p-[2px] rounded-full" />
+                  ),
+                  loading: (
+                    <Loader className="bg-zinc-700 text-white w-5 h-5 p-[2px] rounded-full animate-spin" />
+                  ),
+                  error: (
+                    <X className="bg-rose-500 text-white w-5 h-5 p-[2px] rounded-full" />
+                  ),
+                }}
+              />
+              {children}
+            </ThemeProvider>
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>

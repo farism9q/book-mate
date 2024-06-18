@@ -11,8 +11,8 @@ import { openai as openaisdk } from "@ai-sdk/openai";
 import { createStreamableValue } from "ai/rsc";
 import { getEmbedding } from "@/lib/openai";
 import { userHasFreeLimit } from "@/lib/user-limit";
-import { checkSubscription } from "@/lib/user-subscription";
 import { ErrorType } from "@/constants";
+import { checkSubscription } from "@/lib/user-subscription";
 
 export async function askQuestion({
   book,

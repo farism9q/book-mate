@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import { RemoveFavoriteBookModal } from "../modals/remove-favBook-modal";
+import { RemoveFavoriteBookModal } from "../../features/favorite-books/components/remove-favBook-modal";
 import { UpgradePlanModal } from "../modals/upgrade-plan-modal";
-import { FinishBookModal } from "../modals/finish-book-modal";
-import { EditUserProfileSheet } from "../modals/edit-user-profile-sheet";
+import { FinishBookModal } from "../../features/review/components/finish-book-modal";
+import { EditUserProfileSheet } from "../../features/account/components/edit-user-profile-sheet";
 import { SendEmailModal } from "../modals/send-email-modal";
 import { SubscriptionSuccessModal } from "../modals/subscription-modal";
 

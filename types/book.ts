@@ -1,4 +1,4 @@
-export type VolumeInfo = {
+type VolumeInfo = {
   title: string;
   authors: string[];
   publisher: string;
@@ -17,12 +17,4 @@ export type VolumeInfo = {
 export type Book = {
   id: string;
   volumeInfo: VolumeInfo;
-};
-
-export type BookInfoForChatGPT = {
-  id: string;
-  title: string;
-  publisher: string;
-  authors: string[];
-  publishedDate: string;
 };

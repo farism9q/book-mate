@@ -1,15 +1,11 @@
-import qs from "query-string";
-import axios from "axios";
-import { redirect } from "next/navigation";
+"use client";
 
-import { db } from "@/lib/db";
-import { Book } from "@/types/book";
+import { useGetFavoriteBooks } from "@/features/favorite-books/api/use-get-favorite-books";
 
-import { BookCard } from "@/components/book/book-card";
+import { BookCard } from "@/components/book-card";
 import RoutePage from "@/components/route-page";
 import Empty from "@/components/empty";
-import { auth } from "@clerk/nextjs";
-import { FavoriteBookStatus } from "@prisma/client";
+import BookCardSkeleton from "@/components/book-card-skeleton";
 
 const filterOpt = [
   { value: "all", label: `All` },
@@ -30,51 +26,22 @@ type Props = {
   };
 };
 
-const FavoriteBooksPage = async ({ searchParams }: Props) => {
-  const { userId } = auth();
-
+const FavoriteBooksPage = ({ searchParams }: Props) => {
   const { filter, date } = searchParams;
 
   const status =
     filter !== "all" ? filter?.replace(" ", "_").toUpperCase() : undefined;
 
-  if (!userId) {
-    return redirect("/");
-  }
-
-  let favoriteBooks = await db.favorite.findMany({
-    where: {
-      userId,
-      status: status as FavoriteBookStatus,
-    },
-    orderBy: {
-      createdAt: (date as "asc" | "desc") || "desc",
-    },
+  const { data, isLoading } = useGetFavoriteBooks({
+    filter: status,
+    sort: date,
   });
 
-  // Map over the favoriteBooksIds to create an array of promises
-  const bookPromises = favoriteBooks.map(favoriteBook => {
-    const url = qs.stringifyUrl({
-      url: `https://www.googleapis.com/books/v1/volumes/${favoriteBook.bookId}`,
-      query: {
-        key: process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY,
-      },
-    });
-    return axios.get(url);
-  });
-
-  // 1) Call the books API to get the books using promise.all
-  const booksResponses = await Promise.all(bookPromises);
-  // 2) Extract the book data from the responses
-  const books = booksResponses.map(response => {
-    return {
-      id: response.data.id,
-      volumeInfo: { ...response.data.volumeInfo },
-    } as Book;
-  });
+  const favoriteBooks = data ? data.favoriteBooks : [];
+  const books = data ? data.books : [];
 
   const noFavBooks =
-    (filter === "all" || filter === undefined) && books.length === 0;
+    (filter === "all" || filter === undefined) && books?.length === 0;
 
   const emptyLabel = noFavBooks
     ? "There is no favorite book"
@@ -101,7 +68,8 @@ const FavoriteBooksPage = async ({ searchParams }: Props) => {
             }
       }
     >
-      {books.length > 0 ? (
+      {isLoading && <LoadingSkeleton />}
+      {books.length > 0 && !isLoading && (
         <div className="flex flex-col justify-center items-center space-y-24 overflow-y-auto">
           <div className="flex flex-col items-center space-y-6">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -116,7 +84,8 @@ const FavoriteBooksPage = async ({ searchParams }: Props) => {
             </div>
           </div>
         </div>
-      ) : (
+      )}
+      {books.length === 0 && !isLoading && (
         <Empty
           label={emptyLabel}
           description={emptyDescription}
@@ -133,3 +102,13 @@ const FavoriteBooksPage = async ({ searchParams }: Props) => {
 };
 
 export default FavoriteBooksPage;
+
+const LoadingSkeleton = () => {
+  return (
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {Array.from({ length: 12 }).map((_, idx) => (
+        <BookCardSkeleton key={idx} />
+      ))}
+    </div>
+  );
+};

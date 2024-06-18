@@ -27,8 +27,10 @@ export const Sort = ({ options, urlQuery }: Props) => {
     router.push(pathname + "?" + params.toString());
   };
 
+  const currentSort = searchParams.get(urlQuery) || options[0].value;
+
   return (
-    <Select onValueChange={onChange}>
+    <Select defaultValue={currentSort} onValueChange={onChange}>
       <SelectTrigger className="focus:ring-0 ring-offset-0 focus:ring-offset-0 capitalize outline-none gap-x-1">
         <SelectValue placeholder={options[0].label} />
       </SelectTrigger>
