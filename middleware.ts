@@ -6,7 +6,7 @@ export default authMiddleware({
     "/changelog",
     "/api/webhook",
     "/api/uploadthing",
-    "/api/[[...route]](*.)",
+    "/api/[[...route]]",
   ], //Making it unprotected
 });
 
