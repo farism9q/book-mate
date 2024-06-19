@@ -8,7 +8,6 @@ import { db } from "@/lib/db";
 import { ErrorType } from "@/constants";
 import { userHasFreeLimit } from "@/lib/user-limit";
 import { increaseUserLimit } from "@/features/user-limit/actions";
-import { client } from "@/lib/hono";
 import { checkSubscription } from "@/lib/user-subscription";
 
 const app = new Hono()

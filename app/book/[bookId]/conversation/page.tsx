@@ -1,5 +1,7 @@
 "use client";
 
+export const maxDuration = 30;
+
 import { useRouter } from "next/navigation";
 import { useGetFavoriteBooks } from "@/features/favorite-books/api/use-get-favorite-books";
 import { useGetAccount } from "@/features/account/api/use-get-account";
