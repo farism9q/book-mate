@@ -47,7 +47,7 @@ export default function AddFavBook({ bookId }: AddBookProps) {
   };
 
   return (
-    <div className="flex flex-col space-y-4 premium border-2 border-black rounded-lg p-3">
+    <div className="flex flex-col space-y-4 primary p-3">
       <h3 className="uppercase text-white text-center text-3xl">
         Interested ?
       </h3>
@@ -57,7 +57,8 @@ export default function AddFavBook({ bookId }: AddBookProps) {
         </p>
         <Button
           disabled={isCreatingFavBook}
-          variant={"premium"}
+          variant={"primary"}
+          size={"lg"}
           onClick={onClick}
         >
           Save

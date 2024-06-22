@@ -4,9 +4,12 @@ import { Staatliches } from "next/font/google";
 
 import { useGetBooks } from "@/features/books/api/use-get-books";
 import { useGetFavoriteBooks } from "@/features/favorite-books/api/use-get-favorite-books";
+import { useGetSubscription } from "@/features/subscription/api/use-get-subscription";
+import { useGetUserLimit } from "@/features/user-limit/api/use-get-user-limit";
 
 import { cn } from "@/lib/utils";
 import { extractCategories } from "@/lib/utils";
+import { USER_FREE_LIMIT } from "@/constants";
 
 import { Star } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -15,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import AddFavBook from "@/app/(main)/(routes)/books/[bookId]/add-fav-book";
 import ChatBook from "@/app/(main)/(routes)/books/[bookId]/chat-book";
 import BookDescription from "@/components/book-description";
+import UserFreeLimit from "@/components/user-free-limit";
 
 interface BookDetailPageProps {
   params: {
@@ -35,6 +39,11 @@ const BookTitlePage = ({ params }: BookDetailPageProps) => {
     {}
   );
 
+  const { data: isSubscribed, isLoading: isLoadingSubscription } =
+    useGetSubscription();
+
+  const { data: userLimit, isLoading: isLoadingUserLimit } = useGetUserLimit();
+
   if (isLoadingBook || isLoadingFavBooks) {
     return <LoadingSkeleton />;
   }
@@ -50,6 +59,9 @@ const BookTitlePage = ({ params }: BookDetailPageProps) => {
   );
 
   const categories = extractCategories(book.volumeInfo.categories);
+
+  const dontShowBookActions =
+    userLimit === USER_FREE_LIMIT && isSubscribed === false && !userFav;
 
   return (
     <>
@@ -104,7 +116,10 @@ const BookTitlePage = ({ params }: BookDetailPageProps) => {
             </div>
 
             <BookDescription description={book.volumeInfo.description} />
-            {!userFav ? (
+
+            {dontShowBookActions ? (
+              <UserFreeLimit userLimitCount={userLimit} />
+            ) : !userFav ? (
               <AddFavBook bookId={book.id} />
             ) : (
               <ChatBook bookId={book.id} />

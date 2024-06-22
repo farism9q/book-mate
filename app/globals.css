@@ -84,12 +84,17 @@ body,
 
 @layer components {
   .premium {
-    background-image: linear-gradient(to bottom, #d13f3f, #3b3b3a 72%, #6ab2db);
-    color: white;
-    border: 0;
+    @apply bg-gradient-to-b from-sky-900/70 via-sky-900/60 to-sky-900/30;
   }
+  .primary {
+    @apply bg-zinc-800 text-zinc-100 border-2 border-zinc-500 rounded-lg;
+  }
+
   .text-gradient {
     @apply text-transparent bg-clip-text bg-gradient-to-br from-primary/70 to-zinc-600;
+  }
+  .text-premuim {
+    @apply bg-gradient-to-r from-sky-400 via-sky-300 to-sky-400 bg-clip-text text-transparent;
   }
 }
 
