@@ -71,7 +71,9 @@ export const PriceCard = ({
                 <SignedIn>
                   {isSubscribed ? (
                     <Button className="bg-amber-500/15 text-amber-500 border-amber-500/70 border-2 hover:bg-amber-500/20 transition-none">
-                      <Link href="/books">You're subscribed! Browse Books</Link>
+                      <Link href="/books">
+                        You&apos;re subscribed! Browse Books
+                      </Link>
                     </Button>
                   ) : (
                     <UpgradeButton />
