@@ -117,7 +117,7 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
   const categories = extractCategories(book.volumeInfo.categories);
 
   return (
-    <Card key={book.id}>
+    <Card key={book.id} className="min-w-[400px]">
       <CardHeader className="relative aspect-square w-full h-48">
         <Image
           fill
