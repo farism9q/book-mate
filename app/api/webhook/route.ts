@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
     await db.userSubscription.update({
       where: {
-        stripeCustomerId: subscription.id,
+        stripeCustomerId: subscription.customer as string,
       },
       data: {
         stripePriceId: subscription.items.data[0].price.id,

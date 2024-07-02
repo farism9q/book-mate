@@ -1,9 +1,7 @@
 import { db } from "@/lib/db";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
-import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { z } from "zod";
 
 const app = new Hono().get(
   "/",
@@ -30,9 +28,7 @@ const app = new Hono().get(
     });
 
     if (!userLimit) {
-      throw new HTTPException(400, {
-        res: c.json({ error: "User limit not found" }, 400),
-      });
+      return c.json({ userLimit: { count: 0 } }, 200);
     }
 
     return c.json({ userLimit }, 200);
