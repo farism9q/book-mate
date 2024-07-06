@@ -33,6 +33,7 @@ import {
 import { UploadImage } from "../../../components/upload-image";
 import { Input } from "../../../components/ui/input";
 import { Textarea } from "../../../components/ui/textarea";
+import { MOBILE_WIDTH } from "@/constants";
 
 const formSchema = z
   .object({
@@ -115,7 +116,7 @@ export const EditUserProfileSheet = () => {
   }, [currentPassword, newPassword, setError, getValues]);
 
   const isLoading = formState.isSubmitting || isPending;
-  const isMobile = useMedia("(max-width: 750px)", false);
+  const isMobile = useMedia(`(max-width: ${MOBILE_WIDTH}px)`, false);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { name, bio, newPassword, currentPassword } = values;

@@ -2,21 +2,32 @@
 
 import { useEditProfileSheet } from "@/features/account/hooks/use-edit-profile";
 import { useGetAccount } from "@/features/account/api/use-get-account";
-import { Footer } from "@/features/account/components/footer";
+import { Settings } from "@/features/account/components/settings";
 import { FavoriteBooksStatus } from "@/features/favorite-books/components/favorite-books-status";
+
+import { useState } from "react";
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Reviews } from "@/features/review/components/reviews";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const UserProfile = () => {
   const { onOpen } = useEditProfileSheet();
-
+  const [onReviewClick, setOnReviewClick] = useState(false);
   const { data: user, isLoading } = useGetAccount();
 
+  const whenScrolledTop = () => {
+    setOnReviewClick(false);
+  };
+
+  const [showUserBooks, setShowUserBooks] = useState(
+    user?.userSettings.allowBooksVisibliity || false
+  );
+
   return (
-    <div className="flex flex-col items-center border rounded-md pb-6 space-y-10 overflow-auto no-scrollbar h-full w-full">
+    <div className="flex flex-col items-center border rounded-md space-y-10 overflow-auto no-scrollbar h-full w-full">
       <div className="flex items-end justify-end w-full p-2">
         <Button
           variant={"secondary"}
@@ -66,14 +77,40 @@ export const UserProfile = () => {
 
       {/* Preventing undesired highet changes when "showUserBooksToggle" is turning on and off */}
       <div className="h-full w-full">
-        {user && user.userSettings.allowBooksVisibliity && (
+        {showUserBooks && user && (
           <FavoriteBooksStatus userName={user.name.split(" ")[0]} />
         )}
       </div>
 
-      <Separator className="w-full" />
+      <Tabs defaultValue="reviews" className="w-full">
+        <TabsList className="grid grid-cols-2 rounded-none">
+          <TabsTrigger
+            value="reviews"
+            onClick={() => {
+              setOnReviewClick(true);
+            }}
+          >
+            Reviews
+          </TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
 
-      {user && <Footer user={user} />}
+        <TabsContent value="reviews">
+          <Reviews
+            tabClicked={onReviewClick}
+            whenScrolledTop={whenScrolledTop}
+          />
+        </TabsContent>
+        <TabsContent value="settings">
+          {user && (
+            <Settings
+              user={user}
+              onShowUserBooksToggle={setShowUserBooks}
+              showUserBooksToggle={showUserBooks}
+            />
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

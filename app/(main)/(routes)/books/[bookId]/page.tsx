@@ -39,10 +39,9 @@ const BookTitlePage = ({ params }: BookDetailPageProps) => {
     {}
   );
 
-  const { data: isSubscribed, isLoading: isLoadingSubscription } =
-    useGetSubscription();
+  const { data: isSubscribed } = useGetSubscription();
 
-  const { data: userLimit, isLoading: isLoadingUserLimit } = useGetUserLimit();
+  const { data: userLimit } = useGetUserLimit();
 
   if (isLoadingBook || isLoadingFavBooks) {
     return <LoadingSkeleton />;

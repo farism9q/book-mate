@@ -4,7 +4,7 @@ import { UserProfile } from "./user-profile";
 
 const AccountPage = () => {
   return (
-    <div className="relative flex flex-col max-w-6xl mx-auto items-center h-full w-full px-6 py-12">
+    <div className="flex flex-col items-center h-full min-w-full py-12 px-6">
       <UserProfile />
     </div>
   );

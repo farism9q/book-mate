@@ -4,24 +4,29 @@ import { InferRequestType, InferResponseType } from "hono";
 import { toast } from "sonner";
 
 type ResponseType = InferResponseType<
-  typeof client.api.review.$post
->["newReview"];
+  (typeof client.api.review)[":reviewId"]["$patch"]
+>["updatedReview"];
 
-type RequestType = InferRequestType<typeof client.api.review.$post>["json"];
+type RequestType = InferRequestType<
+  (typeof client.api.review)[":reviewId"]["$patch"]
+>["json"];
 
-export function useCreateReview() {
+export function useEditReview(reviewId: string) {
   const queryClient = useQueryClient();
   const mutate = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async json => {
-      const response = await client.api.review.$post({ json });
+      const response = await client.api.review[":reviewId"].$patch({
+        json,
+        param: { reviewId },
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to create review");
+        throw new Error("Failed to edit review");
       }
 
-      const { newReview } = await response.json();
+      const { updatedReview } = await response.json();
 
-      return newReview;
+      return updatedReview;
     },
 
     onSuccess: () => {
