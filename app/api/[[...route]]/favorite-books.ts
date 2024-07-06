@@ -3,7 +3,12 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { object, z } from "zod";
 import { HTTPException } from "hono/http-exception";
-import { FavoriteBookStatus } from "@prisma/client";
+import {
+  FavoriteBookStatus,
+  PrismaPromise,
+  Favorite,
+  Review,
+} from "@prisma/client";
 import { db } from "@/lib/db";
 import { ErrorType } from "@/constants";
 import { userHasFreeLimit } from "@/lib/user-limit";
@@ -176,15 +181,51 @@ const app = new Hono()
       const { status } = c.req.valid("json");
       const { favBookId } = c.req.param();
 
-      const updatedFavBook = await db.favorite.update({
+      const favBook = await db.favorite.findFirst({
         where: {
-          userId,
           id: favBookId,
+          userId,
+        },
+      });
+
+      if (!favBook) {
+        throw new HTTPException(404, {
+          res: c.json({ error: "Favorite book not found" }, 404),
+        });
+      }
+
+      // 1) Update the favorite book status
+      let updateFavBookStatus = db.favorite.update({
+        where: {
+          id: favBookId,
+          userId,
         },
         data: {
           status,
         },
       });
+
+      // 2) Delete the review if the book status changed from FINISHED to other status
+      let deleteReview = null;
+      if (favBook.status === FavoriteBookStatus.FINISHED) {
+        deleteReview = db.review.delete({
+          where: {
+            userId_bookId: {
+              userId,
+              bookId: favBook.bookId,
+            },
+          },
+        });
+      }
+
+      const dbOperations = [updateFavBookStatus, deleteReview].filter(
+        Boolean
+      ) as PrismaPromise<any>[];
+
+      const [updatedFavBook] = (await db.$transaction(dbOperations)) as [
+        Favorite,
+        Review | null
+      ];
 
       return c.json({ updatedFavBook });
     }
@@ -213,10 +254,35 @@ const app = new Hono()
         },
       });
 
+      const favBookToDelete = await db.favorite.findFirst({
+        where: {
+          id: favBookId,
+          userId,
+          bookId,
+        },
+      });
+
+      if (!favBookToDelete) {
+        throw new HTTPException(404, {
+          res: c.json({ error: "Favorite book not found" }, 404),
+        });
+      }
+
+      // 1) Delete the favorite book
+      const deleteFavBook = db.favorite.delete({
+        where: {
+          id: favBookId,
+          userId,
+          bookId,
+        },
+      });
+
+      // 2) Delete the conversation (Soft delete)
       // It might the user has not started a conversation with the book yet.
       // So, we need to check if the conversation exists or not.
+      let updateConversation = null;
       if (conversation) {
-        await db.conversation.update({
+        updateConversation = db.conversation.update({
           where: {
             id: conversation.id,
             userId,
@@ -228,13 +294,26 @@ const app = new Hono()
         });
       }
 
-      await db.favorite.delete({
-        where: {
-          id: favBookId,
-          userId,
-          bookId,
-        },
-      });
+      // 3) Delete the review if the book status is finished
+      let deleteReview = null;
+      if (favBookToDelete.status === FavoriteBookStatus.FINISHED) {
+        deleteReview = db.review.delete({
+          where: {
+            userId_bookId: {
+              userId,
+              bookId,
+            },
+          },
+        });
+      }
+
+      const dbOperations = [
+        deleteFavBook,
+        updateConversation,
+        deleteReview,
+      ].filter(Boolean) as PrismaPromise<any>[];
+
+      await db.$transaction(dbOperations);
 
       return c.json({
         success: true,

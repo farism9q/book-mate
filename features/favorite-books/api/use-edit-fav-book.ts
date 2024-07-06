@@ -42,6 +42,7 @@ export const useEditFavBook = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["favorite-books"] });
+      queryClient.invalidateQueries({ queryKey: ["user-reviews"] });
     },
 
     onError: () => {

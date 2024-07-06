@@ -24,7 +24,7 @@ export default function UserFreeLimit({ userLimitCount }: UserFreeLimitProps) {
       "
       >
         <h1
-          className="text-[22px] font-semibold text-center
+          className="text-[22px] font-semibold text-center text-premuim
         "
         >
           You have reached your free books limit{" "}

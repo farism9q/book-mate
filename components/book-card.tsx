@@ -65,11 +65,11 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
         onSuccess({ updatedFavBook }) {
           if (updatedFavBook.status === FavoriteBookStatus.FINISHED) {
             const books =
-              data.finishedBooks?.length === 0
+              data.reviewBook?.books?.length === 0
                 ? [book]
-                : [book, ...(data.finishedBooks || [])];
+                : [book, ...(data.reviewBook?.books || [])];
 
-            onOpen("finishBook", { finishedBooks: books });
+            onOpen("reviewBook", { reviewBook: { books } });
           }
 
           toast.success("Book status updated");
@@ -117,7 +117,7 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
   const categories = extractCategories(book.volumeInfo.categories);
 
   return (
-    <Card key={book.id} className="min-w-[400px]">
+    <Card key={book.id}>
       <CardHeader className="relative aspect-square w-full h-48">
         <Image
           fill
