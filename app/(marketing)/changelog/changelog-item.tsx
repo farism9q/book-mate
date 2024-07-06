@@ -1,6 +1,5 @@
 "use client";
 
-
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
@@ -18,6 +17,7 @@ import { ChangelogCategory } from "@prisma/client";
 import { format } from "date-fns";
 import { useMedia } from "react-use";
 import { useState } from "react";
+import { MOBILE_WIDTH } from "@/constants";
 
 const categoryColor: Record<ChangelogCategory, string> = {
   "IMPROVEMENT": "bg-amber-500",
@@ -50,7 +50,7 @@ export const ChangelogItem = ({
   feedback,
   nbLikes,
 }: Props) => {
-  const isMobile = useMedia("(max-width: 750px)", false);
+  const isMobile = useMedia(`(max-width: ${MOBILE_WIDTH}px)`, false);
   const truncatedDescription = truncateTxt({
     text: description,
     nbChars: 250,

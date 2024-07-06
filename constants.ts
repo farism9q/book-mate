@@ -2,6 +2,8 @@ export const BOOKS_PER_PAGE = 12;
 export const USER_FREE_LIMIT = 5;
 export const CHAT_LIMIT_PER_BOOK = 5;
 
+export const MOBILE_WIDTH = 750;
+
 export enum ErrorType {
   ALREADY_FAV = "ALREADY_FAV",
   UPGRADE_PLAN = "UPGRADE_PLAN",
