@@ -11,7 +11,7 @@ import { Fragment } from "react";
 
 const routes = [
   {
-    label: "Home",
+    label: "Books",
     icon: <Book className="w-4 h-4" />,
     href: "/books",
   },
@@ -85,7 +85,7 @@ export const NavigationItems = ({ isMobile }: Props) => {
           >
             <div className="pl-2 lg:pl-6 flex items-center gap-x-2 py-2">
               {route.icon}
-              <span className="text-md font-semibold">{route.label}</span>
+              <span className="text-sm">{route.label}</span>
             </div>
           </Link>
         </Fragment>

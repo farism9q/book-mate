@@ -25,14 +25,13 @@ const NavigationSidebar = ({ isMobile }: NavigationSidebarProps) => {
   const { toggleSidebar, isSidebarExpanded } = useNavToggle();
   const router = useRouter();
 
-  const { data: user, isLoading: isLoadingUser } = useGetAccount();
+  const { data: user } = useGetAccount();
   const { data: userLimitCount, isLoading: isLoadingUserLimit } =
     useGetUserLimit();
   const { data: isSubscribed, isLoading: isLoadingSubscription } =
     useGetSubscription();
 
-  const isLoading =
-    isLoadingUser || isLoadingUserLimit || isLoadingSubscription;
+  const isLoading = isLoadingUserLimit || isLoadingSubscription;
 
   if (!sessionId) {
     router.replace("/");

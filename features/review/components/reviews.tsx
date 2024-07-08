@@ -50,7 +50,7 @@ export const Reviews = ({ tabClicked, whenScrolledTop }: Props) => {
       return;
     }
 
-    scrollRef.current?.scrollTo({ top: 0, behavior: "instant" });
+    scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
     whenScrolledTop();
   }, [tabClicked]);
 

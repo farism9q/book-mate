@@ -84,7 +84,7 @@ body,
 
 @layer components {
   .premium {
-    @apply bg-gradient-to-b from-sky-900/70 via-sky-900/60 to-sky-900/30;
+    @apply bg-[#04090A] bg-gradient-to-b from-sky-900/70 via-sky-900/60 to-sky-900/30;
   }
   .primary {
     @apply bg-zinc-800 text-zinc-100 border-2 border-zinc-500 rounded-lg;

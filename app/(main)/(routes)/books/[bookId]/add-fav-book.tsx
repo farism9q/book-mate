@@ -1,12 +1,15 @@
 "use client";
+import { useCreateFavBook } from "@/features/favorite-books/api/use-create-fav-book";
+
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
-import { useCreateFavBook } from "@/features/favorite-books/api/use-create-fav-book";
+
+import { toast } from "sonner";
 
 import { ErrorType } from "@/constants";
 
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import BookAction from "@/components/book-action";
 
 export interface AddBookProps {
   bookId: string;
@@ -45,25 +48,13 @@ export default function AddFavBook({ bookId }: AddBookProps) {
       }
     );
   };
-
   return (
-    <div className="flex flex-col space-y-4 primary p-3">
-      <h3 className="uppercase text-white text-center text-3xl">
-        Interested ?
-      </h3>
-      <div className="flex flex-col items-center justify-center space-y-6">
-        <p className="text-zinc-100">
-          Just click on save and start chatting with the book.
-        </p>
-        <Button
-          disabled={isCreatingFavBook}
-          variant={"primary"}
-          size={"lg"}
-          onClick={onClick}
-        >
-          Save
-        </Button>
-      </div>
-    </div>
+    <BookAction
+      title="Interested ?"
+      description="Just click on save and start chatting with the book."
+      isLoading={isCreatingFavBook}
+      btnLabel="Save"
+      onClick={onClick}
+    />
   );
 }

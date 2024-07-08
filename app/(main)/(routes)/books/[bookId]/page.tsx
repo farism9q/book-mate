@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import AddFavBook from "@/app/(main)/(routes)/books/[bookId]/add-fav-book";
-import ChatBook from "@/app/(main)/(routes)/books/[bookId]/chat-book";
+import ChatBook from "@/features/books/components/chat-book";
 import BookDescription from "@/components/book-description";
 import UserFreeLimit from "@/components/user-free-limit";
 
