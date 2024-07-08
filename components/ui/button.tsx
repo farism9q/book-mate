@@ -18,12 +18,12 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        primary:
+          "bg-zinc-500 text-zinc-100 border border-zinc-600 hover:bg-zinc-600",
         premium:
-          "bg-gradient-to-b from-[#D13F3F] via-[#3B3B3A]/72 to-[#6AB2DB] text-white border-0",
+          "bg-gradient-to-b from-sky-900/70 via-sky-900/60 to-sky-900/30 text-sky-500 border-sky-500/70 border-2",
         header:
           "bg-primary/15 text-primary border-primary/70 border-2 hover:bg-primary/20 transition-none",
-        signedOutUpgrade:
-          "bg-sky-500/15 text-sky-500 border-sky-500/70 border-2 hover:bg-sky-500/20 transition-none",
       },
       size: {
         default: "h-10 px-4 py-2",

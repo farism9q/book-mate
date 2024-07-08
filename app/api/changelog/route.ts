@@ -45,18 +45,40 @@ export async function POST(req: Request) {
     return new NextResponse("Error with creating changelog", { status: 500 });
   }
 
-  const changelogImages = await db.changelogImages.createMany({
-    data: body.images.map((image: { imageUrl: string; imageKey: string }) => ({
-      imageUrl: image.imageUrl,
-      imageKey: image.imageKey,
-      changelogId: changelog.id,
-    })),
+  if (body.images) {
+    await db.changelogImages.createMany({
+      data: body.images.map(
+        (image: { imageUrl: string; imageKey: string }) => ({
+          imageUrl: image.imageUrl,
+          imageKey: image.imageKey,
+          changelogId: changelog.id,
+        })
+      ),
+    });
+  }
+  return NextResponse.json(changelog);
+}
+
+export async function PUT(req: Request) {
+  if (!isAdmin()) {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  const body = await req.json();
+
+  const changelog = await db.changelog.update({
+    where: {
+      id: body.id,
+    },
+    data: {
+      title: body.title,
+      description: body.description,
+      categories: body.categories,
+    },
   });
 
-  if (!changelogImages) {
-    return new NextResponse("Error with creating changelog images", {
-      status: 500,
-    });
+  if (!changelog) {
+    return new NextResponse("Error with updating changelog", { status: 500 });
   }
 
   return NextResponse.json(changelog);

@@ -1,21 +1,24 @@
-import axios from "axios";
-import { redirect } from "next/navigation";
-import qs from "query-string";
+"use client";
 import Image from "next/image";
 import { Staatliches } from "next/font/google";
 
-import { cn } from "@/lib/utils";
-import { db } from "@/lib/db";
-import { extractCategories } from "@/lib/utils";
+import { useGetBooks } from "@/features/books/api/use-get-books";
+import { useGetFavoriteBooks } from "@/features/favorite-books/api/use-get-favorite-books";
+import { useGetSubscription } from "@/features/subscription/api/use-get-subscription";
+import { useGetUserLimit } from "@/features/user-limit/api/use-get-user-limit";
 
-import { Book } from "@/types/book";
+import { cn } from "@/lib/utils";
+import { extractCategories } from "@/lib/utils";
+import { USER_FREE_LIMIT } from "@/constants";
+
 import { Star } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import AddFavBook from "@/components/add-fav-book";
-import ChatBook from "@/components/chat-book";
-import BookDescription from "@/components/book/book-description";
-import { auth } from "@clerk/nextjs";
+import { Skeleton } from "@/components/ui/skeleton";
+import AddFavBook from "@/app/(main)/(routes)/books/[bookId]/add-fav-book";
+import ChatBook from "@/features/books/components/chat-book";
+import BookDescription from "@/components/book-description";
+import UserFreeLimit from "@/components/user-free-limit";
 
 interface BookDetailPageProps {
   params: {
@@ -25,42 +28,39 @@ interface BookDetailPageProps {
 
 const font = Staatliches({ subsets: ["latin"], weight: "400" });
 
-const BookTitlePage = async ({ params }: BookDetailPageProps) => {
+const BookTitlePage = ({ params }: BookDetailPageProps) => {
   const { bookId } = params;
-  const { userId } = auth();
 
-  if (!userId) {
-    return redirect("/");
+  const { data: booksData, isLoading: isLoadingBook } = useGetBooks({
+    booksId: [bookId],
+    queryKey: [bookId],
+  });
+  const { data: favBooks, isLoading: isLoadingFavBooks } = useGetFavoriteBooks(
+    {}
+  );
+
+  const { data: isSubscribed } = useGetSubscription();
+
+  const { data: userLimit } = useGetUserLimit();
+
+  if (isLoadingBook || isLoadingFavBooks) {
+    return <LoadingSkeleton />;
   }
 
-  if (!bookId) {
-    return redirect("/");
+  const book = booksData ? booksData[0] : null;
+
+  if (!book || !favBooks) {
+    return <div>Something went wrong</div>;
   }
 
-  const url = qs.stringifyUrl({
-    url: `https://www.googleapis.com/books/v1/volumes/${bookId}`,
-
-    query: {
-      key: process.env.GOOGLE_BOOK_API_KEY,
-    },
-  });
-
-  const response = await axios.get(url);
-
-  const book = response.data as Book;
-
-  const userFav = await db.user.findUnique({
-    where: {
-      userClerkId: userId,
-      favorites: {
-        some: {
-          bookId: book.id,
-        },
-      },
-    },
-  });
+  const userFav = favBooks.favoriteBooks.find(
+    favBook => favBook.bookId === book.id
+  );
 
   const categories = extractCategories(book.volumeInfo.categories);
+
+  const dontShowBookActions =
+    userLimit === USER_FREE_LIMIT && isSubscribed === false && !userFav;
 
   return (
     <>
@@ -115,7 +115,10 @@ const BookTitlePage = async ({ params }: BookDetailPageProps) => {
             </div>
 
             <BookDescription description={book.volumeInfo.description} />
-            {!userFav ? (
+
+            {dontShowBookActions ? (
+              <UserFreeLimit userLimitCount={userLimit} />
+            ) : !userFav ? (
               <AddFavBook bookId={book.id} />
             ) : (
               <ChatBook bookId={book.id} />
@@ -143,6 +146,31 @@ const BookTitlePage = async ({ params }: BookDetailPageProps) => {
         </div>
       </div>
     </>
+  );
+};
+
+const LoadingSkeleton = () => {
+  return (
+    <div className="py-12 px-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Skeleton className="relative aspect-square w-full h-full" />
+        <div className="flex flex-col justify-center space-y-4">
+          <Skeleton className="w-1/2 h-6" />
+          <Skeleton className="w-1/3 h-4" />
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <Skeleton className="w-1/3 h-4" />
+            </div>
+          </div>
+          <Skeleton className="w-1/3 h-4" />
+
+          <Separator />
+          <Skeleton className="w-full h-16" />
+          <Skeleton className="w-full h-64" />
+          <Skeleton className="w-full h-32" />
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { EditUserProfileSheet } from "../modals/edit-user-profile-sheet";
+import { EditUserProfileSheet } from "../../features/account/components/edit-user-profile-sheet";
 
 export const SheetProvider = () => {
   const [isMounted, setIsMounted] = useState(false);

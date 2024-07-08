@@ -10,9 +10,16 @@ type Props = {
   price: string;
   pricePerUnit?: string;
   features: string[];
+  isSubscribed?: boolean;
 };
 
-export const PriceCard = ({ plan, price, pricePerUnit, features }: Props) => {
+export const PriceCard = ({
+  plan,
+  price,
+  pricePerUnit,
+  features,
+  isSubscribed,
+}: Props) => {
   return (
     <div className="relative w-[300px] border rounded-md hover:border-amber-500/30 transition-all duration-300 rounded-r-3xl rounded-l-2xl shadow-2xl">
       <div className="py-6 px-12 flex flex-col justify-between w-full h-full relative">
@@ -62,7 +69,15 @@ export const PriceCard = ({ plan, price, pricePerUnit, features }: Props) => {
             <ClerkButtonState
               signIn={
                 <SignedIn>
-                  <UpgradeButton />
+                  {isSubscribed ? (
+                    <Button className="bg-amber-500/15 text-amber-500 border-amber-500/70 border-2 hover:bg-amber-500/20 transition-none">
+                      <Link href="/books">
+                        You&apos;re subscribed! Browse Books
+                      </Link>
+                    </Button>
+                  ) : (
+                    <UpgradeButton />
+                  )}
                 </SignedIn>
               }
               signOut={
@@ -72,7 +87,7 @@ export const PriceCard = ({ plan, price, pricePerUnit, features }: Props) => {
                     afterSignInUrl="/books"
                     afterSignUpUrl="/books"
                   >
-                    <Button variant={"signedOutUpgrade"}>
+                    <Button variant={"premium"}>
                       Get started to subscribe
                     </Button>
                   </SignInButton>

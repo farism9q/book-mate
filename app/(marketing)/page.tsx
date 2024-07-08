@@ -1,4 +1,6 @@
 "use client";
+import { useGetSubscription } from "@/features/subscription/api/use-get-subscription";
+
 import { FeatureCard } from "./feature-card";
 import { Section } from "./section";
 import { PriceCard } from "./price-card";
@@ -37,6 +39,7 @@ const features = [
 ];
 
 const MarketingPage = () => {
+  const { data: isSubscribed } = useGetSubscription();
   return (
     <div className="py-20">
       <div className="flex flex-col items-center justify-center space-y-4">
@@ -82,6 +85,7 @@ const MarketingPage = () => {
               price="15"
               pricePerUnit="﷼/month"
               features={["Unlimited Book Saving", "Unlimited Questions"]}
+              isSubscribed={isSubscribed !== undefined && isSubscribed}
             />
           </div>
         </div>

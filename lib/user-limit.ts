@@ -3,39 +3,6 @@ import { auth } from "@clerk/nextjs";
 import { db } from "./db";
 import { CHAT_LIMIT_PER_BOOK, USER_FREE_LIMIT } from "@/constants";
 
-export async function increaseUserLimit() {
-  const { userId } = auth();
-
-  if (!userId) {
-    return;
-  }
-
-  const userLimit = await db.userLimit.findUnique({
-    where: {
-      userId,
-    },
-  });
-
-  // If userLimit is not found, create a new record. Otherwise, update the count.
-  if (!userLimit) {
-    await db.userLimit.create({
-      data: {
-        userId,
-        count: 1,
-      },
-    });
-  } else {
-    await db.userLimit.update({
-      where: {
-        userId,
-      },
-      data: {
-        count: userLimit.count + 1,
-      },
-    });
-  }
-}
-
 export async function userChatLimits({
   conversationId,
 }: {
@@ -61,6 +28,7 @@ export async function userChatLimits({
   return bookChatCounts.length;
 }
 
+// This is used by two different routes. Move this function to a separate file.
 export async function userHasFreeLimit({
   type,
   conversationId,
@@ -97,24 +65,4 @@ export async function userHasFreeLimit({
 
     return bookChats < CHAT_LIMIT_PER_BOOK;
   }
-}
-
-export async function userLimitCount() {
-  const { userId } = auth();
-
-  if (!userId) {
-    return 0;
-  }
-
-  const userLimit = await db.userLimit.findUnique({
-    where: {
-      userId,
-    },
-  });
-
-  if (!userLimit) {
-    return 0;
-  }
-
-  return userLimit.count;
 }
