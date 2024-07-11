@@ -62,7 +62,7 @@ export const SearchBooksAction = ({ isFetching, type }: Props) => {
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    return router.push(`books/search?title=${values.title}`);
+    return router.push(`/books/search?title=${values.title}`);
   }
 
   return (
