@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Edit, Loader2, Star } from "lucide-react";
 
-const REVIEWS_BATCH_SIZE = 10;
+const REVIEWS_BATCH_SIZE = 5;
 
 type Props = {
   tabClicked: boolean;
