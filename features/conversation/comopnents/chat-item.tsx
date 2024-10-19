@@ -3,15 +3,20 @@
 import { useState } from "react";
 import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";
+import Image from "next/image";
+import "react-photo-view/dist/react-photo-view.css";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 
 import { cn } from "@/lib/utils";
 import { EntityAvatar } from "../../../components/entity-avatar";
 import { Check, Copy, Loader2, Share } from "lucide-react";
 import { useModal } from "@/hooks/use-modal-store";
+import { MessageFile } from "@prisma/client";
 
 interface ChatItemProps {
   type: "user" | "chatgpt";
   text: string;
+  imagesPreview?: MessageFile[] | string[];
   avatar: string;
   question?: string;
   bookTitle?: string;
@@ -24,6 +29,7 @@ const ChatItem = ({
   type,
   question,
   text,
+  imagesPreview,
   avatar,
   bookTitle,
   bookImageUrl,
@@ -62,8 +68,34 @@ const ChatItem = ({
             type === "chatgpt" ? "justify-between gap-y-1" : "justify-center"
           )}
         >
+          {type === "user" && imagesPreview && imagesPreview.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              <PhotoProvider>
+                {imagesPreview?.map(url => {
+                  url = typeof url === "string" ? url : url.url;
+
+                  return (
+                    <div key={url} className="w-24 h-24 relative">
+                      <div className="foo">
+                        <PhotoView src={url}>
+                          <Image
+                            src={url}
+                            fill
+                            sizes="96px"
+                            quality={30}
+                            alt="User uploaded image"
+                            className="object-cover rounded-lg"
+                          />
+                        </PhotoView>
+                      </div>
+                    </div>
+                  );
+                })}
+              </PhotoProvider>
+            </div>
+          )}
           {type === "user" ? (
-            <p className="text-gray-800 dark:text-gray-200">{text}</p>
+            <p className="text-gray-800 dark:text-gray-200 mt-2">{text}</p>
           ) : (
             <ReactMarkdown rehypePlugins={[rehypeRaw]}>{text}</ReactMarkdown>
           )}

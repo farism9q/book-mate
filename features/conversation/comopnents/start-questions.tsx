@@ -20,11 +20,11 @@ const StartQuestionsData = [
   },
 ];
 type Props = {
-  onSubmitMessage: (question: string) => void;
+  onSubmitMessage: ({ question }: { question: string }) => void;
 };
 const StartQuestions = ({ onSubmitMessage }: Props) => {
   const onClick = (question: string) => {
-    onSubmitMessage(question);
+    onSubmitMessage({ question });
   };
 
   return (

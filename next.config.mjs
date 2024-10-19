@@ -27,12 +27,14 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
+      // google books
       {
         protocol: "http",
         hostname: "books.google.com",
         port: "",
         pathname: "/books/**",
       },
+      // Clerk
       {
         protocol: "https",
         hostname: "img.clerk.com",
@@ -40,11 +42,19 @@ const nextConfig = {
         pathname: "*/**",
       },
       {
-        //  (https://utfs.io/f/
+        // Uploadthing
         protocol: "https",
         hostname: "utfs.io",
         port: "",
         pathname: "/f/**",
+      },
+
+      // Supabase
+      {
+        protocol: "https",
+        hostname: "wqvlecfljbaygqdtixyv.supabase.co",
+        port: "",
+        pathname: "/storage/v1/object/public/**",
       },
     ],
   },

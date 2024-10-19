@@ -3,26 +3,38 @@ import { InitialUserType } from "@/types/initial-user";
 import { Book } from "@/types/book";
 
 import ChatItem from "./chat-item";
+import { MessageFile } from "@prisma/client";
 
 type Props = {
-  messages: ChatMessage[];
+  messages: {
+    chatMessage: ChatMessage;
+    imagesPreview?: string[];
+  }[];
+
   user: InitialUserType;
   book: Book;
   isStreaming: boolean;
 };
 
 export const ChatStream = ({ messages, user, book, isStreaming }: Props) => {
-  const lastMessageIsUser = messages[messages.length - 1]?.role === "user";
+  const lastMessageIsUser =
+    messages[messages.length - 1]?.chatMessage.role === "user";
 
   return (
     <div className="flex flex-col py-4 space-y-2 w-full">
       <ChatItem
-        type={messages[0].role === "user" ? "user" : "chatgpt"}
+        type={messages[0].chatMessage.role === "user" ? "user" : "chatgpt"}
         avatar={user.userProfileImage?.imageUrl || user.imageURL}
+        imagesPreview={
+          messages[0].chatMessage.role === "user" &&
+          messages[0].imagesPreview !== undefined
+            ? messages[0].imagesPreview
+            : undefined
+        }
         text={
-          messages[0].role === "user"
-            ? messages[0].content
-            : messages[1]?.content || ""
+          messages[0].chatMessage.role === "user"
+            ? messages[0].chatMessage.content
+            : messages[1]?.chatMessage.content || ""
         }
       />
 
@@ -36,14 +48,14 @@ export const ChatStream = ({ messages, user, book, isStreaming }: Props) => {
       )}
       {messages[1] && (
         <ChatItem
-          type={messages[1].role !== "user" ? "chatgpt" : "user"}
+          type={messages[1].chatMessage.role !== "user" ? "chatgpt" : "user"}
           avatar={"/chatgpt-logo.png"}
           question={
-            messages[0].role === "user"
-              ? messages[0].content
-              : messages[1].content
+            messages[0].chatMessage.role === "user"
+              ? messages[0].chatMessage.content
+              : messages[1].chatMessage.content
           }
-          text={messages[1].content || ""}
+          text={messages[1].chatMessage.content || ""}
           bookTitle={book.volumeInfo.title}
           isChatStreaming={isStreaming}
           bookImageUrl={book.volumeInfo.imageLinks.thumbnail}

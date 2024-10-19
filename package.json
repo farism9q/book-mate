@@ -12,7 +12,7 @@
     "db:seed": "tsx ./scripts/seed.ts"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.16",
+    "@ai-sdk/openai": "^0.0.37",
     "@clerk/backend": "^1.2.2",
     "@clerk/nextjs": "^4.29.9",
     "@hono/clerk-auth": "^2.0.0",
@@ -35,6 +35,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@react-email/components": "0.0.16",
     "@react-email/render": "^0.0.12",
+    "@supabase/supabase-js": "^2.45.4",
     "@tanstack/react-query": "^4.36.1",
     "@uploadthing/react": "^6.4.1",
     "ai": "^3.1.15",
@@ -57,6 +58,7 @@
     "react-email": "2.1.1",
     "react-hook-form": "^7.51.0",
     "react-markdown": "^9.0.1",
+    "react-photo-view": "^1.2.6",
     "react-use": "^17.5.0",
     "rehype-raw": "^7.0.0",
     "resend": "^3.2.0",

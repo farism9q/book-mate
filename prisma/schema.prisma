@@ -131,10 +131,30 @@ model Review {
   conversationId String
   conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
+  files MessageFile[] 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
  }
+
+enum MessageFileType {
+  IMAGE
+  FILE
+}
+
+model MessageFile {
+  id String @id @default(uuid())
+  type MessageFileType  
+  url String
+  
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 model UserLimit {
   id String @id @default(uuid())

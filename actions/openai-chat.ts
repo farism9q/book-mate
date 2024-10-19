@@ -14,13 +14,24 @@ import { userHasFreeLimit } from "@/lib/user-limit";
 import { ErrorType } from "@/constants";
 import { checkSubscription } from "@/lib/user-subscription";
 
+import axios from "axios";
+
+async function urlToBase64(url: string) {
+  const response = await axios.get(url, { responseType: "arraybuffer" });
+  const buffer = Buffer.from(response.data, "binary");
+  return buffer.toString("base64");
+}
+
 export async function askQuestion({
   book,
   previousChats,
   question,
   conversationId,
 }: {
-  question: string;
+  question: {
+    text: string;
+    urls?: string[];
+  };
   book: Book;
   previousChats: { role: string; content: string }[];
   conversationId: string;
@@ -78,9 +89,35 @@ export async function askQuestion({
       `,
     };
 
+    let urls: undefined | any[] = undefined;
+    if (question.urls && question.urls?.length > 0) {
+      const urlsType = question.urls?.map(async url => {
+        const base64 = await urlToBase64(url);
+        return {
+          type: "image",
+          image: base64,
+        };
+      });
+
+      urls = await Promise.all(urlsType);
+    }
+
     const result = await streamText({
-      model: openaisdk("gpt-3.5-turbo"),
-      messages: [instructionMessage, { role: "user", content: question }],
+      model: openaisdk("gpt-4o") as any,
+      messages: [
+        instructionMessage,
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: question.text,
+            },
+
+            ...(urls || []),
+          ],
+        },
+      ],
     });
 
     const stream = createStreamableValue(result.textStream);

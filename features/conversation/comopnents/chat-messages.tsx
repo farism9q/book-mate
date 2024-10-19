@@ -2,13 +2,13 @@
 
 import { useChatScroll } from "@/features/conversation/hooks/use-chat-scroll";
 import { useGetConversationMessages } from "@/features/conversation/api/use-get-conversation-messages";
+import { ChatMessage } from "@/features/conversation/types";
 
 import { ElementRef, Fragment, useRef } from "react";
 
 import { Conversation } from "@prisma/client";
 import { Book } from "@/types/book";
 import { InitialUserType } from "@/types/initial-user";
-import { ChatMessage } from "@/features/conversation/types";
 
 import { ArrowDown, Loader2, ServerCrash } from "lucide-react";
 import StartQuestions from "./start-questions";
@@ -19,9 +19,18 @@ type Props = {
   book: Book;
   user: InitialUserType;
   conversation: Conversation;
-  onSubmitMessage: (message: string) => void;
+  onSubmitMessage: ({
+    question,
+    files,
+  }: {
+    question: string;
+    files?: string[];
+  }) => void;
   isStreaming: boolean;
-  messages: ChatMessage[];
+  messages: {
+    chatMessage: ChatMessage;
+    imagesPreview?: string[];
+  }[];
 };
 
 const ChatMessages = ({
@@ -114,6 +123,7 @@ const ChatMessages = ({
                   type="user"
                   avatar={user.userProfileImage?.imageUrl || user.imageURL}
                   text={message.userQuestion}
+                  imagesPreview={(message as any).files}
                 />
                 <ChatItem
                   type="chatgpt"

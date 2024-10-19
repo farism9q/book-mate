@@ -8,6 +8,7 @@ import ChatInput from "@/features/conversation/comopnents/chat-input";
 import ChatHeader from "@/features/conversation/comopnents/chat-header";
 import { ChatLoader } from "@/features/conversation/comopnents/chat-loader";
 import { formatMessages } from "@/features/conversation/utils";
+import { usePreviewFiles } from "@/features/conversation/hooks/use-preview-files";
 
 import { useState } from "react";
 import { StreamableValue, readStreamableValue } from "ai/rsc";
@@ -37,8 +38,15 @@ export const ChatPannel = ({
   conversation,
   isSubscribed,
 }: Props) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<
+    {
+      chatMessage: ChatMessage;
+      imagesPreview?: string[];
+    }[]
+  >([]);
   const [isStreaming, setStreaming] = useState(false);
+  const { previewFiles } = usePreviewFiles();
+
   const { onOpen } = useModal();
 
   const { data } = useGetConversationMessages({
@@ -70,7 +78,8 @@ export const ChatPannel = ({
   const isLastMessageSaved =
     messages.length > 0 &&
     conversationMessages &&
-    conversationMessages.at(0)?.userQuestion === messages[0]?.content;
+    conversationMessages.at(0)?.userQuestion ===
+      messages[0]?.chatMessage?.content;
 
   if (isLastMessageSaved) {
     setMessages([]);
@@ -78,7 +87,13 @@ export const ChatPannel = ({
 
   const formattedPreviousMessages = formatMessages(conversationMessages);
 
-  const onSubmitMessage = async (question: string) => {
+  const onSubmitMessage = async ({
+    question,
+    files,
+  }: {
+    question: string;
+    files?: string[];
+  }) => {
     if (!conversation || !book) {
       return;
     }
@@ -96,7 +111,12 @@ export const ChatPannel = ({
       content: question,
     };
 
-    setMessages([userMessage]);
+    setMessages([
+      {
+        chatMessage: userMessage,
+        imagesPreview: previewFiles.map(file => URL.createObjectURL(file)),
+      },
+    ]);
 
     let chatgptResponse = "";
 
@@ -104,7 +124,10 @@ export const ChatPannel = ({
       const result = (await askQuestion({
         book,
         previousChats: formattedPreviousMessages,
-        question,
+        question: {
+          text: question,
+          urls: files,
+        },
         conversationId: conversation.id,
       })) as StreamableValue<string, any> | { message: string; type: string };
 
@@ -125,10 +148,15 @@ export const ChatPannel = ({
         }
 
         setMessages(msgs => [
-          userMessage,
           {
-            role: "system",
-            content: content as string,
+            chatMessage: userMessage,
+            imagesPreview: previewFiles.map(file => URL.createObjectURL(file)),
+          },
+          {
+            chatMessage: {
+              role: "system",
+              content: content as string,
+            },
           },
         ]);
       }
@@ -138,6 +166,7 @@ export const ChatPannel = ({
       saveUserChatgptConversationMessage({
         question,
         text: chatgptResponse,
+        files: files,
       });
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
@@ -165,7 +194,6 @@ export const ChatPannel = ({
       <ChatInput
         onSubmitMessage={onSubmitMessage}
         isStreaming={isStreaming}
-        isSubscribed={isSubscribed}
         bookChatLimit={bookChatLimit}
       />
     </>

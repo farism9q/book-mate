@@ -19,6 +19,7 @@ export const useCreateConversationMessage = ({
         json: {
           question: json.question,
           text: json.text,
+          files: json.files,
         },
         param: {
           conversationId,
