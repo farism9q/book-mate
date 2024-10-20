@@ -172,12 +172,16 @@ const ChatInput = ({ onSubmitMessage, isStreaming, bookChatLimit }: Props) => {
                     className="hidden"
                   />
 
-                  <div className={"relative w-full"}>
+                  <div
+                    className={
+                      "relative w-full border-slate-200 bg-slate-100 dark:bg-gray-900 dark:border-gray-800"
+                    }
+                  >
                     <Textarea
                       disabled={isStreaming}
                       placeholder="Ask your question here..."
                       className={cn(
-                        "text-base px-4 py-6 border-slate-200 bg-slate-100 dark:bg-gray-900 dark:border-gray-800 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200 min-h-12 resize-none border-0 p-3 shadow-none overflow-y-auto no-scrollbar",
+                        "max-w-[calc(100%-40px)] text-base px-4 py-6 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200 min-h-12 resize-none border-0 p-3 shadow-none overflow-y-auto no-scrollbar bg-transparent",
                         previewFiles.length > 0 && "pt-14"
                       )}
                       {...field}
