@@ -33,3 +33,5 @@ export function isNewUpdate(updateDate?: Date) {
 
   return isAfter(new Date(updateDate), dateThreshold);
 }
+
+export const suggestedBooksCacheTime = 1000 * 60 * 60 * 24; // 24 hours

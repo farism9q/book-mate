@@ -1,5 +1,4 @@
 import { Book } from "@/types/book";
-import { subscriptionType } from "@/types/subscription";
 import { User, UserProfileImage } from "@prisma/client";
 import { create } from "zustand";
 
@@ -9,7 +8,8 @@ export type ModalType =
   | "reviewBook"
   | "editUserProfile"
   | "sendEmail"
-  | "subscriptionSuccess";
+  | "subscriptionSuccess"
+  | "userBooksPrefrences";
 
 interface ModalData {
   bookId?: string;

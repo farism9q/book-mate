@@ -13,6 +13,10 @@ import CustomPagination from "@/components/custom-pagination";
 import BookCardSkeleton from "@/components/book-card-skeleton";
 import { BookCard } from "@/components/book-card";
 import { useGetBooks } from "@/features/books/api/use-get-books";
+import ForYouBooks from "@/components/for-you-books";
+import { useGetUserBooksGenres } from "@/features/user-books-prefrences/api/use-get-user-books-genres";
+import { useGetUserHighRatedBooks } from "@/features/review/api/use-get-user-high-rated-books";
+import { useGetFavoriteBooks } from "@/features/favorite-books/api/use-get-favorite-books";
 
 const InitialPage = () => {
   const searchParams = useSearchParams();
@@ -36,6 +40,23 @@ const InitialPage = () => {
     queryKey: ["books", category, currentPage.toString()],
   });
 
+  const { data: highRatedBooks, isLoading: isHighRatedBooksLoading } =
+    useGetUserHighRatedBooks();
+  const { data: favoriteBooks, isLoading: isFavoriteBooksLoading } =
+    useGetFavoriteBooks({
+      sort: "desc",
+    });
+  const { data: userBooksGenres, isLoading: isUserBooksGenresLoading } =
+    useGetUserBooksGenres();
+
+  useEffect(() => {
+    console.log(userBooksGenres, isUserBooksGenresLoading);
+    if (!userBooksGenres && !isUserBooksGenresLoading) {
+      onOpen("userBooksPrefrences");
+      setHasOpenedModal(true);
+    }
+  }, [onOpen, hasOpenedModal, isUserBooksGenresLoading, userBooksGenres]);
+
   useEffect(() => {
     if (
       (cameFromSubscription === subscriptionType.SUBSCRIBE.toLowerCase() ||
@@ -53,6 +74,23 @@ const InitialPage = () => {
         <div className="mt-12 px-2">
           <SearchBooksAction isFetching={isLoading} type="initial" />
         </div>
+
+        {highRatedBooks &&
+        favoriteBooks &&
+        !isFavoriteBooksLoading &&
+        !isHighRatedBooksLoading ? (
+          <ForYouBooks
+            highRatedBooks={highRatedBooks?.books || []}
+            favoriteBooks={favoriteBooks?.books || []}
+            genrePrefrences={userBooksGenres!}
+          />
+        ) : userBooksGenres && !isLoading ? (
+          <ForYouBooks
+            highRatedBooks={[]}
+            favoriteBooks={[]}
+            genrePrefrences={userBooksGenres!}
+          />
+        ) : null}
 
         {/* Is loading */}
         {isLoading && <LoadingSkeleton />}

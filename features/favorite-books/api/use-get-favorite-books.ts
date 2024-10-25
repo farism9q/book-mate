@@ -41,6 +41,10 @@ export const useGetFavoriteBooks = ({
       const { books } = await booksResponse.json();
       queryClient.setQueryData(["books"], books);
 
+      queryClient.invalidateQueries({
+        queryKey: ["user-recommended-books"],
+      });
+
       return { favoriteBooks, books };
     },
   });

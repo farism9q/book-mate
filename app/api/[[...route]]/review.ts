@@ -86,6 +86,33 @@ const app = new Hono()
       return c.json({ reviews, nextCursor }, 200);
     }
   )
+  .get("/highest-rated", clerkMiddleware(), async c => {
+    const auth = getAuth(c);
+
+    if (!auth || !auth.userId) {
+      throw new HTTPException(401, {
+        res: c.json({ error: "Unauthorized" }, 401),
+      });
+    }
+
+    const { userId } = auth;
+
+    const highestRatedBooks = await db.review.findMany({
+      where: {
+        userId,
+        rating: {
+          gte: 4,
+        },
+      },
+      orderBy: {
+        rating: "desc",
+      },
+      take: 10,
+    });
+
+    console.log({ highestRatedBooks });
+    return c.json({ highestRatedBooks }, 200);
+  })
   .post(
     "/",
     clerkMiddleware(),

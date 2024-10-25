@@ -8,6 +8,7 @@ import { ReviewBookModal } from "../../features/review/components/review-book-mo
 import { EditUserProfileSheet } from "../../features/account/components/edit-user-profile-sheet";
 import { SendEmailModal } from "../modals/send-email-modal";
 import { SubscriptionSuccessModal } from "../modals/subscription-modal";
+import { UserBooksPrefrencesModal } from "../../features/user-books-prefrences/modal/user-books-prefrences-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -28,6 +29,7 @@ export const ModalProvider = () => {
       <EditUserProfileSheet />
       <SendEmailModal />
       <SubscriptionSuccessModal />
+      <UserBooksPrefrencesModal />
     </>
   );
 };

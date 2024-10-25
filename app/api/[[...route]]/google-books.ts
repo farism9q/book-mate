@@ -22,6 +22,7 @@ const app = new Hono().post(
           page: z.number(),
           startIndex: z.number(),
           maxResults: z.number(),
+          langRestrict: z.enum(["en", "ar"]).default("en"),
         })
         .optional(),
     })

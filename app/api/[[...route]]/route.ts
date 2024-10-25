@@ -1,12 +1,13 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
-import { HTTPException } from "hono/http-exception";
 import favoriteBooks from "./favorite-books";
 import googleBooks from "./google-books";
 import conversations from "./conversations";
 import account from "./account";
 import review from "./review";
 import userLimit from "./user-limit";
+import llm from "./llm";
+import userBooksPrefrences from "./user-books-prefrences";
 
 export const runtime = "nodejs";
 
@@ -18,7 +19,9 @@ const routes = app
   .route("/conversations", conversations)
   .route("/account", account)
   .route("/review", review)
-  .route("/user-limit", userLimit);
+  .route("/user-limit", userLimit)
+  .route("/llm", llm)
+  .route("/user-books-prefrences", userBooksPrefrences);
 
 export const GET = handle(app);
 export const POST = handle(app);
