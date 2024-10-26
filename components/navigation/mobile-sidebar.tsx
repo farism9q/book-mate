@@ -2,30 +2,28 @@
 
 import Link from "next/link";
 
-import { useNavToggle } from "@/hooks/use-nav-toggle";
-
 import { Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import NavigationSidebar from "./navigation-sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 
 export default function MobileSidebar() {
-  const { open, onOpenChange } = useNavToggle();
+  const { toggleSidebar } = useSidebar();
 
   return (
-    <Sheet open={open} onOpenChange={() => onOpenChange()}>
+    <div
+      className="lg:hidden h-14 sticky px-2 mx-2 mt-4 top-4 z-50
+      flex justify-between items-center
+      bg-background/55 backdrop-blur-md border border-border rounded-2xl"
+    >
       <Link href={"/"}>
         <h1 className="text-gradient text-2xl font-bold uppercase tracking-widest">
           Book mate
         </h1>
       </Link>
-      <SheetTrigger className="ml-auto">
-        <div className="p-2">
-          <Menu className="size-6" />
-        </div>
-      </SheetTrigger>
-      <SheetContent side={"right"} className="p-0">
-        <NavigationSidebar isMobile={true} />
-      </SheetContent>
-    </Sheet>
+
+      <Button size={"icon"} variant={"ghost"} onClick={toggleSidebar}>
+        <Menu />
+      </Button>
+    </div>
   );
 }

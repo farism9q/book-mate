@@ -22,17 +22,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../components/ui/form";
+} from "@/components/ui/form";
 import { Loader } from "lucide-react";
 import {
   Sheet,
   SheetContent,
   SheetFooter,
   SheetHeader,
-} from "../../../components/ui/sheet";
-import { UploadImage } from "../../../components/upload-image";
-import { Input } from "../../../components/ui/input";
-import { Textarea } from "../../../components/ui/textarea";
+} from "@/components/ui/sheet";
+import { UploadImage } from "@/components/upload-image";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { MOBILE_WIDTH } from "@/constants";
 
 const formSchema = z
@@ -62,7 +62,7 @@ const formSchema = z
 export const EditUserProfileSheet = () => {
   const { data, isOpen, onClose } = useEditProfileSheet();
   const { user } = data;
-  const { mutate, isLoading: isPending } = useEditAccount();
+  const { mutate, isPending } = useEditAccount();
 
   const [avatar, setAvatar] = useState("");
   const [avatarKey, setAvatarKey] = useState("");
