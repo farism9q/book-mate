@@ -56,9 +56,9 @@ const ChatInput = ({ onSubmitMessage, isStreaming, bookChatLimit }: Props) => {
     removePreviewFile,
   } = usePreviewFiles();
 
-  const { mutate: uploadChatFile, isLoading: isUploadingFiles } =
+  const { mutate: uploadChatFile, isPending: isUploadingFiles } =
     useUploadChatFile();
-  const { mutate: removeChatFile, isLoading: isRemovingFiles } =
+  const { mutate: removeChatFile, isPending: isRemovingFiles } =
     useRemoveChatFile();
 
   const fileInputRef = useRef<HTMLInputElement>(null);

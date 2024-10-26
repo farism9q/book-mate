@@ -30,7 +30,7 @@ export function useEditReview(reviewId: string) {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries(["user-reviews"]);
+      queryClient.invalidateQueries({ queryKey: ["user-reviews"] });
     },
 
     onError: () => {

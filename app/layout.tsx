@@ -38,33 +38,30 @@ export default function RootLayout({
               enableSystem={true}
               storageKey="book-mate-theme"
             >
-              <SidebarProvider>
-                {/* <AppSidebar /> */}
-                <ModalProvider />
-                <SheetProvider />
-                <Toaster
-                  toastOptions={{
-                    classNames: {
-                      error: "border border-rose-500",
-                      loading: "border border-zinc-700",
-                      success: "border border-emerald-500",
-                    },
-                  }}
-                  icons={{
-                    success: (
-                      <Check className="bg-emerald-500 text-white w-5 h-5 p-[2px] rounded-full" />
-                    ),
-                    loading: (
-                      <Loader className="bg-zinc-700 text-white w-5 h-5 p-[2px] rounded-full animate-spin" />
-                    ),
-                    error: (
-                      <X className="bg-rose-500 text-white w-5 h-5 p-[2px] rounded-full" />
-                    ),
-                  }}
-                />
+              <ModalProvider />
+              <SheetProvider />
+              <Toaster
+                toastOptions={{
+                  classNames: {
+                    error: "border border-rose-500",
+                    loading: "border border-zinc-700",
+                    success: "border border-emerald-500",
+                  },
+                }}
+                icons={{
+                  success: (
+                    <Check className="bg-emerald-500 text-white w-5 h-5 p-[2px] rounded-full" />
+                  ),
+                  loading: (
+                    <Loader className="bg-zinc-700 text-white w-5 h-5 p-[2px] rounded-full animate-spin" />
+                  ),
+                  error: (
+                    <X className="bg-rose-500 text-white w-5 h-5 p-[2px] rounded-full" />
+                  ),
+                }}
+              />
 
-                {children}
-              </SidebarProvider>
+              {children}
             </ThemeProvider>
           </QueryProvider>
         </body>

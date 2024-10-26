@@ -6,7 +6,7 @@ import { useGetSubscription } from "@/features/subscription/api/use-get-subscrip
 
 import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
-import { SignOutButton, useAuth } from "@clerk/nextjs";
+import { useAuth, useClerk } from "@clerk/nextjs";
 
 import { Book, ChevronsUpDown, LogOut, Sun, Moon, User } from "lucide-react";
 import {
@@ -45,7 +45,6 @@ export function AppSidebar() {
   const { isMobile } = useSidebar();
 
   if (isMobile) {
-    console.log("mobile sidebar");
     return (
       <>
         <MobileSidebar />
@@ -60,6 +59,7 @@ export function AppSidebar() {
 function SidebarPage() {
   const router = useRouter();
   const pathname = usePathname();
+  const { signOut } = useClerk();
 
   const { sessionId } = useAuth();
   const { open, isMobile, state } = useSidebar();
@@ -170,12 +170,12 @@ function SidebarPage() {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
 
-                  <DropdownMenuItem>
-                    <Link href={"/account"} className="flex items-center">
+                  <Link href={"/account"}>
+                    <DropdownMenuItem>
                       <User className="size-4 mr-2" />
                       Account
-                    </Link>
-                  </DropdownMenuItem>
+                    </DropdownMenuItem>
+                  </Link>
 
                   <DropdownMenuSeparator />
 
@@ -193,12 +193,21 @@ function SidebarPage() {
                     {theme === "dark" ? "Light mode" : "Dark mode"}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <SignOutButton signOutOptions={{ sessionId }}>
+
+                  <Link
+                    href={"/"}
+                    onClick={e => {
+                      e.stopPropagation();
+                      setInterval(() => {
+                        signOut();
+                      }, 2000);
+                    }}
+                  >
                     <DropdownMenuItem>
                       <LogOut className="size-4 mr-2" />
                       Sign out
                     </DropdownMenuItem>
-                  </SignOutButton>
+                  </Link>
                 </DropdownMenuContent>
               </DropdownMenu>
             </SidebarMenuItem>

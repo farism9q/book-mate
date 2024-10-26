@@ -25,7 +25,7 @@ export function useCreateReview() {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries(["user-reviews"]);
+      queryClient.invalidateQueries({ queryKey: ["user-reviews"] });
     },
 
     onError: () => {

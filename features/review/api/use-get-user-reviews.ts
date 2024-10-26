@@ -11,7 +11,7 @@ export const useGetUserReviewsInfinite = ({
 
   return useInfiniteQuery({
     queryKey: ["user-reviews"],
-    queryFn: async ({ pageParam = undefined }) => {
+    queryFn: async ({ pageParam }) => {
       const response = await client.api.review.$get({
         query: {
           cursor: pageParam,
@@ -39,6 +39,7 @@ export const useGetUserReviewsInfinite = ({
 
       return { books, reviews, nextCursor };
     },
+    initialPageParam: "",
     getNextPageParam: lastPage => lastPage.nextCursor,
   });
 };

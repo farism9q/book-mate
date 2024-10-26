@@ -33,10 +33,10 @@ export const ReviewBookModal = () => {
   const books = data.reviewBook?.books;
   const previousReview = data.reviewBook?.previousReview;
 
-  const { mutate: createReview, isLoading: isCreatingReview } =
+  const { mutate: createReview, isPending: isCreatingReview } =
     useCreateReview();
 
-  const { mutate: editReview, isLoading: isEditingReview } = useEditReview(
+  const { mutate: editReview, isPending: isEditingReview } = useEditReview(
     previousReview?.reviewId || ""
   );
 
