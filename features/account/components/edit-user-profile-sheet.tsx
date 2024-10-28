@@ -62,7 +62,7 @@ const formSchema = z
 export const EditUserProfileSheet = () => {
   const { data, isOpen, onClose } = useEditProfileSheet();
   const { user } = data;
-  const { mutate, isLoading: isPending } = useEditAccount();
+  const { mutate, isPending } = useEditAccount();
 
   const [avatar, setAvatar] = useState("");
   const [avatarKey, setAvatarKey] = useState("");
