@@ -19,7 +19,7 @@ export default function AddFavBook({ bookId }: AddBookProps) {
   const { onOpen } = useModal();
   const router = useRouter();
 
-  const { mutate: createFavBook, isLoading: isCreatingFavBook } =
+  const { mutate: createFavBook, isPending: isCreatingFavBook } =
     useCreateFavBook();
 
   const onClick = async () => {
