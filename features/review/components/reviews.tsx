@@ -71,7 +71,7 @@ export const Reviews = ({ tabClicked, whenScrolledTop }: Props) => {
     }
   }, [bottomRef.current, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  if (status === "loading") {
+  if (status === "pending") {
     return (
       <div className="divide-y-2">
         {Array.from({ length: 3 }).map((_, idx) => (

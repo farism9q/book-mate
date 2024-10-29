@@ -20,7 +20,7 @@ export const Settings = ({
   showUserBooksToggle,
   onShowUserBooksToggle,
 }: Props) => {
-  const { mutate, isLoading: isPending } = useEditAccountSettings();
+  const { mutate, isPending } = useEditAccountSettings();
 
   const handleShowUserBooksToggle = (status: boolean) => {
     onShowUserBooksToggle(status);

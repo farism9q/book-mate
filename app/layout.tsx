@@ -10,6 +10,7 @@ import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Check, Loader, X } from "lucide-react";
 import { SheetProvider } from "@/components/providers/sheet-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -59,6 +60,7 @@ export default function RootLayout({
                   ),
                 }}
               />
+
               {children}
             </ThemeProvider>
           </QueryProvider>

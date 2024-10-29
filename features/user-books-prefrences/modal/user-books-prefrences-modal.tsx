@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import {
   Dialog,
@@ -13,6 +13,7 @@ import { useModal } from "@/hooks/use-modal-store";
 import { useCreateUserBooksPrefrences } from "../api/use-create-books-prefrences";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const USER_BOOKS_GENRES = [
   Category.FICTION,
@@ -38,7 +39,6 @@ export const UserBooksPrefrencesModal = () => {
   const { mutate: createUserBooksPrefrences, isPending } =
     useCreateUserBooksPrefrences();
 
-  console.log("I am being rendered");
 
   const toggleCategory = (category: Category) => {
     setSelectedCategories(prev =>
@@ -49,6 +49,10 @@ export const UserBooksPrefrencesModal = () => {
   };
 
   const handleSave = () => {
+    if (selectedCategories.length === 0) {
+      toast.info("Please select your prefrences");
+      return;
+    }
     createUserBooksPrefrences(
       { categories: selectedCategories },
       {

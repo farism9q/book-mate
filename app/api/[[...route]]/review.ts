@@ -110,7 +110,6 @@ const app = new Hono()
       take: 10,
     });
 
-    console.log({ highestRatedBooks });
     return c.json({ highestRatedBooks }, 200);
   })
   .post(

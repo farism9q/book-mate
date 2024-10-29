@@ -1,9 +1,11 @@
 import { client } from "@/lib/hono";
+import { suggestedBooksCacheTime } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 
 export function useGetUserBooksGenres() {
   const { data, isLoading, error, failureCount, isSuccess } = useQuery({
     queryKey: ["user-genre-prefrences"],
+    staleTime: suggestedBooksCacheTime,
     queryFn: async () => {
       const response = await client.api["user-books-prefrences"].$get();
 

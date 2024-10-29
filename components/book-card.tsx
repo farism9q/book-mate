@@ -49,7 +49,7 @@ export const BookCard = ({ book, favBookId, favBookStatus }: BookCardProps) => {
 
   const { mutate: createFavBook } = useCreateFavBook();
 
-  const { mutate: editFavBookStatus, isLoading: editFavBookStatusLoading } =
+  const { mutate: editFavBookStatus, isPending: editFavBookStatusLoading } =
     useEditFavBook();
 
   const onBookStatusChange = async (status: FavoriteBookStatus) => {

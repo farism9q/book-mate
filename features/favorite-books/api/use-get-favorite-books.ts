@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { client } from "@/lib/hono";
+import { suggestedBooksCacheTime } from "@/lib/utils";
 
 export const useGetFavoriteBooks = ({
   filter,
@@ -13,6 +14,7 @@ export const useGetFavoriteBooks = ({
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["favorite-books", filter, sort],
+    staleTime: suggestedBooksCacheTime,
 
     queryFn: async () => {
       const response = await client.api["favorite-books"].$get({

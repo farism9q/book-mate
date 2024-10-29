@@ -9,7 +9,7 @@ export function useGetConversationMessages({ conversationId }: ChatQueryProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useInfiniteQuery({
       queryKey: [`chat-${conversationId}`],
-      queryFn: async ({ pageParam = undefined }) => {
+      queryFn: async ({ pageParam }) => {
         const response = await client.api.conversations[
           ":conversationId"
         ].messages.$get({
@@ -35,6 +35,7 @@ export function useGetConversationMessages({ conversationId }: ChatQueryProps) {
 
         return { messages: parsedMessages, nextCursor };
       },
+      initialPageParam: "",
       getNextPageParam: lastPage => lastPage?.nextCursor,
     });
 

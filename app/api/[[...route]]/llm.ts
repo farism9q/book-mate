@@ -28,8 +28,6 @@ const app = new Hono().post(
 
     const { prompt, system } = await c.req.json();
 
-    console.log({ promptInLLM: prompt });
-
     if (!prompt) {
       throw new HTTPException(400, {
         res: c.json({ error: "Prompt is required" }, 400),
@@ -48,8 +46,6 @@ const app = new Hono().post(
         ),
       }),
     });
-
-    console.log({ result: result.object.books });
 
     return c.json({
       suggestedBooks: result.object.books,

@@ -21,7 +21,7 @@ export const RemoveFavoriteBookModal = () => {
   const isModalOpen = isOpen && type === "removeFavBook";
   const { bookId, favBookId } = data;
 
-  const { mutate: deleteFavBook, isLoading: isDeleteFavBookLoading } =
+  const { mutate: deleteFavBook, isPending: isDeleteFavBookLoading } =
     useDeleteFavBook();
 
   const onClick = async () => {

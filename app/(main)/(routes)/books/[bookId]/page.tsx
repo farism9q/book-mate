@@ -6,10 +6,11 @@ import { useGetBooks } from "@/features/books/api/use-get-books";
 import { useGetFavoriteBooks } from "@/features/favorite-books/api/use-get-favorite-books";
 import { useGetSubscription } from "@/features/subscription/api/use-get-subscription";
 import { useGetUserLimit } from "@/features/user-limit/api/use-get-user-limit";
+import { useCreateFavBook } from "@/features/favorite-books/api/use-create-fav-book";
 
 import { cn } from "@/lib/utils";
 import { extractCategories } from "@/lib/utils";
-import { USER_FREE_LIMIT } from "@/constants";
+import { ErrorType, USER_FREE_LIMIT } from "@/constants";
 
 import { Star } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -19,6 +20,11 @@ import AddFavBook from "@/app/(main)/(routes)/books/[bookId]/add-fav-book";
 import ChatBook from "@/features/books/components/chat-book";
 import BookDescription from "@/components/book-description";
 import UserFreeLimit from "@/components/user-free-limit";
+import ForYouBooks from "@/components/for-you-books";
+import { toast } from "sonner";
+
+import { useModal } from "@/hooks/use-modal-store";
+import { useRouter } from "next/navigation";
 
 interface BookDetailPageProps {
   params: {
@@ -30,7 +36,8 @@ const font = Staatliches({ subsets: ["latin"], weight: "400" });
 
 const BookTitlePage = ({ params }: BookDetailPageProps) => {
   const { bookId } = params;
-
+  const { onOpen } = useModal();
+  const router = useRouter();
   const { data: booksData, isLoading: isLoadingBook } = useGetBooks({
     booksId: [bookId],
     queryKey: [bookId],
@@ -42,6 +49,38 @@ const BookTitlePage = ({ params }: BookDetailPageProps) => {
   const { data: isSubscribed } = useGetSubscription();
 
   const { data: userLimit } = useGetUserLimit();
+
+  const {
+    mutate: createFavBook,
+    isPending: isCreatingFavBook,
+    status,
+  } = useCreateFavBook();
+
+  const onClick = async () => {
+    toast.loading("Adding to favorite");
+    createFavBook(
+      { bookId },
+      {
+        onSuccess(data) {
+          if ("type" in data && data.type === ErrorType.ALREADY_FAV) {
+            toast.error(data.message);
+            router.push(`/books/${bookId}`);
+            return;
+          }
+          if ("type" in data && data.type === ErrorType.UPGRADE_PLAN) {
+            toast.error(data.message);
+            onOpen("upgradePlan");
+            return;
+          }
+
+          toast.success("Added to favorite");
+        },
+        onSettled() {
+          toast.dismiss();
+        },
+      }
+    );
+  };
 
   if (isLoadingBook || isLoadingFavBooks) {
     return <LoadingSkeleton />;
@@ -119,7 +158,10 @@ const BookTitlePage = ({ params }: BookDetailPageProps) => {
             {dontShowBookActions ? (
               <UserFreeLimit userLimitCount={userLimit} />
             ) : !userFav ? (
-              <AddFavBook bookId={book.id} />
+              <AddFavBook
+                onClick={onClick}
+                isCreatingFavBook={isCreatingFavBook}
+              />
             ) : (
               <ChatBook bookId={book.id} />
             )}
@@ -144,6 +186,7 @@ const BookTitlePage = ({ params }: BookDetailPageProps) => {
             </div>
           </div>
         </div>
+        {status === "success" && <ForYouBooks sample />}
       </div>
     </>
   );

@@ -7,29 +7,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useState, useCallback, memo } from "react";
 import { Book } from "@/types/book";
-import { UserBookPreferences } from "@prisma/client";
+
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-
-type LocalUserBookPreferences = Pick<
-  UserBookPreferences,
-  "id" | "userId" | "genres"
-> & {
-  createdAt: string;
-  updatedAt: string;
-};
+import Link from "next/link";
+import { NoBookCover } from "./no-book-cover";
 
 type ForYouBooksProps = {
-  highRatedBooks: Book[];
-  favoriteBooks: Book[];
-  genrePrefrences: LocalUserBookPreferences;
   sample?: boolean;
 };
 
 const ForYouBooks = memo(function ForYouBooks({
-  highRatedBooks,
-  favoriteBooks,
-  genrePrefrences,
   sample = false,
 }: ForYouBooksProps) {
   const router = useRouter();
@@ -41,9 +29,6 @@ const ForYouBooks = memo(function ForYouBooks({
     error,
   } = useGetUserRecommendedBooks({
     page,
-    highRatedBooks,
-    favoriteBooks,
-    genrePrefrences,
   });
 
   const handlePrevPage = useCallback(() => {
@@ -62,21 +47,19 @@ const ForYouBooks = memo(function ForYouBooks({
 
   if (error) return <div>Error</div>;
 
-  if (!books) return null;
-
   if (sample) {
     return (
       <div className="px-4 py-8">
         <div className="flex items-center justify-between gap-4 mb-6">
-          <h2 className="text-2xl font-bold">Recommended for You</h2>
-          <div className="mt-4 flex justify-center">
-            <button onClick={() => router.push("/recommended")}>
-              View All Books
-            </button>
+          <div className="flex items-center justify-between px-2 bg-gradient-to-l to-primary/5 via-primary/30 from-primary/70 size-full rounded-r-md">
+            <h2 className="text-gradient text-2xl font-bold">
+              Recommended for You
+            </h2>
+            <Link href={"/recommended"}>View All</Link>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {books.slice(0, 6).map(book => (
+          {books?.slice(0, 6).map(book => (
             <motion.div
               key={book.id}
               className="relative group"
@@ -84,12 +67,16 @@ const ForYouBooks = memo(function ForYouBooks({
               transition={{ duration: 0.2 }}
             >
               <div className="relative aspect-[2/3] rounded-md overflow-hidden">
-                <Image
-                  src={book.volumeInfo.imageLinks?.thumbnail || "/no-image.png"}
-                  alt={book.volumeInfo.title}
-                  fill
-                  className="object-cover"
-                />
+                {book.volumeInfo.imageLinks?.thumbnail ? (
+                  <Image
+                    src={book.volumeInfo.imageLinks?.thumbnail}
+                    alt={book.volumeInfo.title}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <NoBookCover />
+                )}
                 <button
                   onClick={e => {
                     e.stopPropagation();
@@ -97,7 +84,7 @@ const ForYouBooks = memo(function ForYouBooks({
                   }}
                   className="z-50 absolute top-2 right-2 p-2 bg-black/50 hover:bg-black/70 rounded-full transition-colors"
                 >
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight color="#ffffff" className="w-4 h-4" />
                 </button>
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300">
                   <div className="absolute bottom-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
@@ -127,7 +114,11 @@ const ForYouBooks = memo(function ForYouBooks({
 
   return (
     <div className="px-4 py-8">
-      <h2 className="text-2xl font-bold mb-6">Recommended for You</h2>
+      <div className="flex-1 bg-gradient-to-l to-primary/5 via-primary/30 from-primary/70 size-full rounded-r-md mb-6">
+        <h2 className="text-gradient text-2xl font-bold">
+          Recommended for You
+        </h2>
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {books?.map(book => (
           <motion.div

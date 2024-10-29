@@ -1,3 +1,7 @@
+import { useGetFavoriteBooks } from "@/features/favorite-books/api/use-get-favorite-books";
+import { useGetUserHighRatedBooks } from "@/features/review/api/use-get-user-high-rated-books";
+import { useGetUserBooksGenres } from "@/features/user-books-prefrences/api/use-get-user-books-genres";
+
 import { client } from "@/lib/hono";
 import { suggestedBooksCacheTime } from "@/lib/utils";
 import { Book } from "@/types/book";
@@ -25,8 +29,6 @@ async function getUserRecommendedBooks({
   genrePrefrences: LocalUserBookPreferences;
   previousSuggestedBooks: Book[] | undefined;
 }) {
-  console.log({ highRatedBooks, favoriteBooks, genrePrefrences });
-
   let userGenrePrefrences: LocalUserBookPreferences | undefined;
   if (highRatedBooks.length === 0 && favoriteBooks.length === 0) {
     userGenrePrefrences = genrePrefrences;
@@ -74,17 +76,7 @@ async function getUserRecommendedBooks({
   return fetchedBooks;
 }
 
-export function useGetUserRecommendedBooks({
-  page,
-  highRatedBooks,
-  favoriteBooks,
-  genrePrefrences,
-}: {
-  page: number;
-  highRatedBooks: Book[];
-  favoriteBooks: Book[];
-  genrePrefrences: LocalUserBookPreferences;
-}) {
+export function useGetUserRecommendedBooks({ page }: { page: number }) {
   const clientQuery = useQueryClient();
 
   const previousSuggestedBooks = clientQuery.getQueryData<Book[]>([
@@ -92,15 +84,29 @@ export function useGetUserRecommendedBooks({
     page - 1,
   ]);
 
+  const { data: highRatedBooks, isLoading: isHighRatedBooksLoading } =
+    useGetUserHighRatedBooks();
+  const { data: favoriteBooks, isLoading: isFavoriteBooksLoading } =
+    useGetFavoriteBooks({
+      sort: "desc",
+    });
+
+  const { data: userBooksGenres, isLoading: isUserBooksGenresLoading } =
+    useGetUserBooksGenres();
+
+  const enabled =
+    userBooksGenres && favoriteBooks?.books && highRatedBooks?.books;
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["user-recommended-books", page],
     staleTime: suggestedBooksCacheTime,
+    enabled: !!enabled,
     queryFn: () =>
       getUserRecommendedBooks({
         page,
-        highRatedBooks,
-        favoriteBooks,
-        genrePrefrences,
+        highRatedBooks: highRatedBooks?.books!,
+        favoriteBooks: favoriteBooks?.books!,
+        genrePrefrences: userBooksGenres!,
         previousSuggestedBooks,
       }),
   });
@@ -116,9 +122,9 @@ export function useGetUserRecommendedBooks({
 
       return getUserRecommendedBooks({
         page: page + 1,
-        highRatedBooks,
-        favoriteBooks,
-        genrePrefrences,
+        highRatedBooks: highRatedBooks?.books!,
+        favoriteBooks: favoriteBooks?.books!,
+        genrePrefrences: userBooksGenres!,
         previousSuggestedBooks,
       });
     },
@@ -152,7 +158,7 @@ function prepareLLMPromt({
     prompt += `The user likes ${userGenrePrefrences.join(", ")} genre.`;
   }
 
-  prompt = `You are a book recommendation system. You are given a list of books and a user's genre preferences. Your task is to suggest 10 books similar to user taste.
+  prompt = `You are a book recommendation system. You are given a list of books and a user's genre preferences. Your task is to suggest 12 books similar to user taste.
   ${books
     .map(
       book =>
