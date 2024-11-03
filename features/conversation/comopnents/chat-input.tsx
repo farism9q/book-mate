@@ -20,6 +20,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { CornerDownRight, Plus, X } from "lucide-react";
+import { useGetSubscription } from "@/features/subscription/api/use-get-subscription";
 
 const formSchema = z.object({
   question: z.string().min(1),
@@ -61,12 +62,14 @@ const ChatInput = ({ onSubmitMessage, isStreaming, bookChatLimit }: Props) => {
   const { mutate: removeChatFile, isPending: isRemovingFiles } =
     useRemoveChatFile();
 
+  const { data: isSubscribed, isLoading } = useGetSubscription();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
-    if (bookChatLimit >= CHAT_LIMIT_PER_BOOK) {
+    if (bookChatLimit >= CHAT_LIMIT_PER_BOOK && !isSubscribed && !isLoading) {
       toast.error("You have exceeded the chat limit");
       return;
     }

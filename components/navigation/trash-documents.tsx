@@ -59,7 +59,6 @@ const TrashDocuments = () => {
         <DropdownMenuContent className="w-56 space-y-1 rounded-lg h-52 overflow-auto no-scrollbar bg-transparent">
           {documents?.map(document => (
             <SidebarMenuItem
-              key={document.id}
               className={cn(
                 "flex items-center gap-2",
                 document.id === path.split("/").at(-1) && "bg-sidebar-accent",
@@ -67,11 +66,11 @@ const TrashDocuments = () => {
                   "opacity-50 cursor-not-allowed"
               )}
             >
-              <SidebarMenuButton asChild>
-                <Link href={`/documents/${document.id}`}>
+              <Link href={`/documents/${document.id}`}>
+                <SidebarMenuButton asChild>
                   <span>{document.title}</span>
-                </Link>
-              </SidebarMenuButton>
+                </SidebarMenuButton>
+              </Link>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

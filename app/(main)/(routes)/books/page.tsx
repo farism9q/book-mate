@@ -43,7 +43,11 @@ const InitialPage = () => {
     useGetUserBooksGenres();
 
   useEffect(() => {
-    if (!userBooksGenres && !isUserBooksGenresLoading) {
+    if (
+      !!userBooksGenres &&
+      !isUserBooksGenresLoading &&
+      userBooksGenres.genres?.length === 0
+    ) {
       onOpen("userBooksPrefrences");
       setHasOpenedModal(true);
     }

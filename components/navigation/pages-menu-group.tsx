@@ -2,7 +2,6 @@
 
 import { useCreateDocument } from "@/features/document/api/use-create-document";
 import { useGetUserDocuments } from "@/features/document/api/use-get-user-documents";
-import { useDeleteDocument } from "@/features/document/api/use-delete-document";
 import { useEditDocument } from "@/features/document/api/use-edit-document";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -70,16 +69,14 @@ export const PagesMenuGroup = () => {
   return (
     // When its collapsible, no purpose of showing the icon
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarMenuButton className="pl-0">
-        <SidebarGroupLabel>Documents</SidebarGroupLabel>
+      <SidebarGroupLabel>Documents</SidebarGroupLabel>
 
-        <SidebarGroupAction
-          onClick={onDocumentCreate}
-          disabled={isCreatingDocument}
-        >
-          <Plus />
-        </SidebarGroupAction>
-      </SidebarMenuButton>
+      <SidebarGroupAction
+        onClick={onDocumentCreate}
+        disabled={isCreatingDocument}
+      >
+        <Plus />
+      </SidebarGroupAction>
 
       <SidebarMenu>
         {isFetchingDocuments && (
@@ -89,7 +86,8 @@ export const PagesMenuGroup = () => {
         )}
 
         {!isFetchingDocuments &&
-          documents?.slice(0, 6)?.map(document => (
+          documents &&
+          documents.slice(0, 6)?.map(document => (
             <SidebarMenuItem
               key={document.id}
               className={cn(

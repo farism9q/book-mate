@@ -23,11 +23,7 @@ const ForYouBooks = memo(function ForYouBooks({
   const router = useRouter();
   const [page, setPage] = useState(1);
 
-  const {
-    data: books,
-    isLoading,
-    error,
-  } = useGetUserRecommendedBooks({
+  const { data: books, isLoading } = useGetUserRecommendedBooks({
     page,
   });
 
@@ -45,8 +41,8 @@ const ForYouBooks = memo(function ForYouBooks({
 
   if (isLoading) return <SkeletonLoading />;
 
-  if (error) return <div>Error</div>;
-
+  // This will be used to display a sample of recommended books
+  // On "books" and "book details" pages
   if (sample) {
     return (
       <div className="px-4 py-8">
@@ -184,12 +180,23 @@ const ForYouBooks = memo(function ForYouBooks({
 
 function SkeletonLoading() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-      {[...Array(6)].map((_, index) => (
-        <div key={index} className="aspect-[2/3]">
-          <Skeleton className="w-full h-full rounded-md" />
+    <div>
+      <div className="flex items-center justify-between gap-4 mb-6">
+        <div className="flex items-center justify-between px-2 bg-gradient-to-l to-primary/5 via-primary/30 from-primary/70 size-full rounded-r-md">
+          <h2 className="text-gradient text-2xl font-bold">
+            Recommended for You
+          </h2>
+          <Link href={"/recommended"}>View All</Link>
         </div>
-      ))}
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {[...Array(6)].map((_, index) => (
+          <div key={index} className="aspect-[2/3]">
+            <Skeleton className="w-full h-full rounded-md" />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

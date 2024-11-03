@@ -97,10 +97,10 @@ function SidebarPage() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <FavoriteBooksMenuItem
+              {/* <FavoriteBooksMenuItem
                 isActive={pathname === "/favorite-books"}
-              />
-              <ConversationsMenuItem isActive={pathname === "/conversations"} />
+              /> */}
+              {/* <ConversationsMenuItem isActive={pathname === "/conversations"} /> */}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
