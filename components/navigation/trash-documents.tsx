@@ -59,6 +59,7 @@ const TrashDocuments = () => {
         <DropdownMenuContent className="w-56 space-y-1 rounded-lg h-52 overflow-auto no-scrollbar bg-transparent">
           {documents?.map(document => (
             <SidebarMenuItem
+              key={document.id}
               className={cn(
                 "flex items-center gap-2",
                 document.id === path.split("/").at(-1) && "bg-sidebar-accent",

@@ -91,6 +91,7 @@ export const PagesMenuGroup = () => {
         {!isFetchingDocuments &&
           documents?.slice(0, 6)?.map(document => (
             <SidebarMenuItem
+              key={document.id}
               className={cn(
                 document.id === path.split("/").pop() && "bg-sidebar-accent",
                 isDeletingDocument === document.id &&
@@ -134,6 +135,7 @@ export const PagesMenuGroup = () => {
               <DropdownMenuContent className="w-56 space-y-1 rounded-lg h-52 overflow-auto no-scrollbar bg-transparent">
                 {documents?.slice(6).map(document => (
                   <SidebarMenuItem
+                    key={document.id}
                     className={cn(
                       "flex items-center gap-2",
                       document.id === path.split("/").at(-1) &&
