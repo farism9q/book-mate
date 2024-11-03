@@ -67,7 +67,7 @@ const TrashDocuments = () => {
               )}
             >
               <SidebarMenuButton asChild>
-                <Link href={`/document/${document.id}`}>
+                <Link href={`/documents/${document.id}`}>
                   <span>{document.title}</span>
                 </Link>
               </SidebarMenuButton>

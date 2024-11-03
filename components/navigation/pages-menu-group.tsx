@@ -46,7 +46,7 @@ export const PagesMenuGroup = () => {
   const onDocumentCreate = async () => {
     createDocument(undefined, {
       onSuccess: document => {
-        router.push(`/document/${document.id}`);
+        router.push(`/documents/${document.id}`);
       },
     });
   };
@@ -63,7 +63,7 @@ export const PagesMenuGroup = () => {
     setIsDeletingDocument(documentId);
 
     if (documents && documents.length > 0) {
-      router.push(`/document/${documents[0].id}`);
+      router.push(`/documents/${documents[0].id}`);
     }
   };
 
@@ -98,7 +98,7 @@ export const PagesMenuGroup = () => {
               )}
             >
               <SidebarMenuButton asChild>
-                <Link href={`/document/${document.id}`}>
+                <Link href={`/documents/${document.id}`}>
                   <span>{document.title}</span>
                 </Link>
               </SidebarMenuButton>
@@ -143,7 +143,7 @@ export const PagesMenuGroup = () => {
                     )}
                   >
                     <SidebarMenuButton asChild>
-                      <Link href={`/document/${document.id}`}>
+                      <Link href={`/documents/${document.id}`}>
                         <span>{document.title}</span>
                       </Link>
                     </SidebarMenuButton>
