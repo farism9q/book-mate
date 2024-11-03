@@ -1,5 +1,7 @@
 "use client";
 
+import { useGetUserBooksGenres } from "@/features/user-books-prefrences/api/use-get-user-books-genres";
+
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
@@ -14,7 +16,6 @@ import BookCardSkeleton from "@/components/book-card-skeleton";
 import { BookCard } from "@/components/book-card";
 import { useGetBooks } from "@/features/books/api/use-get-books";
 import ForYouBooks from "@/components/for-you-books";
-import { useGetUserBooksGenres } from "@/features/user-books-prefrences/api/use-get-user-books-genres";
 
 const InitialPage = () => {
   const searchParams = useSearchParams();

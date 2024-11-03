@@ -40,6 +40,7 @@ import { cn } from "@/lib/utils";
 import { ConversationsMenuItem } from "./conversations-menu-item";
 import { SidebarCustomTrigger } from "./sidebar-trigger";
 import MobileSidebar from "./mobile-sidebar";
+import { PagesMenuGroup } from "./pages-menu-group";
 
 export function AppSidebar() {
   const { isMobile } = useSidebar();
@@ -63,6 +64,7 @@ function SidebarPage() {
 
   const { sessionId } = useAuth();
   const { open, isMobile, state } = useSidebar();
+
   const { data: userLimitCount, isLoading: isLoadingUserLimit } =
     useGetUserLimit();
   const { data: isSubscribed, isLoading: isLoadingSubscription } =
@@ -103,6 +105,9 @@ function SidebarPage() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarSeparator />
+
+        {/* Pages group */}
+        <PagesMenuGroup />
 
         <SidebarFooter className="mt-auto px-2">
           {(open || (isMobile && state === "collapsed")) && (
@@ -221,7 +226,7 @@ function SidebarPage() {
               "[[data-side=left]:-right-2"
             )}
           >
-            <SidebarCustomTrigger className="absolute bottom-1/2" />
+            <SidebarCustomTrigger className="absolute bottom-[15%]" />
           </div>
         )}
       </SidebarContent>

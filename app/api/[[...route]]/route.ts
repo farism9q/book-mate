@@ -8,6 +8,7 @@ import review from "./review";
 import userLimit from "./user-limit";
 import llm from "./llm";
 import userBooksPrefrences from "./user-books-prefrences";
+import document from "./document";
 
 export const runtime = "nodejs";
 
@@ -21,7 +22,8 @@ const routes = app
   .route("/review", review)
   .route("/user-limit", userLimit)
   .route("/llm", llm)
-  .route("/user-books-prefrences", userBooksPrefrences);
+  .route("/user-books-prefrences", userBooksPrefrences)
+  .route("/document", document);
 
 export const GET = handle(app);
 export const POST = handle(app);

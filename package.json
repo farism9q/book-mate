@@ -13,6 +13,9 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.37",
+    "@blocknote/core": "^0.18.0",
+    "@blocknote/mantine": "^0.18.1",
+    "@blocknote/react": "^0.18.1",
     "@clerk/backend": "^1.2.2",
     "@clerk/nextjs": "^4.31.6",
     "@hono/clerk-auth": "^2.0.0",

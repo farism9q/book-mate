@@ -1,7 +1,7 @@
-import { getFileUrl, uploadFile } from "@/actions/supabase";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { usePreviewFiles } from "../hooks/use-preview-files";
+import { SupabaseFrom, getFileUrl, uploadFile } from "@/actions/supabase";
+import { toast } from "sonner";
 
 export const useUploadChatFile = () => {
   const { addFilesUrls } = usePreviewFiles();
@@ -12,12 +12,18 @@ export const useUploadChatFile = () => {
       for (const file of files) {
         const { path } = await uploadFile({
           file,
+          from: SupabaseFrom.ChatFiles,
         });
 
         uploadedFiles.push(path);
       }
 
-      const fileUrls = uploadedFiles.map(file => getFileUrl(file));
+      const fileUrls = uploadedFiles.map(file =>
+        getFileUrl({
+          filePath: file,
+          from: SupabaseFrom.ChatFiles,
+        })
+      );
 
       addFilesUrls(fileUrls);
 

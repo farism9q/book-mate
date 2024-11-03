@@ -33,6 +33,7 @@ model User {
   conversations Conversation[]
   reviews Review[]
   changelogReactions ChangelogReaction[]
+  documents Document[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -198,6 +199,25 @@ model UserSubscription {
 
 }
 
+model Document {
+  id String @id @default(uuid())
+  title String
+  userId String
+  user User @relation(fields: [userId], references: [userClerkId], onDelete: Cascade)
+  content String? @db.Text 
+  coverImage String?
+  isPublic Boolean @default(false)
+  isArchived Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Index by currentlly logged in user
+  @@index([userId])
+
+}
+
+// CHANGELOG
 enum ChangelogCategory {
   IMPROVEMENT
   BUG_FIX

@@ -1,0 +1,4 @@
+/* Changes for dark mode */
+.bn-container[data-editor-theming-css][data-color-scheme="dark"] {
+  --bn-colors-editor-background: #040404;
+}

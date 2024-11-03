@@ -18,11 +18,9 @@ export function SidebarCustomTrigger({ className }: SidebarTriggerProps) {
       variant="ghost"
       size="icon"
       className={cn(
-        "h-12 w-5",
-        open
-          ? "right-2 rounded-l-full rounded-r-none"
-          : "left-2 rounded-l-none rounded-r-full",
-        "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground",
+        "size-6",
+        open ? "-right-1" : "-left-1",
+        "rounded-full bg-sidebar-foreground/10 text-sidebar-foreground/70",
         className
       )}
       onClick={toggleSidebar}

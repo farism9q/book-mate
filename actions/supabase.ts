@@ -1,6 +1,19 @@
 import { supabase } from "@/lib/db";
 
-export async function uploadFile({ file }: { file: File }) {
+export enum SupabaseFrom {
+  ChatFiles = "chat-files",
+  DocumentCovers = "document-covers",
+}
+
+export async function uploadFile({
+  file,
+  fileName,
+  from,
+}: {
+  file: File;
+  fileName?: string;
+  from: SupabaseFrom;
+}) {
   try {
     // Check file size
     const fileSize = file.size;
@@ -11,9 +24,8 @@ export async function uploadFile({ file }: { file: File }) {
     }
 
     const { data, error } = await supabase.storage
-      .from("chat-files")
-      .upload(`${Date.now()}-${file.name}`, file, {
-        cacheControl: "3600",
+      .from(from)
+      .upload(fileName || `${Date.now()}-${file.name}`, file, {
         upsert: true,
         contentType: file.type,
       });
@@ -28,16 +40,26 @@ export async function uploadFile({ file }: { file: File }) {
   }
 }
 
-export function getFileUrl(filePath: string) {
-  const { data } = supabase.storage.from("chat-files").getPublicUrl(filePath);
+export function getFileUrl({
+  filePath,
+  from,
+}: {
+  filePath: string;
+  from: SupabaseFrom;
+}) {
+  const { data } = supabase.storage.from(from).getPublicUrl(filePath);
 
   return data.publicUrl;
 }
 
-export async function removeFile(filePath: string) {
-  const { data, error } = await supabase.storage
-    .from("chat-files")
-    .remove([filePath]);
+export async function removeFile({
+  filePath,
+  from,
+}: {
+  filePath: string;
+  from: SupabaseFrom;
+}) {
+  const { data, error } = await supabase.storage.from(from).remove([filePath]);
 
   if (error) {
     throw new Error(`File deletion failed`);
