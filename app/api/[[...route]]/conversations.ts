@@ -314,7 +314,6 @@ const app = new Hono()
 
         return c.json({ success: true }, 201);
       } catch (error) {
-        console.error("Error in conversation post:", error);
         throw new HTTPException(500, {
           res: c.json({ error: "Internal Server Error" }, 500),
         });
