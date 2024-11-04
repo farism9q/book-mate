@@ -53,11 +53,11 @@ export const Content = ({ document }: ContentProps) => {
   };
 
   return (
-    <div className="mt-6 pt-4 pb-40 pl-20 pr-4">
+    <div className="px-4 sm:px-10 py-6 mt-6 pt-4 pb-40">
       <Textarea
         value={value}
         onChange={e => onInput(e.target.value)}
-        className="break-words text-5xl font-bold bg-transparent outline-none resize-none border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 no-scrollbar"
+        className="pl-10 text-3xl sm:text-5xl mb-4 break-words font-bold bg-transparent outline-none resize-none border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 no-scrollbar"
       />
 
       <BlockNoteView
