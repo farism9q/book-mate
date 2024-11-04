@@ -97,6 +97,11 @@ export function useGetUserRecommendedBooks({ page }: { page: number }) {
   const enabled =
     userBooksGenres && favoriteBooks?.books && highRatedBooks?.books;
 
+  const isLoadingRelatedData =
+    isHighRatedBooksLoading ||
+    isFavoriteBooksLoading ||
+    isUserBooksGenresLoading;
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["user-recommended-books", page],
     staleTime: suggestedBooksCacheTime,
@@ -132,7 +137,7 @@ export function useGetUserRecommendedBooks({ page }: { page: number }) {
 
   return {
     data,
-    isLoading,
+    isLoading: isLoading || isLoadingRelatedData,
     error,
   };
 }
