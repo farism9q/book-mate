@@ -12,11 +12,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { userId } = useAuth();
-  const { onOpen } = useModal();
-
-  if (!userId) {
-    return redirect("/");
-  }
+  const { onOpen, onClose } = useModal();
 
   const { data: userBooksGenres, isLoading: isUserBooksGenresLoading } =
     useGetUserBooksGenres();
@@ -29,6 +25,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       onOpen("userBooksPrefrences");
     }
   }, [onOpen, isUserBooksGenresLoading, userBooksGenres]);
+
+  if (!userId) {
+    onClose();
+    return redirect("/");
+  }
 
   return (
     <SidebarProvider>
