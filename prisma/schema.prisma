@@ -50,6 +50,7 @@ model UserProfileImage {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([userId])
 }
 
 model UserSettings {
@@ -62,6 +63,8 @@ model UserSettings {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model UserBookPreferences {
@@ -73,6 +76,8 @@ model UserBookPreferences {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 
@@ -99,6 +104,8 @@ model Favorite {
 
   @@unique([userId, bookId])
 
+  @@index([userId])
+
 }
 
 model Review {
@@ -116,6 +123,8 @@ model Review {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, bookId])
+
+  @@index([userId])
 }
 
 model Conversation {
@@ -132,6 +141,7 @@ model Conversation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([userId])
 
  }
 
@@ -147,6 +157,8 @@ model Conversation {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([conversationId])
   
  }
 
@@ -178,6 +190,8 @@ model UserLimit {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([userId])
+
 }
 
 enum UserSubscriptionType {
@@ -196,6 +210,7 @@ model UserSubscription {
   stripePriceId String? @unique @map(name:"stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end") 
 
+  @@index([userId])
 
 }
 
@@ -267,5 +282,8 @@ model ChangelogReaction {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, changelogId])
+
+  @@index([userId])
+  @@index([changelogId])
 
 }

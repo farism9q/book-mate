@@ -89,6 +89,7 @@ export function useGetUserRecommendedBooks({ page }: { page: number }) {
   const { data: favoriteBooks, isLoading: isFavoriteBooksLoading } =
     useGetFavoriteBooks({
       sort: "desc",
+      limit: "5",
     });
 
   const { data: userBooksGenres, isLoading: isUserBooksGenresLoading } =

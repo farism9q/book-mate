@@ -205,7 +205,7 @@ function SidebarPage() {
                       e.stopPropagation();
                       setInterval(() => {
                         signOut();
-                      }, 2000);
+                      }, 1000);
                     }}
                   >
                     <DropdownMenuItem>

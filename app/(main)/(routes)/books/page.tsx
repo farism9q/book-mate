@@ -19,7 +19,7 @@ import ForYouBooks from "@/components/for-you-books";
 
 const InitialPage = () => {
   const searchParams = useSearchParams();
-  const { onOpen } = useModal();
+  const { onOpen, type } = useModal();
   const [hasOpenedModal, setHasOpenedModal] = useState(false);
 
   const cameFromSubscription = searchParams.get("subscription");
@@ -44,17 +44,6 @@ const InitialPage = () => {
 
   useEffect(() => {
     if (
-      !!userBooksGenres &&
-      !isUserBooksGenresLoading &&
-      userBooksGenres.genres?.length === 0
-    ) {
-      onOpen("userBooksPrefrences");
-      setHasOpenedModal(true);
-    }
-  }, [onOpen, hasOpenedModal, isUserBooksGenresLoading, userBooksGenres]);
-
-  useEffect(() => {
-    if (
       (cameFromSubscription === subscriptionType.SUBSCRIBE.toLowerCase() ||
         cameFromSubscription === subscriptionType.UPDATE.toLowerCase()) &&
       !hasOpenedModal
@@ -71,7 +60,10 @@ const InitialPage = () => {
           <SearchBooksAction isFetching={isLoading} type="initial" />
         </div>
 
-        <ForYouBooks sample />
+        {/* Stop showing recommended books if user is selecting prefrences */}
+        {type !== "userBooksPrefrences" && !isUserBooksGenresLoading && (
+          <ForYouBooks sample />
+        )}
 
         {/* Is loading */}
         {isLoading && <LoadingSkeleton />}

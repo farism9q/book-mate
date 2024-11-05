@@ -6,14 +6,16 @@ import { suggestedBooksCacheTime } from "@/lib/utils";
 export const useGetFavoriteBooks = ({
   filter,
   sort,
+  limit,
 }: {
   filter?: string;
   sort?: string;
+  limit?: string;
 }) => {
   const queryClient = useQueryClient();
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["favorite-books", filter, sort],
+    queryKey: ["favorite-books", filter, sort, limit],
     staleTime: suggestedBooksCacheTime,
 
     queryFn: async () => {
@@ -21,6 +23,7 @@ export const useGetFavoriteBooks = ({
         query: {
           filter,
           sort,
+          limit,
         },
       });
 

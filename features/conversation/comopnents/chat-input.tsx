@@ -69,7 +69,7 @@ const ChatInput = ({ onSubmitMessage, isStreaming, bookChatLimit }: Props) => {
   const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
-    if (bookChatLimit >= CHAT_LIMIT_PER_BOOK && !isSubscribed && !isLoading) {
+    if (bookChatLimit >= CHAT_LIMIT_PER_BOOK && !isSubscribed) {
       toast.error("You have exceeded the chat limit");
       return;
     }

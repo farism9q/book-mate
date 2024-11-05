@@ -6,7 +6,7 @@ export const NoBookCover = () => {
       <div className="flex flex-col justify-center items-center gap-y-4 size-full">
         <ImageIcon className="size-10" />
 
-        <span>No Book Cover Available</span>
+        <span className="text-center">No Book Cover Available</span>
       </div>
     </div>
   );

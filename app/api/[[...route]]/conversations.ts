@@ -36,9 +36,7 @@ const app = new Hono()
         const conversations = await db.conversation.findMany({
           where: {
             userId: auth.userId,
-            deleted: {
-              not: true,
-            },
+            deleted: false,
           },
           include: {
             messages: true,

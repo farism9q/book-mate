@@ -17,6 +17,11 @@ export const ConversationsMenuItem = ({
   isActive,
 }: ConversationsMenuItemProps) => {
   const { data: conversations, isLoading } = useGetBookConversations({});
+
+  const nbConversationsWithMessages = conversations?.conversations.filter(
+    conversation => conversation.messages.length > 0
+  ).length;
+
   return (
     <SidebarMenuItem key="favorite-books">
       <SidebarMenuButton asChild isActive={isActive} tooltip={"Conversations"}>
@@ -27,7 +32,7 @@ export const ConversationsMenuItem = ({
       </SidebarMenuButton>
 
       <SidebarMenuBadge>
-        {!isLoading && conversations?.conversations.length}
+        {!isLoading && nbConversationsWithMessages}
         {isLoading && (
           <Skeleton
             className="size-4 rounded-sm"

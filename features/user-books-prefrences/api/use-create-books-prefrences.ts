@@ -22,6 +22,9 @@ export function useCreateUserBooksPrefrences() {
       clientQuery.invalidateQueries({
         queryKey: ["user-recommended-books"],
       });
+      clientQuery.invalidateQueries({
+        queryKey: ["user-genre-prefrences"],
+      });
 
       return userBookPreferences;
     },

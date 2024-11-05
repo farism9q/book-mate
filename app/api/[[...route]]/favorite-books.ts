@@ -31,6 +31,7 @@ const app = new Hono()
           ])
           .optional(),
         sort: z.string().optional(),
+        limit: z.string().optional(),
       })
     ),
 
@@ -44,7 +45,7 @@ const app = new Hono()
           });
         }
 
-        const { filter, sort } = c.req.valid("query");
+        const { filter, sort, limit } = c.req.valid("query");
 
         const retrieveFilter =
           filter === "all" || !filter
@@ -61,6 +62,7 @@ const app = new Hono()
           orderBy: {
             createdAt: retreiveSort as "asc" | "desc",
           },
+          take: limit ? parseInt(limit) : undefined,
         });
 
         return c.json({ favoriteBooks });
