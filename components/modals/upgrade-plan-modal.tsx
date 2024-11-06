@@ -68,7 +68,10 @@ export const UpgradePlanModal = () => {
           <DialogTitle className="flex justify-center items-center flex-col gap-y-4 pb-2">
             <div className="flex items-center gap-x-2 font-bold py-1">
               Upgrade to
-              <Badge variant={"premium"} className="uppercase text-sm py-1">
+              <Badge
+                variant={"premium"}
+                className="bg-zinc-800 uppercase text-sm py-1"
+              >
                 pro
               </Badge>
             </div>
@@ -105,7 +108,7 @@ export const UpgradePlanModal = () => {
             disabled={isLoading}
             size={"lg"}
             variant={"premium"}
-            className="w-full uppercase hover:opacity-70"
+            className="bg-zinc-800 w-full uppercase hover:opacity-70"
           >
             Upgrade
             <Zap className="w-4 h-4 ml-2 fill-white" />

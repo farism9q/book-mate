@@ -130,7 +130,7 @@ export const PagesMenuGroup = () => {
                   <span>More</span>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 space-y-1 rounded-lg h-52 overflow-auto no-scrollbar bg-transparent">
+              <DropdownMenuContent className="w-56 space-y-1 rounded-lg h-52 overflow-auto no-scrollbar">
                 {documents?.slice(6).map(document => (
                   <SidebarMenuItem
                     key={document.id}
