@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Open_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -10,7 +11,6 @@ import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Check, Loader, X } from "lucide-react";
 import { SheetProvider } from "@/components/providers/sheet-provider";
-import { SidebarProvider } from "@/components/ui/sidebar";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -38,6 +38,7 @@ export default function RootLayout({
               enableSystem={true}
               storageKey="book-mate-theme"
             >
+              <Analytics />
               <ModalProvider />
               <SheetProvider />
               <Toaster
